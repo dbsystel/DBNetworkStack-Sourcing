@@ -7,9 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C613C3461DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C33C1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.framework */; };
+		C613C3461DBF2A1E00E397B8 /* DBNetworkStackSourcing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C33C1DBF2A1E00E397B8 /* DBNetworkStackSourcing.framework */; };
 		C613C34B1DBF2A1E00E397B8 /* DBNetworkStack_SourcingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C34A1DBF2A1E00E397B8 /* DBNetworkStack_SourcingTests.swift */; };
 		C613C34D1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.h in Headers */ = {isa = PBXBuildFile; fileRef = C613C33F1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C613C35B1DBF35D600E397B8 /* DBNetworkStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C3591DBF35D600E397B8 /* DBNetworkStack.framework */; };
+		C613C35C1DBF35D600E397B8 /* Sourcing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C35A1DBF35D600E397B8 /* Sourcing.framework */; };
+		C613C35E1DBF35E900E397B8 /* RessourceDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C35D1DBF35E900E397B8 /* RessourceDataProvider.swift */; };
+		C613C3601DBF35F700E397B8 /* DataProviderListRessource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C35F1DBF35F700E397B8 /* DataProviderListRessource.swift */; };
+		C613C3621DBF362800E397B8 /* RessourceDataProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C3611DBF362800E397B8 /* RessourceDataProviderTests.swift */; };
+		C6FD36281DBF432C005BEFCB /* NetworkTaskMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6FD36271DBF432C005BEFCB /* NetworkTaskMock.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,12 +29,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		C613C33C1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "DBNetworkStack+Sourcing.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C613C33C1DBF2A1E00E397B8 /* DBNetworkStackSourcing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DBNetworkStackSourcing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C613C33F1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DBNetworkStack+Sourcing.h"; sourceTree = "<group>"; };
 		C613C3401DBF2A1E00E397B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C613C3451DBF2A1E00E397B8 /* DBNetworkStack+SourcingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "DBNetworkStack+SourcingTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C613C3451DBF2A1E00E397B8 /* DBNetworkStackSourcingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DBNetworkStackSourcingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C613C34A1DBF2A1E00E397B8 /* DBNetworkStack_SourcingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBNetworkStack_SourcingTests.swift; sourceTree = "<group>"; };
 		C613C34C1DBF2A1E00E397B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C613C3591DBF35D600E397B8 /* DBNetworkStack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DBNetworkStack.framework; path = Carthage/Build/iOS/DBNetworkStack.framework; sourceTree = "<group>"; };
+		C613C35A1DBF35D600E397B8 /* Sourcing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sourcing.framework; path = Carthage/Build/iOS/Sourcing.framework; sourceTree = "<group>"; };
+		C613C35D1DBF35E900E397B8 /* RessourceDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RessourceDataProvider.swift; sourceTree = "<group>"; };
+		C613C35F1DBF35F700E397B8 /* DataProviderListRessource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataProviderListRessource.swift; sourceTree = "<group>"; };
+		C613C3611DBF362800E397B8 /* RessourceDataProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RessourceDataProviderTests.swift; sourceTree = "<group>"; };
+		C6FD36271DBF432C005BEFCB /* NetworkTaskMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkTaskMock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +48,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C613C35B1DBF35D600E397B8 /* DBNetworkStack.framework in Frameworks */,
+				C613C35C1DBF35D600E397B8 /* Sourcing.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,7 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C613C3461DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.framework in Frameworks */,
+				C613C3461DBF2A1E00E397B8 /* DBNetworkStackSourcing.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,14 +70,15 @@
 				C613C33E1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing */,
 				C613C3491DBF2A1E00E397B8 /* DBNetworkStack+SourcingTests */,
 				C613C33D1DBF2A1E00E397B8 /* Products */,
+				C613C3581DBF35D600E397B8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		C613C33D1DBF2A1E00E397B8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C613C33C1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.framework */,
-				C613C3451DBF2A1E00E397B8 /* DBNetworkStack+SourcingTests.xctest */,
+				C613C33C1DBF2A1E00E397B8 /* DBNetworkStackSourcing.framework */,
+				C613C3451DBF2A1E00E397B8 /* DBNetworkStackSourcingTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -71,6 +86,8 @@
 		C613C33E1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing */ = {
 			isa = PBXGroup;
 			children = (
+				C613C35F1DBF35F700E397B8 /* DataProviderListRessource.swift */,
+				C613C35D1DBF35E900E397B8 /* RessourceDataProvider.swift */,
 				C613C33F1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.h */,
 				C613C3401DBF2A1E00E397B8 /* Info.plist */,
 			);
@@ -80,10 +97,21 @@
 		C613C3491DBF2A1E00E397B8 /* DBNetworkStack+SourcingTests */ = {
 			isa = PBXGroup;
 			children = (
+				C6FD36271DBF432C005BEFCB /* NetworkTaskMock.swift */,
+				C613C3611DBF362800E397B8 /* RessourceDataProviderTests.swift */,
 				C613C34A1DBF2A1E00E397B8 /* DBNetworkStack_SourcingTests.swift */,
 				C613C34C1DBF2A1E00E397B8 /* Info.plist */,
 			);
 			path = "DBNetworkStack+SourcingTests";
+			sourceTree = "<group>";
+		};
+		C613C3581DBF35D600E397B8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C613C3591DBF35D600E397B8 /* DBNetworkStack.framework */,
+				C613C35A1DBF35D600E397B8 /* Sourcing.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -100,40 +128,42 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		C613C33B1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing */ = {
+		C613C33B1DBF2A1E00E397B8 /* DBNetworkStackSourcing */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C613C3501DBF2A1E00E397B8 /* Build configuration list for PBXNativeTarget "DBNetworkStack+Sourcing" */;
+			buildConfigurationList = C613C3501DBF2A1E00E397B8 /* Build configuration list for PBXNativeTarget "DBNetworkStackSourcing" */;
 			buildPhases = (
 				C613C3371DBF2A1E00E397B8 /* Sources */,
 				C613C3381DBF2A1E00E397B8 /* Frameworks */,
 				C613C3391DBF2A1E00E397B8 /* Headers */,
 				C613C33A1DBF2A1E00E397B8 /* Resources */,
+				C613C3561DBF355A00E397B8 /* 📦 Carthage Copy */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "DBNetworkStack+Sourcing";
+			name = DBNetworkStackSourcing;
 			productName = "DBNetworkStack+Sourcing";
-			productReference = C613C33C1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.framework */;
+			productReference = C613C33C1DBF2A1E00E397B8 /* DBNetworkStackSourcing.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		C613C3441DBF2A1E00E397B8 /* DBNetworkStack+SourcingTests */ = {
+		C613C3441DBF2A1E00E397B8 /* DBNetworkStackSourcingTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C613C3531DBF2A1E00E397B8 /* Build configuration list for PBXNativeTarget "DBNetworkStack+SourcingTests" */;
+			buildConfigurationList = C613C3531DBF2A1E00E397B8 /* Build configuration list for PBXNativeTarget "DBNetworkStackSourcingTests" */;
 			buildPhases = (
 				C613C3411DBF2A1E00E397B8 /* Sources */,
 				C613C3421DBF2A1E00E397B8 /* Frameworks */,
 				C613C3431DBF2A1E00E397B8 /* Resources */,
+				C6FD36291DBF44D0005BEFCB /* 📦 Carthage Copy */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				C613C3481DBF2A1E00E397B8 /* PBXTargetDependency */,
 			);
-			name = "DBNetworkStack+SourcingTests";
+			name = DBNetworkStackSourcingTests;
 			productName = "DBNetworkStack+SourcingTests";
-			productReference = C613C3451DBF2A1E00E397B8 /* DBNetworkStack+SourcingTests.xctest */;
+			productReference = C613C3451DBF2A1E00E397B8 /* DBNetworkStackSourcingTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -143,11 +173,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = DBSystel;
 				TargetAttributes = {
 					C613C33B1DBF2A1E00E397B8 = {
 						CreatedOnToolsVersion = 8.0;
+						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
 					C613C3441DBF2A1E00E397B8 = {
@@ -168,8 +199,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C613C33B1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing */,
-				C613C3441DBF2A1E00E397B8 /* DBNetworkStack+SourcingTests */,
+				C613C33B1DBF2A1E00E397B8 /* DBNetworkStackSourcing */,
+				C613C3441DBF2A1E00E397B8 /* DBNetworkStackSourcingTests */,
 			);
 		};
 /* End PBXProject section */
@@ -191,11 +222,47 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		C613C3561DBF355A00E397B8 /* 📦 Carthage Copy */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/DBNetworkStack.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Sourcing.framework",
+			);
+			name = "📦 Carthage Copy";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+		C6FD36291DBF44D0005BEFCB /* 📦 Carthage Copy */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/DBNetworkStack.framework",
+			);
+			name = "📦 Carthage Copy";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C613C3371DBF2A1E00E397B8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C613C3601DBF35F700E397B8 /* DataProviderListRessource.swift in Sources */,
+				C613C35E1DBF35E900E397B8 /* RessourceDataProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,6 +270,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C613C3621DBF362800E397B8 /* RessourceDataProviderTests.swift in Sources */,
+				C6FD36281DBF432C005BEFCB /* NetworkTaskMock.swift in Sources */,
 				C613C34B1DBF2A1E00E397B8 /* DBNetworkStack_SourcingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -212,7 +281,7 @@
 /* Begin PBXTargetDependency section */
 		C613C3481DBF2A1E00E397B8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C613C33B1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing */;
+			target = C613C33B1DBF2A1E00E397B8 /* DBNetworkStackSourcing */;
 			targetProxy = C613C3471DBF2A1E00E397B8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -236,6 +305,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -289,6 +359,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -320,17 +391,23 @@
 		C613C3511DBF2A1E00E397B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "DBNetworkStack+Sourcing/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dbsystel.DBNetworkStack-Sourcing";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -338,11 +415,16 @@
 		C613C3521DBF2A1E00E397B8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "DBNetworkStack+Sourcing/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -356,6 +438,7 @@
 		C613C3541DBF2A1E00E397B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = "DBNetworkStack+SourcingTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dbsystel.DBNetworkStack-SourcingTests";
@@ -367,6 +450,7 @@
 		C613C3551DBF2A1E00E397B8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = "DBNetworkStack+SourcingTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dbsystel.DBNetworkStack-SourcingTests";
@@ -387,21 +471,23 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C613C3501DBF2A1E00E397B8 /* Build configuration list for PBXNativeTarget "DBNetworkStack+Sourcing" */ = {
+		C613C3501DBF2A1E00E397B8 /* Build configuration list for PBXNativeTarget "DBNetworkStackSourcing" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C613C3511DBF2A1E00E397B8 /* Debug */,
 				C613C3521DBF2A1E00E397B8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
-		C613C3531DBF2A1E00E397B8 /* Build configuration list for PBXNativeTarget "DBNetworkStack+SourcingTests" */ = {
+		C613C3531DBF2A1E00E397B8 /* Build configuration list for PBXNativeTarget "DBNetworkStackSourcingTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C613C3541DBF2A1E00E397B8 /* Debug */,
 				C613C3551DBF2A1E00E397B8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import DBNetworkStack_Sourcing
+@testable import DBNetworkStackSourcing
 
 class DBNetworkStack_SourcingTests: XCTestCase {
     
