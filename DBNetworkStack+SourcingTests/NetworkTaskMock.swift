@@ -26,9 +26,10 @@
 //
 
 import Foundation
+@testable import DBNetworkStackSourcing
 import DBNetworkStack
 
-class NetworkTaskMock: NetworkTask {
+class NetworkTaskMock: NetworkTaskRepresenting {
     var isCanceld = false
     func cancel() {
         isCanceld = true

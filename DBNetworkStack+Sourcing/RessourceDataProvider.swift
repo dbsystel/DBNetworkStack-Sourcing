@@ -28,75 +28,77 @@ import Sourcing
 import DBNetworkStack
 
 public enum ResourceDataProviderState {
-    case Success
-    case Error
-    case Loading
-    case Empty
+    case success
+    case error
+    case loading
+    case empty
     
     public var isLoading: Bool {
-        return self == .Loading
+        return self == .loading
+    }
+}
+
+extension ArrayResourceModeling {
+    func wrapArray() -> Resource<Array<Element>> {
+        let resource = Resource<Model>(request: request, parse: parse)
+        return resource as! Resource<Array<Element>>
     }
 }
 
 /**
  `ResourceDataProvider` provides fetching JSONResources and transforming them into a DataProvider(DataSource) for colllection/table views.
  */
-final public class ResourceDataProvider<Resource: ArrayResourceModeling>: NSObject, ArrayDataProviding {
-    
-    public typealias Object = Resource.Element
+final public class ResourceDataProvider<Object>: ArrayDataProviding {
+
+    public var sortDescriptor: ((Object, Object) -> Bool)?
     public var whenStateChanges: ((ResourceDataProviderState) -> ())?
     public let sectionIndexTitles: Array<String>? = nil
     public var data: Array<Array<Object>> {
-        guard let fetchedData = fetchedData else {
-            return []
-        }
-        return [fetchedData as! Array<Object>]
+        return [fetchedData ?? []]
     }
     
     /// Describes the current stae of the data provider. Listen for state changes with the `whenStateChanges` callback
-    public private(set) var state: ResourceDataProviderState = .Empty {
+    public fileprivate(set) var state: ResourceDataProviderState = .empty {
         didSet {
             whenStateChanges?(state)
         }
     }
-    private(set) var resource: Resource?
+    fileprivate(set) var resource: Resource<Array<Object>>?
     
-    private var fetchedData: Resource.Model?
-    private let dataProviderDidUpdate: (([DataProviderUpdate<Object>]?) ->())?
+    fileprivate var fetchedData: Array<Object>?
+    fileprivate let dataProviderDidUpdate: (([DataProviderUpdate<Object>]?) ->())?
     
     // MARK: Network properties
-    private let networkService: NetworkServiceProviding
-    private var currentRequest: NetworkTaskRepresenting?
+    fileprivate let networkService: NetworkServiceProviding
+    fileprivate var currentRequest: NetworkTaskRepresenting?
     
     /**
-     Creates an instance which fetches a gives resource
+     Creates an instance which fetches a gives ressource
      
-     - parameter resource: The resource to fetch. 
-     - parameter networkService: a networkservice for fetching resources
+     - parameter ressource: The ressource to fetch.
+     - parameter networkService: a networkservice for fetching ressources
      - parameter dataProviderDidUpdate: handler for data updates. `nil` by default.
      - parameter mapFetchedObjectToArray: A function which maps a object to an array for using it as a dataSoruce. `nil` by default.
      - parameter delegate: A delegate for listing to events. `nil` by default.
      */
-    public init(resource: Resource?, networkService: NetworkServiceProviding, dataProviderDidUpdate: @escaping (([DataProviderUpdate<Object>]?) ->()), whenStateChanges: ((ResourceDataProviderState) -> ())? = nil) {
-        self.resource = resource
+    public init(ressource: Resource<Array<Object>>?, networkService: NetworkServiceProviding, dataProviderDidUpdate: @escaping (([DataProviderUpdate<Object>]?) ->()), whenStateChanges: @escaping ((ResourceDataProviderState) -> ())) {
+        self.resource = ressource
         self.dataProviderDidUpdate = dataProviderDidUpdate
         self.networkService = networkService
         self.whenStateChanges = whenStateChanges
-        super.init()
-        fetchResource()
     }
     
     /**
-     Fetches a new resource.
+     Fetches a new ressource.
      
-     - parameter resource: The new resource to fetch.
-    */
-    public func reconfigureData(resource: Resource?) {
+     - parameter ressource: The new ressource to fetch.
+     */
+    public func reconfigure(_ resource: Resource<Array<Object>>?) {
         if resource == nil {
             fetchedData = nil
         }
         self.resource = resource
-        fetchResource()
+        load()
     }
     
     //MARK: private
@@ -105,47 +107,71 @@ final public class ResourceDataProvider<Resource: ArrayResourceModeling>: NSObje
      
      - parameter updates: The updates.
      */
-    private func didUpdateData(updates: [DataProviderUpdate<Object>]?) {
+    fileprivate func didUpdate(_ updates: [DataProviderUpdate<Object>]?) {
         dataProviderDidUpdate?(updates)
     }
     
     /**
-     Fetches the resources via webservices.
-    */
-    private func fetchResource() {
+     Fetches the current ressources via webservices.
+     */
+    fileprivate func load() {
         currentRequest?.cancel()
-        guard let resource = resource else {
-            state = .Empty
-            didUpdateData(updates: nil)
+        guard let ressource = resource else {
+            state = .empty
+            didUpdate(nil)
             return
         }
-        state = .Loading
-        currentRequest = networkService.request(resource, onCompletion: { fetchedData in
-            self.currentRequest = nil
+        state = .loading
+        currentRequest = networkService.request(ressource, onCompletion: loadDidSucess, onError: loadDidError)
+    }
+    
+    fileprivate func loadDidSucess(fetchedData: Array<Object>) {
+        self.currentRequest = nil
+        if let sortDescriptor = self.sortDescriptor {
+            self.fetchedData = fetchedData.sorted(by: sortDescriptor)
+        } else {
             self.fetchedData = fetchedData
-            self.didUpdateData(updates: nil)
-            self.state = .Success
-            }, onError: { error in
-                switch error {
-                case .requestError(let err):
-                    let err = err as NSError
-                    if err.code != -999 {
-                        self.state = .Error
-                    }
-                    break
-                default:
-                    self.state = .Error
-                }
-                
-        })
+        }
+        
+        self.state = .success
+        self.didUpdate(nil)
+    }
+    
+    fileprivate func loadDidError(error: DBNetworkStackError) {
+        switch error {
+        case .requestError(let err):
+            if (err as NSError).code != -999 {
+                self.state = .error
+            }
+            break
+        default:
+            self.state = .error
+        }
+    }
+}
+
+public extension ResourceDataProvider {
+    /**
+     Creates an instance which fetches a gives ressource
+     
+     - parameter ressource: The ressource to fetch.
+     - parameter networkService: a networkservice for fetching ressources
+     - parameter dataProviderDidUpdate: handler for data updates. `nil` by default.
+     - parameter mapFetchedObjectToArray: A function which maps a object to an array for using it as a dataSoruce. `nil` by default.
+     - parameter delegate: A delegate for listing to events. `nil` by default.
+     */
+    public convenience init<ArrayResource: ArrayResourceModeling>(ressource: ArrayResource?, networkService: NetworkServiceProviding, dataProviderDidUpdate: @escaping (([DataProviderUpdate<Object>]?) ->()), whenStateChanges: @escaping ((ResourceDataProviderState) -> ())) where ArrayResource.Element == Object {
+        self.init(ressource: ressource?.wrapArray(), networkService: networkService, dataProviderDidUpdate: dataProviderDidUpdate, whenStateChanges: whenStateChanges)
     }
     
     /**
-     Retches the current resources via webservices. 
-     Can be helpfull when connection lost and you want to try
+     Fetches a new ressource.
+     
+     - parameter ressource: The new ressource to fetch.
      */
-    public func retry() {
-        fetchResource()
+    public func reconfigure<ArrayResource: ArrayResourceModeling>(_ resource: ArrayResource?) where ArrayResource.Element == Object {
+        reconfigure(resource?.wrapArray())
     }
 }
+
 

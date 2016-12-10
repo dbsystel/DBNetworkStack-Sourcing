@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		C613C3461DBF2A1E00E397B8 /* DBNetworkStackSourcing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C33C1DBF2A1E00E397B8 /* DBNetworkStackSourcing.framework */; };
-		C613C34B1DBF2A1E00E397B8 /* DBNetworkStack_SourcingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C34A1DBF2A1E00E397B8 /* DBNetworkStack_SourcingTests.swift */; };
 		C613C34D1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.h in Headers */ = {isa = PBXBuildFile; fileRef = C613C33F1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C613C35B1DBF35D600E397B8 /* DBNetworkStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C3591DBF35D600E397B8 /* DBNetworkStack.framework */; };
 		C613C35C1DBF35D600E397B8 /* Sourcing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C35A1DBF35D600E397B8 /* Sourcing.framework */; };
@@ -33,7 +32,6 @@
 		C613C33F1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DBNetworkStack+Sourcing.h"; sourceTree = "<group>"; };
 		C613C3401DBF2A1E00E397B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C613C3451DBF2A1E00E397B8 /* DBNetworkStackSourcingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DBNetworkStackSourcingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		C613C34A1DBF2A1E00E397B8 /* DBNetworkStack_SourcingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBNetworkStack_SourcingTests.swift; sourceTree = "<group>"; };
 		C613C34C1DBF2A1E00E397B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C613C3591DBF35D600E397B8 /* DBNetworkStack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DBNetworkStack.framework; path = Carthage/Build/iOS/DBNetworkStack.framework; sourceTree = "<group>"; };
 		C613C35A1DBF35D600E397B8 /* Sourcing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sourcing.framework; path = Carthage/Build/iOS/Sourcing.framework; sourceTree = "<group>"; };
@@ -99,7 +97,6 @@
 			children = (
 				C6FD36271DBF432C005BEFCB /* NetworkTaskMock.swift */,
 				C613C3611DBF362800E397B8 /* RessourceDataProviderTests.swift */,
-				C613C34A1DBF2A1E00E397B8 /* DBNetworkStack_SourcingTests.swift */,
 				C613C34C1DBF2A1E00E397B8 /* Info.plist */,
 			);
 			path = "DBNetworkStack+SourcingTests";
@@ -154,7 +151,7 @@
 				C613C3411DBF2A1E00E397B8 /* Sources */,
 				C613C3421DBF2A1E00E397B8 /* Frameworks */,
 				C613C3431DBF2A1E00E397B8 /* Resources */,
-				C6FD36291DBF44D0005BEFCB /* 📦 Carthage Copy */,
+				C6C183741DFB013F000A3314 /* 📦 Carthage Copy */,
 			);
 			buildRules = (
 			);
@@ -239,7 +236,7 @@
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks";
 		};
-		C6FD36291DBF44D0005BEFCB /* 📦 Carthage Copy */ = {
+		C6C183741DFB013F000A3314 /* 📦 Carthage Copy */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -252,7 +249,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+			shellScript = "#/usr/local/bin/carthage copy-frameworks";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -272,7 +269,6 @@
 			files = (
 				C613C3621DBF362800E397B8 /* RessourceDataProviderTests.swift in Sources */,
 				C6FD36281DBF432C005BEFCB /* NetworkTaskMock.swift in Sources */,
-				C613C34B1DBF2A1E00E397B8 /* DBNetworkStack_SourcingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,7 +325,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -377,7 +373,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -439,8 +435,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				INFOPLIST_FILE = "DBNetworkStack+SourcingTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dbsystel.DBNetworkStack-SourcingTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
@@ -451,8 +448,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
 				INFOPLIST_FILE = "DBNetworkStack+SourcingTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dbsystel.DBNetworkStack-SourcingTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
