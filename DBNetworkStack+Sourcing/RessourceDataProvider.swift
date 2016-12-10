@@ -27,17 +27,6 @@ import Foundation
 import Sourcing
 import DBNetworkStack
 
-public enum ResourceDataProviderState {
-    case success
-    case error
-    case loading
-    case empty
-    
-    public var isLoading: Bool {
-        return self == .loading
-    }
-}
-
 extension ArrayResourceModeling {
     func wrapArray() -> Resource<Array<Element>> {
         let resource = Resource<Model>(request: request, parse: parse)
@@ -152,9 +141,9 @@ final public class ResourceDataProvider<Object>: ArrayDataProviding {
 
 public extension ResourceDataProvider {
     /**
-     Creates an instance which fetches a gives ressource
+     Creates an instance which fetches a gives array ressource
      
-     - parameter ressource: The ressource to fetch.
+     - parameter ressource: The array ressource to fetch.
      - parameter networkService: a networkservice for fetching ressources
      - parameter dataProviderDidUpdate: handler for data updates. `nil` by default.
      - parameter mapFetchedObjectToArray: A function which maps a object to an array for using it as a dataSoruce. `nil` by default.

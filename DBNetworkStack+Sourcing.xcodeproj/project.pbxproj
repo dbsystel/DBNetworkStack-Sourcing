@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C60F99B61DFC59B600628F31 /* ResourceDataProviderState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60F99B51DFC59B600628F31 /* ResourceDataProviderState.swift */; };
 		C613C3461DBF2A1E00E397B8 /* DBNetworkStackSourcing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C33C1DBF2A1E00E397B8 /* DBNetworkStackSourcing.framework */; };
 		C613C34D1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.h in Headers */ = {isa = PBXBuildFile; fileRef = C613C33F1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C613C35B1DBF35D600E397B8 /* DBNetworkStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C3591DBF35D600E397B8 /* DBNetworkStack.framework */; };
 		C613C35C1DBF35D600E397B8 /* Sourcing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C35A1DBF35D600E397B8 /* Sourcing.framework */; };
 		C613C35E1DBF35E900E397B8 /* RessourceDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C35D1DBF35E900E397B8 /* RessourceDataProvider.swift */; };
-		C613C3601DBF35F700E397B8 /* DataProviderListRessource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C35F1DBF35F700E397B8 /* DataProviderListRessource.swift */; };
 		C613C3621DBF362800E397B8 /* RessourceDataProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C3611DBF362800E397B8 /* RessourceDataProviderTests.swift */; };
 		C6FD36281DBF432C005BEFCB /* NetworkTaskMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6FD36271DBF432C005BEFCB /* NetworkTaskMock.swift */; };
 /* End PBXBuildFile section */
@@ -28,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C60F99B51DFC59B600628F31 /* ResourceDataProviderState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceDataProviderState.swift; sourceTree = "<group>"; };
 		C613C33C1DBF2A1E00E397B8 /* DBNetworkStackSourcing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DBNetworkStackSourcing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C613C33F1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DBNetworkStack+Sourcing.h"; sourceTree = "<group>"; };
 		C613C3401DBF2A1E00E397B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -36,7 +37,6 @@
 		C613C3591DBF35D600E397B8 /* DBNetworkStack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DBNetworkStack.framework; path = Carthage/Build/iOS/DBNetworkStack.framework; sourceTree = "<group>"; };
 		C613C35A1DBF35D600E397B8 /* Sourcing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sourcing.framework; path = Carthage/Build/iOS/Sourcing.framework; sourceTree = "<group>"; };
 		C613C35D1DBF35E900E397B8 /* RessourceDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RessourceDataProvider.swift; sourceTree = "<group>"; };
-		C613C35F1DBF35F700E397B8 /* DataProviderListRessource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataProviderListRessource.swift; sourceTree = "<group>"; };
 		C613C3611DBF362800E397B8 /* RessourceDataProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RessourceDataProviderTests.swift; sourceTree = "<group>"; };
 		C6FD36271DBF432C005BEFCB /* NetworkTaskMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkTaskMock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -84,8 +84,8 @@
 		C613C33E1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing */ = {
 			isa = PBXGroup;
 			children = (
-				C613C35F1DBF35F700E397B8 /* DataProviderListRessource.swift */,
 				C613C35D1DBF35E900E397B8 /* RessourceDataProvider.swift */,
+				C60F99B51DFC59B600628F31 /* ResourceDataProviderState.swift */,
 				C613C33F1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.h */,
 				C613C3401DBF2A1E00E397B8 /* Info.plist */,
 			);
@@ -258,7 +258,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C613C3601DBF35F700E397B8 /* DataProviderListRessource.swift in Sources */,
+				C60F99B61DFC59B600628F31 /* ResourceDataProviderState.swift in Sources */,
 				C613C35E1DBF35E900E397B8 /* RessourceDataProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
