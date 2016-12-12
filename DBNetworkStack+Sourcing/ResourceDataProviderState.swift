@@ -26,15 +26,27 @@
 //  Created by Lukas Schmidt on 10.12.16.
 //
 
-import Foundation
+import DBNetworkStack
 
 public enum ResourceDataProviderState {
     case success
-    case error
+    case error(DBNetworkStackError)
     case loading
     case empty
-    
+}
+
+extension ResourceDataProviderState {
     public var isLoading: Bool {
-        return self == .loading
+        if case .loading = self {
+            return true
+        }
+        return false
+    }
+    
+    public var hasError: Bool {
+        if case .error(_) = self {
+            return true
+        }
+        return false
     }
 }

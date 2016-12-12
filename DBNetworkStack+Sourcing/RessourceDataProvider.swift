@@ -28,7 +28,12 @@ import Sourcing
 import DBNetworkStack
 
 extension ArrayResourceModeling {
-    func wrapArray() -> Resource<Array<Element>> {
+    
+    
+    /// Wraps self insie a standart resource 
+    ///
+    /// - Returns: the wrapped resource
+    func wrapped() -> Resource<Array<Element>> {
         let resource = Resource<Model>(request: request, parse: parse)
         return resource as! Resource<Array<Element>>
     }
@@ -128,13 +133,13 @@ final public class ResourceDataProvider<Object>: ArrayDataProviding {
     
     fileprivate func loadDidError(error: DBNetworkStackError) {
         switch error {
-        case .requestError(let err):
-            if (err as NSError).code != -999 {
-                self.state = .error
+        case .requestError(let errorResult):
+            if (errorResult as NSError).code != -999 {
+                self.state = .error(error)
             }
             break
         default:
-            self.state = .error
+            self.state = .error(error)
         }
     }
 }
@@ -150,7 +155,7 @@ public extension ResourceDataProvider {
      - parameter delegate: A delegate for listing to events. `nil` by default.
      */
     public convenience init<ArrayResource: ArrayResourceModeling>(ressource: ArrayResource?, networkService: NetworkServiceProviding, dataProviderDidUpdate: @escaping (([DataProviderUpdate<Object>]?) ->()), whenStateChanges: @escaping ((ResourceDataProviderState) -> ())) where ArrayResource.Element == Object {
-        self.init(ressource: ressource?.wrapArray(), networkService: networkService, dataProviderDidUpdate: dataProviderDidUpdate, whenStateChanges: whenStateChanges)
+        self.init(ressource: ressource?.wrapped(), networkService: networkService, dataProviderDidUpdate: dataProviderDidUpdate, whenStateChanges: whenStateChanges)
     }
     
     /**
@@ -159,7 +164,7 @@ public extension ResourceDataProvider {
      - parameter ressource: The new ressource to fetch.
      */
     public func reconfigure<ArrayResource: ArrayResourceModeling>(_ resource: ArrayResource?) where ArrayResource.Element == Object {
-        reconfigure(resource?.wrapArray())
+        reconfigure(resource?.wrapped())
     }
 }
 
