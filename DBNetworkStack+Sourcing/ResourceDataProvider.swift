@@ -39,6 +39,14 @@ extension ArrayResourceModeling {
     }
 }
 
+extension ResourceModeling {
+    func map<T>(mapIt: @escaping (Model) -> (Array<T>)) -> Resource<Array<T>> {
+        return Resource(request: request, parse: { data in
+            return mapIt(try self.parse(data))
+        })
+    }
+}
+
 /**
  `ResourceDataProvider` provides fetching JSONResources and transforming them into a DataProvider(DataSource) for colllection/table views.
  */
