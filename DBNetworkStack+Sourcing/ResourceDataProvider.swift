@@ -99,7 +99,7 @@ final public class ResourceDataProvider<Object>: ArrayDataProviding {
     /**
      Fetches the current resources via webservices.
      */
-    fileprivate func load(clearBeforeLoading: Bool = true) {
+    public func load(clearBeforeLoading: Bool = true) {
         currentRequest?.cancel()
         guard let resource = resource else {
             state = .empty
