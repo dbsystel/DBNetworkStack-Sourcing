@@ -1,5 +1,5 @@
 //
-//  Copyright (C) 2016 Lukas Schmidt.
+//  Copyright (C) 2017 Lukas Schmidt.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a 
 //  copy of this software and associated documentation files (the "Software"), 
@@ -20,47 +20,26 @@
 //  DEALINGS IN THE SOFTWARE.
 //
 //
-//  ResourceDataProviderState.swift
+//  MockListResource.swift
 //  DBNetworkStack+Sourcing
 //
-//  Created by Lukas Schmidt on 10.12.16.
+//  Created by Lukas Schmidt on 02.01.17.
 //
 
 import DBNetworkStack
 
-public enum ResourceDataProviderState {
-    case success
-    case error(DBNetworkStackError)
-    case loading
-    case empty
-}
-
-extension ResourceDataProviderState {
-    public var isLoading: Bool {
-        if case .loading = self {
-            return true
-        }
-        return false
+struct MockListResource<Element_>: ArrayResourceModeling {
+    typealias Element = Element_
+    let result: Array<Element>
+    var parse: (_ data: Data) throws -> Array<Element> {
+        return test
     }
     
-    public var hasError: Bool {
-        if case .error(_) = self {
-            return true
-        }
-        return false
+    func test(data: Data) -> Array<Element> {
+        return result
     }
     
-    public var hasSucceded: Bool {
-        if case .success = self {
-            return true
-        }
-        return false
-    }
-    
-    public var isEmpty: Bool {
-        if case .empty = self {
-            return true
-        }
-        return false
+    var request: NetworkRequestRepresening {
+        return NetworkRequest(path: "", baseURLKey: "")
     }
 }

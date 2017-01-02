@@ -1,5 +1,5 @@
 //
-//  Copyright (C) 2016 Lukas Schmidt.
+//  Copyright (C) 2017 Lukas Schmidt.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a 
 //  copy of this software and associated documentation files (the "Software"), 
@@ -20,47 +20,29 @@
 //  DEALINGS IN THE SOFTWARE.
 //
 //
-//  ResourceDataProviderState.swift
+//  NetworkServiceMock.swift
 //  DBNetworkStack+Sourcing
 //
-//  Created by Lukas Schmidt on 10.12.16.
+//  Created by Lukas Schmidt on 02.01.17.
 //
 
+import Foundation
 import DBNetworkStack
 
-public enum ResourceDataProviderState {
-    case success
-    case error(DBNetworkStackError)
-    case loading
-    case empty
-}
-
-extension ResourceDataProviderState {
-    public var isLoading: Bool {
-        if case .loading = self {
-            return true
-        }
-        return false
-    }
+class FastNetworkService: NetworkServiceProviding {
+    var completeCurrentRequest: (() -> ())?
+    var errorCurrentRequest: ((DBNetworkStackError) -> ())?
     
-    public var hasError: Bool {
-        if case .error(_) = self {
-            return true
+    var didRequestAResource: Bool { return completeCurrentRequest != nil }
+    func request<T : ResourceModeling>(_ ressource: T, onCompletion: @escaping (T.Model) -> (), onError: @escaping (DBNetworkStackError) -> ()) -> NetworkTaskRepresenting {
+        completeCurrentRequest = {
+            onCompletion(try! ressource.parse(Data()))
         }
-        return false
-    }
-    
-    public var hasSucceded: Bool {
-        if case .success = self {
-            return true
+        
+        errorCurrentRequest = { error in
+            onError(error)
         }
-        return false
-    }
-    
-    public var isEmpty: Bool {
-        if case .empty = self {
-            return true
-        }
-        return false
+        
+        return NetworkTaskMock()
     }
 }

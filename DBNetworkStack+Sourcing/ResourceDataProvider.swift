@@ -27,15 +27,6 @@ import Foundation
 import Sourcing
 import DBNetworkStack
 
-extension ResourceModeling {
-    public func map<T>(transform: @escaping (Model) -> (T)) -> Resource<T> {
-        return Resource(request: request, parse: { data in
-            return transform(try self.parse(data))
-        })
-    }
-}
-
-
 /**
  `ResourceDataProvider` provides fetching JSONResources and transforming them into a DataProvider(DataSource) for colllection/table views.
  */
@@ -123,7 +114,7 @@ final public class ResourceDataProvider<Object>: ArrayDataProviding {
     
     fileprivate func loadDidSucess(fetchedData: Array<Object>) {
         self.currentRequest = nil
-        if let sortDescriptor = self.sortDescriptor {
+        if let sortDescriptor = sortDescriptor {
             self.fetchedData = fetchedData.sorted(by: sortDescriptor)
         } else {
             self.fetchedData = fetchedData
