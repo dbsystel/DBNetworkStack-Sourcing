@@ -47,6 +47,19 @@ class ResourceDataProviderTests: XCTestCase {
         XCTAssert(networkService.didRequestAResource)
     }
     
+    func testLoadResource_skipLoadingState() {
+        //Given
+        let location = LocationCoordinate(longitude: 0, latitude: 0)
+        let ressource = MockListResource(result: [location])
+        
+        //When
+        ressourceDataProvider.reconfigure(ressource, clearBeforeLoading: false)
+        
+        //Then
+        XCTAssert(ressourceDataProvider.state.isEmpty)
+        XCTAssert(networkService.didRequestAResource)
+    }
+    
     func testLoadSucceed() {
         ()
         //Given

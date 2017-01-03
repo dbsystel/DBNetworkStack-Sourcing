@@ -81,7 +81,7 @@ final public class ResourceDataProvider<Object>: ArrayDataProviding {
             fetchedData = nil
         }
         self.resource = resource
-        load()
+        load(clearBeforeLoading: clearBeforeLoading)
     }
     
     
@@ -98,6 +98,8 @@ final public class ResourceDataProvider<Object>: ArrayDataProviding {
     
     /**
      Fetches the current resources via webservices.
+     
+      - parameter clearBeforeLoading: when true the loading state will be skipped.
      */
     public func load(clearBeforeLoading: Bool = true) {
         currentRequest?.cancel()
@@ -148,10 +150,11 @@ public extension ResourceDataProvider {
      Fetches a new resource.
      
      - parameter resource: The new resource to fetch.
+      - parameter clearBeforeLoading: when true the loading state will be skipped.
      */
-    public func reconfigure<ArrayResource: ArrayResourceModeling>(_ resource: ArrayResource?) where ArrayResource.Element == Object {
+    public func reconfigure<ArrayResource: ArrayResourceModeling>(_ resource: ArrayResource?, clearBeforeLoading: Bool = true) where ArrayResource.Element == Object {
         let resource = resource?.wrapped() as! Resource<Array<Object>>
-        reconfigure(resource)
+        reconfigure(resource, clearBeforeLoading: clearBeforeLoading)
     }
 }
 
