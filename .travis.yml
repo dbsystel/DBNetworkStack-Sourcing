@@ -1,0 +1,9 @@
+language: objective-c
+xcode_project: DBNetworkStack+Sourcing.xcodeproj # path to your xcodeproj folder
+xcode_scheme: DBNetworkStackSourcing
+osx_image: xcode8.2
+before_install:
+  - export SNAPSHOT_FORCE_DELETE=1
+  - fastlane snapshot reset_simulators
+script: 
+- set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone SE,OS=latest' ONLY_ACTIVE_ARCH=NO -enableCodeCoverage NO clean build test | xcpretty
