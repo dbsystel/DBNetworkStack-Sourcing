@@ -30,13 +30,17 @@ import Foundation
 import DBNetworkStack
 
 class FastNetworkService: NetworkServiceProviding {
-    var completeCurrentRequest: (() -> ())?
-    var errorCurrentRequest: ((DBNetworkStackError) -> ())?
+    var completeCurrentRequest: (() -> Void)?
+    var errorCurrentRequest: ((DBNetworkStackError) -> Void)?
     
     var didRequestAResource: Bool { return completeCurrentRequest != nil }
-    func request<T : ResourceModeling>(_ ressource: T, onCompletion: @escaping (T.Model) -> (), onError: @escaping (DBNetworkStackError) -> ()) -> NetworkTaskRepresenting {
+    func request<T: ResourceModeling>(_ ressource: T, onCompletion: @escaping (T.Model) -> Void,
+                 onError: @escaping (DBNetworkStackError) -> Void) -> NetworkTaskRepresenting {
         completeCurrentRequest = {
-            onCompletion(try! ressource.parse(Data()))
+            guard let result = try? ressource.parse(Data()) else {
+                fatalError("error")
+            }
+            onCompletion(result)
         }
         
         errorCurrentRequest = { error in

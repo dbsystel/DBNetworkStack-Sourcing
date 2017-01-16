@@ -24,9 +24,9 @@ class ResourceDataProviderTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        ressourceDataProvider = ResourceDataProvider(resource: nil, networkService: networkService, dataProviderDidUpdate: { [weak self] updates in
+        ressourceDataProvider = ResourceDataProvider(resource: nil, networkService: networkService, dataProviderDidUpdate: { [weak self] _ in
             self?.didUpdateContents = true
-            }, whenStateChanges: { state in
+            }, whenStateChanges: { _ in
                 
         })
         
@@ -99,6 +99,5 @@ class ResourceDataProviderTests: XCTestCase {
         XCTAssert(ressourceDataProvider.state.hasError)
         XCTAssert(!didUpdateContents)
     }
-    
-    
+
 }
