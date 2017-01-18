@@ -2,7 +2,6 @@
 
 Take a look at [Sourcing](https://github.com/lightsprint09/Sourcing) and [DBNetworkStack](https://github.com/dbsystel/DBNetworkStack) and come back to bring those two together.
 
-# Usage
 ## Loading
 ```swift
 import DBNetworkStackSourcing
