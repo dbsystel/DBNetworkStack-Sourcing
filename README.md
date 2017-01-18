@@ -1,6 +1,6 @@
 # DBNetworkStack-Sourcing
 
-Take a look at [Sourcing](https://github.com/lightsprint09/Sourcing) and [DBNetworkStack](https://github.com/dbsystel/DBNetworkStack) and come back to bring those two together.
+This component acts as a bridge between [Sourcing](https://github.com/lightsprint09/Sourcing) and [DBNetworkStack](https://github.com/dbsystel/DBNetworkStack). It is a data provider, for resources fetched by a network service provider. 
 
 ## Loading
 ```swift
@@ -8,8 +8,8 @@ import DBNetworkStackSourcing
 import DBNetworkStack
 import Sourcing
 
-let networkService: NetworkServiceProviding = //
-let resource = // some resource which implements DBNetworkStack.ArrayResourceProviding
+let networkService: NetworkServiceProviding = // Network service which implements DBNetworkStack.NetworkServiceProviding
+let resource = // Some resource which implements DBNetworkStack.ArrayResourceProviding
 
 let dataSource: TableViewDataSource<ResourceDataProvider<Int>, CellConfiguration<Int>> = //
 
@@ -26,11 +26,14 @@ ressourceDataProvider.load()
 You can either pass a closure into `ResourceDataProvider.init` and get notified when state changes or you could access `ressourceDataProvider.state`.
 
 ## Default data
-If you have default local data you can provide them upfront. It will be replaced with data from the network once the requests is done.
+If you have default local data you can provide it upfront. It will be replaced with data from the network once the requests is done.
 ```swift
- ressourceDataProvider = ResourceDataProvider(resource: nil, prefetchedData: [1, 2, 3],
-                                                     networkService: networkService, dataProviderDidUpdate: {  _ in },
-                                                     whenStateChanges: { _ in })
+ ressourceDataProvider = ResourceDataProvider(
+            resource: nil, prefetchedData: [1, 2, 3],
+            networkService: networkService,
+            dataProviderDidUpdate: {  _ in },
+            whenStateChanges: { _ in }
+ )
 ```
 
 ## Sorting loaded data
