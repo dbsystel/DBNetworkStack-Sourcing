@@ -18,28 +18,27 @@ let ressourceDataProvider = ResourceDataProvider(resource: resource, networkServ
                                     self?.dataSource.processUpdates(updates)
             }, whenStateChanges: { newState in })
         
-// Start loding content
+// Start loading content
 ressourceDataProvider.load()
 ```
 
-## Access state of loading operation
+## Access state of the loading operation
 You can either pass a closure into `ResourceDataProvider.init` and get notified when state changes or you could access `ressourceDataProvider.state`.
 
 ## Default data
-If you have default local data you can them upfront. It will be replaced with data from the network once the requests is done.
+If you have default local data you can provide them upfront. It will be replaced with data from the network once the requests is done.
 ```swift
  ressourceDataProvider = ResourceDataProvider(resource: nil, prefetchedData: [1, 2, 3],
                                                      networkService: networkService, dataProviderDidUpdate: {  _ in },
                                                      whenStateChanges: { _ in })
 ```
 
-## Sorting loaded data (beta)
+## Sorting loaded data
 Providing a sort descriptor will sort your response.
 ```swift
 ressourceDataProvider.sortDescriptor = { $0 < $1 }
 ```
 ## Requirements
-
 - iOS 9.0+
 - Xcode 8.0+
 - Swift 3.0
