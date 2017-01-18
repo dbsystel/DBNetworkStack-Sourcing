@@ -13,9 +13,9 @@ let resource = // some resource which implements DBNetworkStack.ArrayResourcePro
 
 let dataSource: TableViewDataSource<ResourceDataProvider<Int>, CellConfiguration<Int>> = //
 
-let ressourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService, dataProviderDidUpdate: { [weak self] updates in
-self?.processUpdates(updates)
-            self?.didUpdateContents = true
+let ressourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService,
+            dataProviderDidUpdate: { [weak self] updates in
+                                    self?.dataSource.processUpdates(updates)
             }, whenStateChanges: { newState in })
         
 // Start loding content
