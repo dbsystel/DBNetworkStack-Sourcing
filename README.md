@@ -29,4 +29,12 @@ You can either pass a closure into `ResourceDataProvider.init` and get notified 
 If you have default local data you can them upfront. It will be replaced with data from the network once the requests is done.
 ```swift
  ressourceDataProvider = ResourceDataProvider(resource: nil, prefetchedData: [1, 2, 3],
-                                                     networkService: networkService, dataProviderDidUpdate: {  _ in }, whenStateChanges: { _ in })
+                                                     networkService: networkService, dataProviderDidUpdate: {  _ in },
+                                                     whenStateChanges: { _ in })
+```
+
+## Sorting loaded data (beta)
+Providing a sort descriptor will sort your response.
+```swift
+ressourceDataProvider.sortDescriptor = { $0 < $1 }
+```
