@@ -28,7 +28,7 @@
 
 import DBNetworkStack
 
-struct MockListResource<Element_>: ArrayResourceModeling {
+struct ListResourceMock<Element_>: ArrayResourceModeling {
     typealias Element = Element_
     let result: Array<Element>
     var parse: (_ data: Data) throws -> Array<Element> {
