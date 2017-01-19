@@ -162,7 +162,7 @@ public extension ResourceDataProvider {
                             networkService: NetworkServiceProviding, dataProviderDidUpdate: @escaping (([DataProviderUpdate<Object>]?) -> Void),
                             whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) where ArrayResource.Element == Object {
         // swiftlint:disable:next force_cast
-        let resource = resource?.wrapped() as! Resource<Array<Object>>
+        let resource = resource?.wrapped() as! Resource<Array<Object>>?
         self.init(resource: resource, prefetchedData: prefetchedData, networkService: networkService,
                   dataProviderDidUpdate: dataProviderDidUpdate, whenStateChanges: whenStateChanges)
     }
@@ -176,7 +176,7 @@ public extension ResourceDataProvider {
     public func reconfigure<ArrayResource: ArrayResourceModeling>(with resource: ArrayResource?, clearBeforeLoading: Bool = true)
         where ArrayResource.Element == Object {
         // swiftlint:disable:next force_cast
-        let resource = resource?.wrapped() as! Resource<Array<Object>>
+        let resource = resource?.wrapped() as! Resource<Array<Object>>?
         reconfigure(with: resource, clearBeforeLoading: clearBeforeLoading)
     }
 }

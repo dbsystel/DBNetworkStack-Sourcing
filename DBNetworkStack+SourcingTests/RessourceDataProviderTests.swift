@@ -17,7 +17,7 @@ struct LocationCoordinate {
 }
 
 class ResourceDataProviderTests: XCTestCase {
-    var ressourceDataProvider: ResourceDataProvider<LocationCoordinate>!
+    var resourceDataProvider: ResourceDataProvider<LocationCoordinate>!
     let networkService = FastNetworkService()
     
     let location = LocationCoordinate(longitude: 0, latitude: 0)
@@ -27,19 +27,19 @@ class ResourceDataProviderTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        ressourceDataProvider = ResourceDataProvider(resource: nil, networkService: networkService, dataProviderDidUpdate: { [weak self] _ in
+        resourceDataProvider = ResourceDataProvider(resource: nil, networkService: networkService, dataProviderDidUpdate: { [weak self] _ in
             self?.didUpdateContents = true
             }, whenStateChanges: { _ in
                 
         })
         
         didUpdateContents = false
-        XCTAssert(ressourceDataProvider.state.isEmpty)
+        XCTAssert(resourceDataProvider.state.isEmpty)
     }
     
     func testGetPreloadedResources() {
         //When
-        ressourceDataProvider = ResourceDataProvider(resource: nil, prefetchedData: [location],
+        resourceDataProvider = ResourceDataProvider(resource: nil, prefetchedData: [location],
                                                      networkService: networkService, dataProviderDidUpdate: { [weak self] _ in
             self?.didUpdateContents = true
             }, whenStateChanges: { _ in
@@ -47,93 +47,118 @@ class ResourceDataProviderTests: XCTestCase {
         })
         
         //Then
-        XCTAssert(ressourceDataProvider.state.hasSucceded)
-        XCTAssertEqual(ressourceDataProvider.numberOfItems(inSection: 0), 1)
+        XCTAssert(resourceDataProvider.state.hasSucceded)
+        XCTAssertEqual(resourceDataProvider.numberOfItems(inSection: 0), 1)
+    }
+    
+    func testInitEmpty() {
+        //Given
+        let resource: ListResourceMock<LocationCoordinate>? = nil
+        
+        //When
+        let resourceDataProvider = ResourceDataProvider(resource: resource,
+                                                     networkService: networkService,
+                                                     dataProviderDidUpdate: { _ in }, whenStateChanges: { _ in })
+        
+        //Then
+        XCTAssert(resourceDataProvider.state.isEmpty)
+        XCTAssert(!networkService.didRequestAResource)
     }
     
     func testReplacePreloadedWithResources() {
         //Given
-        let ressource = ListResourceMock(result: [location, location])
+        let resource = ListResourceMock(result: [location, location])
         
         //When
-        ressourceDataProvider = ResourceDataProvider(resource: ressource, prefetchedData: [location],
+        resourceDataProvider = ResourceDataProvider(resource: resource, prefetchedData: [location],
                                                      networkService: networkService, dataProviderDidUpdate: { [weak self] _ in
                                                         self?.didUpdateContents = true
             }, whenStateChanges: { _ in
                 
         })
-        ressourceDataProvider.load()
+        resourceDataProvider.load()
         networkService.completeCurrentRequest?()
         
         //Then
-        XCTAssert(ressourceDataProvider.state.hasSucceded)
-        XCTAssertEqual(ressourceDataProvider.numberOfItems(inSection: 0), 2)
+        XCTAssert(resourceDataProvider.state.hasSucceded)
+        XCTAssertEqual(resourceDataProvider.numberOfItems(inSection: 0), 2)
     }
     
     func testLoadResource() {
         //Given
-        let ressource = ListResourceMock(result: [location])
+        let resource = ListResourceMock(result: [location])
         
         //When
-        ressourceDataProvider.reconfigure(with: ressource)
+        resourceDataProvider.reconfigure(with: resource)
         
         //Then
-        XCTAssert(ressourceDataProvider.state.isLoading)
+        XCTAssert(resourceDataProvider.state.isLoading)
         XCTAssert(networkService.didRequestAResource)
+    }
+    
+    func testLoadResourceNil() {
+        //Given
+        let resource: ListResourceMock<LocationCoordinate>? = nil
+        //When
+        resourceDataProvider.reconfigure(with: resource)
+        
+        //Then
+        XCTAssert(resourceDataProvider.state.isEmpty)
+        XCTAssert(!networkService.didRequestAResource)
     }
     
     func testLoadResource_skipLoadingState() {
         //Given
-        let ressource = ListResourceMock(result: [location])
+        let resource = ListResourceMock(result: [location])
         
         //When
-        ressourceDataProvider.reconfigure(with: ressource, clearBeforeLoading: false)
+        resourceDataProvider.reconfigure(with: resource, clearBeforeLoading: false)
         
         //Then
-        XCTAssert(ressourceDataProvider.state.isEmpty)
+        XCTAssert(resourceDataProvider.state.isEmpty)
         XCTAssert(networkService.didRequestAResource)
     }
     
     func testLoadSucceed() {
         //Given
-        let ressource = ListResourceMock(result: [location])
+        let resource = ListResourceMock(result: [location])
         
         //When
-        ressourceDataProvider.reconfigure(with: ressource)
+        resourceDataProvider.reconfigure(with: resource)
         networkService.completeCurrentRequest?()
         
         //Then
-        XCTAssert(ressourceDataProvider.state.hasSucceded)
-        XCTAssertEqual(location.latitude, ressourceDataProvider.data.first?.first?.latitude)
+        XCTAssert(resourceDataProvider.state.hasSucceded)
+        XCTAssertEqual(location.latitude, resourceDataProvider.data.first?.first?.latitude)
     }
     
     func testLoadEmpty() {
         //When
-        ressourceDataProvider.reconfigure(with: nil)
+        resourceDataProvider.reconfigure(with: nil)
         
         //Then
-        XCTAssert(ressourceDataProvider.state.isEmpty)
+        XCTAssert(resourceDataProvider.state.isEmpty)
         XCTAssert(didUpdateContents)
     }
     
     func testLoadError() {
         //Given
-        let ressource = ListResourceMock(result: [location])
+        let resource = ListResourceMock(result: [location])
         
         //When
-        ressourceDataProvider.reconfigure(with: ressource)
+        resourceDataProvider.reconfigure(with: resource)
         networkService.errorCurrentRequest?(.unknownError)
         
         //Then
-        XCTAssert(ressourceDataProvider.state.hasError)
+        XCTAssert(resourceDataProvider.state.hasError)
         XCTAssert(!didUpdateContents)
     }
     
     func testSortedResult() {
         //Given
         let unsortedValues = [3, 1, 5]
-        let ressource = ListResourceMock(result: unsortedValues)
-        let dataProvider = ResourceDataProvider(resource: ressource, networkService: networkService,
+        let resource = ListResourceMock(result: unsortedValues)
+        let dataProvider = ResourceDataProvider(resource: resource, networkService: networkService,
                                                          dataProviderDidUpdate: { _ in }, whenStateChanges: { _ in })
         
         //When
