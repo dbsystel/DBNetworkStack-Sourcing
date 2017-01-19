@@ -28,8 +28,8 @@
 
 import DBNetworkStack
 
-struct ListResourceMock<Element_>: ArrayResourceModeling {
-    typealias Element = Element_
+struct ListResourceMock<ModelElement>: ArrayResourceModeling {
+    typealias Element = ModelElement
     let result: Array<Element>
     var parse: (_ data: Data) throws -> Array<Element> {
         return test
