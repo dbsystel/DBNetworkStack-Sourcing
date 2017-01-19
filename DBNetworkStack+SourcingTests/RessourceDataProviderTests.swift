@@ -29,9 +29,7 @@ class ResourceDataProviderTests: XCTestCase {
         
         resourceDataProvider = ResourceDataProvider(resource: nil, networkService: networkService, dataProviderDidUpdate: { [weak self] _ in
             self?.didUpdateContents = true
-            }, whenStateChanges: { _ in
-                
-        })
+            }, whenStateChanges: { _ in })
         
         didUpdateContents = false
         XCTAssert(resourceDataProvider.state.isEmpty)
@@ -170,5 +168,34 @@ class ResourceDataProviderTests: XCTestCase {
         let firstObject = dataProvider.object(at: IndexPath(item: 0, section: 0))
         XCTAssertEqual(firstObject, 1)
     }
-
+    
+    func testOnNetworkRequestCanceldWithEmptyData() {
+        //Given
+        let resource = ListResourceMock(result: [location])
+        
+        //When
+        resourceDataProvider.reconfigure(with: resource)
+        networkService.errorCurrentRequest?(.cancelled)
+        
+        //Then
+        XCTAssert(resourceDataProvider.state.isEmpty)
+        XCTAssert(networkService.didRequestAResource)
+    }
+    
+    func testOnNetworkRequestCanceldWithNoEmptyData() {
+        //Given
+        resourceDataProvider = ResourceDataProvider(resource: nil, prefetchedData: [location],
+                                                    networkService: networkService, dataProviderDidUpdate: { [weak self] _ in
+            self?.didUpdateContents = true
+            }, whenStateChanges: { _ in })
+        let resource = ListResourceMock(result: [location])
+        
+        //When
+        resourceDataProvider.reconfigure(with: resource)
+        networkService.errorCurrentRequest?(.cancelled)
+        
+        //Then
+        XCTAssert(resourceDataProvider.state.hasSucceded)
+        XCTAssert(networkService.didRequestAResource)
+    }
 }

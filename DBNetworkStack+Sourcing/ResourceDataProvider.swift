@@ -53,6 +53,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     public internal(set) var state: ResourceDataProviderState = .empty {
         didSet { whenStateChanges?(state) }
     }
+    var stateBeforeLoadingStarted: ResourceDataProviderState = .empty
     var resource: Resource<Array<Object>>?
     
     var fetchedData: Array<Object>?
@@ -115,6 +116,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
       - parameter clearBeforeLoading: when true the loading state will be skipped.
      */
     public func load(clearBeforeLoading: Bool = true) {
+        stateBeforeLoadingStarted = state
         currentRequest?.cancel()
         guard let resource = resource else {
             state = .empty
@@ -143,6 +145,10 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     ///
     /// - Parameter error: the error which occurs.
     func loadDidError(with error: DBNetworkStackError) {
+        if case DBNetworkStackError.cancelled = error {
+            state = stateBeforeLoadingStarted
+            return
+        }
         state = .error(error)
     }
 }
