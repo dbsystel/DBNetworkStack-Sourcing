@@ -32,10 +32,19 @@ import DBNetworkStack
  */
 public class ResourceDataProvider<Object>: ArrayDataProviding {
     
+    /// Data which get provided when in no data is fetched
     public var prefetchedData: [Object] = []
+    
+    /// Function which sorts the result of the ressource
     public var sortDescriptor: ((Object, Object) -> Bool)?
+    
+    /// Function which gets called when state changes
     public var whenStateChanges: ((ResourceDataProviderState) -> Void)?
+    
+    /// Section Index Titles for `UITableView`. Related to `UITableViewDataSource` method `sectionIndexTitlesForTableView`
     public let sectionIndexTitles: Array<String>? = nil
+    
+    /// The provided data
     open var data: Array<Array<Object>> {
         return [fetchedData ?? prefetchedData]
     }
@@ -118,20 +127,23 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
         currentRequest = networkService.request(resource, onCompletion: loadDidSucess, onError: loadDidError)
     }
     
-    func loadDidSucess(with fetchedData: Array<Object>) {
-        self.currentRequest = nil
+    func loadDidSucess(with newFetchedData: Array<Object>) {
+        currentRequest = nil
         if let sortDescriptor = sortDescriptor {
-            self.fetchedData = fetchedData.sorted(by: sortDescriptor)
+            fetchedData = newFetchedData.sorted(by: sortDescriptor)
         } else {
-            self.fetchedData = fetchedData
+            fetchedData = newFetchedData
         }
         
-        self.state = .success
-        self.didUpdate(nil)
+        state = .success
+        didUpdate(nil)
     }
-    
+
+    /// Handles errors which occur during fetching a resource.
+    ///
+    /// - Parameter error: the error which occurs.
     func loadDidError(with error: DBNetworkStackError) {
-        self.state = .error(error)
+        state = .error(error)
     }
 }
 
@@ -149,6 +161,7 @@ public extension ResourceDataProvider {
     public convenience init<ArrayResource: ArrayResourceModeling>(resource: ArrayResource?, prefetchedData: [Object] = [],
                             networkService: NetworkServiceProviding, dataProviderDidUpdate: @escaping (([DataProviderUpdate<Object>]?) -> Void),
                             whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) where ArrayResource.Element == Object {
+        // swiftlint:disable:next force_cast
         let resource = resource?.wrapped() as! Resource<Array<Object>>
         self.init(resource: resource, prefetchedData: prefetchedData, networkService: networkService,
                   dataProviderDidUpdate: dataProviderDidUpdate, whenStateChanges: whenStateChanges)
@@ -162,6 +175,7 @@ public extension ResourceDataProvider {
      */
     public func reconfigure<ArrayResource: ArrayResourceModeling>(with resource: ArrayResource?, clearBeforeLoading: Bool = true)
         where ArrayResource.Element == Object {
+        // swiftlint:disable:next force_cast
         let resource = resource?.wrapped() as! Resource<Array<Object>>
         reconfigure(with: resource, clearBeforeLoading: clearBeforeLoading)
     }
