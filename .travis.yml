@@ -6,7 +6,7 @@ before_install:
   - export SNAPSHOT_FORCE_DELETE=1
   - fastlane snapshot reset_simulators
 install:
-  - carthage update --platform ios
+  - carthage update --platform ios —no-use-binaries
 script: 
 - set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone SE,OS=latest' ONLY_ACTIVE_ARCH=NO -enableCodeCoverage YES clean build test | xcpretty
 after_success:
