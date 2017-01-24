@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/dbsystel/DBNetworkStack-Sourcing.svg?branch=master)](https://travis-ci.org/dbsystel/DBNetworkStack-Sourcing)
+[![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+
 # DBNetworkStack-Sourcing
 
 This component acts as a bridge between [Sourcing](https://github.com/lightsprint09/Sourcing) and [DBNetworkStack](https://github.com/dbsystel/DBNetworkStack). It is a data provider, for resources fetched by a network service provider. 
@@ -55,7 +58,7 @@ ressourceDataProvider.sortDescriptor = { $0 < $1 }
 Specify the following in your `Cartfile`:
 
 ```ogdl
-github "dbsystel/DBNetworkStack-Sourcing" ~> 0.1
+github "dbsystel/DBNetworkStack-Sourcing" ~> 0.3
 ```
 ## Contributing
 Feel free to submit a pull request with new features, improvements on tests or documentation and bug fixes. Keep in mind that we welcome code that is well tested and documented.
