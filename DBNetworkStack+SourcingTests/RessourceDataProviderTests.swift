@@ -23,26 +23,25 @@ class ResourceDataProviderTests: XCTestCase {
     let location = LocationCoordinate(longitude: 0, latitude: 0)
     
     var didUpdateContents = false
+    var notifiedDataSourceToProcess = false
     
     override func setUp() {
         super.setUp()
         
-        resourceDataProvider = ResourceDataProvider(resource: nil, networkService: networkService, dataProviderDidUpdate: { [weak self] _ in
+        resourceDataProvider = ResourceDataProvider(resource: nil, networkService: networkService, whenStateChanges: { _ in })
+        resourceDataProvider.dataProviderDidUpdate = { [weak self] _ in
             self?.didUpdateContents = true
-            }, whenStateChanges: { _ in })
-        
+            self?.notifiedDataSourceToProcess = true
+        }
         didUpdateContents = false
+        notifiedDataSourceToProcess = false
         XCTAssert(resourceDataProvider.state.isEmpty)
     }
     
     func testGetPreloadedResources() {
         //When
         resourceDataProvider = ResourceDataProvider(resource: nil, prefetchedData: [location],
-                                                     networkService: networkService, dataProviderDidUpdate: { [weak self] _ in
-            self?.didUpdateContents = true
-            }, whenStateChanges: { _ in
-                
-        })
+                                                     networkService: networkService, whenStateChanges: { _ in })
         
         //Then
         XCTAssert(resourceDataProvider.state.hasSucceded)
@@ -55,8 +54,7 @@ class ResourceDataProviderTests: XCTestCase {
         
         //When
         let resourceDataProvider = ResourceDataProvider(resource: resource,
-                                                     networkService: networkService,
-                                                     dataProviderDidUpdate: { _ in }, whenStateChanges: { _ in })
+                                                     networkService: networkService, whenStateChanges: { _ in })
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
@@ -69,11 +67,10 @@ class ResourceDataProviderTests: XCTestCase {
         
         //When
         resourceDataProvider = ResourceDataProvider(resource: resource, prefetchedData: [location],
-                                                     networkService: networkService, dataProviderDidUpdate: { [weak self] _ in
-                                                        self?.didUpdateContents = true
-            }, whenStateChanges: { _ in
-                
-        })
+                                                     networkService: networkService, whenStateChanges: { _ in })
+        resourceDataProvider.dataProviderDidUpdate = { [weak self] _ in
+            self?.didUpdateContents = true
+        }
         resourceDataProvider.load()
         networkService.completeCurrentRequest?()
         
@@ -128,6 +125,8 @@ class ResourceDataProviderTests: XCTestCase {
         //Then
         XCTAssert(resourceDataProvider.state.hasSucceded)
         XCTAssertEqual(location.latitude, resourceDataProvider.data.first?.first?.latitude)
+        XCTAssert(notifiedDataSourceToProcess)
+        XCTAssert(didUpdateContents)
     }
     
     func testLoadEmpty() {
@@ -137,6 +136,7 @@ class ResourceDataProviderTests: XCTestCase {
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
         XCTAssert(didUpdateContents)
+        XCTAssert(notifiedDataSourceToProcess)
     }
     
     func testLoadError() {
@@ -156,8 +156,8 @@ class ResourceDataProviderTests: XCTestCase {
         //Given
         let unsortedValues = [3, 1, 5]
         let resource = ListResourceMock(result: unsortedValues)
-        let dataProvider = ResourceDataProvider(resource: resource, networkService: networkService,
-                                                         dataProviderDidUpdate: { _ in }, whenStateChanges: { _ in })
+        let dataProvider = ResourceDataProvider(resource: resource,
+                                                networkService: networkService, whenStateChanges: { _ in })
         
         //When
         dataProvider.sortDescriptor = { $0 < $1 }
@@ -185,9 +185,7 @@ class ResourceDataProviderTests: XCTestCase {
     func testOnNetworkRequestCanceldWithNoEmptyData() {
         //Given
         resourceDataProvider = ResourceDataProvider(resource: nil, prefetchedData: [location],
-                                                    networkService: networkService, dataProviderDidUpdate: { [weak self] _ in
-            self?.didUpdateContents = true
-            }, whenStateChanges: { _ in })
+                                                    networkService: networkService, whenStateChanges: { _ in })
         let resource = ListResourceMock(result: [location])
         
         //When

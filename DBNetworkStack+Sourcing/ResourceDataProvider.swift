@@ -57,7 +57,8 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     var resource: Resource<Array<Object>>?
     
     var fetchedData: Array<Object>?
-    let dataProviderDidUpdate: (([DataProviderUpdate<Object>]?) -> Void)?
+    public var dataProviderDidUpdate: ProcessUpdatesCallback<Object>?
+    public var whenDataSourceProcessUpdates: (([DataProviderUpdate<Object>]?) -> Void)?
     
     // MARK: Network properties
     let networkService: NetworkServiceProviding
@@ -69,16 +70,13 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      - parameter resource: The resource to fetch.
      - parameter prefetchedData: Data which is already in memory, like cached data.
      - parameter networkService: a networkservice for fetching resources
-     - parameter dataProviderDidUpdate: handler for data updates. `nil` by default.
      - parameter mapFetchedObjectToArray: A function which maps a object to an array for using it as a dataSoruce. `nil` by default.
      - parameter delegate: A delegate for listing to events. `nil` by default.
      */
     public init(resource: Resource<Array<Object>>?, prefetchedData: [Object] = [], networkService: NetworkServiceProviding,
-                dataProviderDidUpdate: @escaping (([DataProviderUpdate<Object>]?) -> Void),
                 whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
         self.resource = resource
         self.prefetchedData = prefetchedData
-        self.dataProviderDidUpdate = dataProviderDidUpdate
         self.networkService = networkService
         self.whenStateChanges = whenStateChanges
         if !prefetchedData.isEmpty {
@@ -102,15 +100,6 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     
     // MARK: private
     /**
-     Gets called when data updates.
-     
-     - parameter updates: The updates.
-     */
-    func didUpdate(_ updates: [DataProviderUpdate<Object>]?) {
-        dataProviderDidUpdate?(updates)
-    }
-    
-    /**
      Fetches the current resources via webservices.
      
       - parameter clearBeforeLoading: when true the loading state will be skipped.
@@ -120,7 +109,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
         currentRequest?.cancel()
         guard let resource = resource else {
             state = .empty
-            didUpdate(nil)
+            dataProviderDidChangeContets(with: nil)
             return
         }
         if clearBeforeLoading {
@@ -138,7 +127,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
         }
         
         state = .success
-        didUpdate(nil)
+        dataProviderDidChangeContets(with: nil)
     }
 
     /// Handles errors which occur during fetching a resource.
@@ -151,6 +140,16 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
         }
         state = .error(error)
     }
+    
+    /**
+     Gets called when data updates.
+     
+     - parameter updates: The updates.
+     */
+    func dataProviderDidChangeContets(with updates: [DataProviderUpdate<Object>]?) {
+        dataProviderDidUpdate?(updates)
+        whenDataSourceProcessUpdates?(updates)
+    }
 }
 
 public extension ResourceDataProvider {
@@ -160,17 +159,15 @@ public extension ResourceDataProvider {
      - parameter resource: The array resource to fetch.
      - parameter prefetchedData: Data which is already in memory, like cached data.
      - parameter networkService: a networkservice for fetching resources
-     - parameter dataProviderDidUpdate: handler for data updates. `nil` by default.
      - parameter mapFetchedObjectToArray: A function which maps a object to an array for using it as a dataSoruce. `nil` by default.
      - parameter delegate: A delegate for listing to events. `nil` by default.
      */
     public convenience init<ArrayResource: ArrayResourceModeling>(resource: ArrayResource?, prefetchedData: [Object] = [],
-                            networkService: NetworkServiceProviding, dataProviderDidUpdate: @escaping (([DataProviderUpdate<Object>]?) -> Void),
-                            whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) where ArrayResource.Element == Object {
+                            networkService: NetworkServiceProviding, whenStateChanges: @escaping ((ResourceDataProviderState) -> Void))
+                            where ArrayResource.Element == Object {
         // swiftlint:disable:next force_cast
         let resource = resource?.wrapped() as! Resource<Array<Object>>?
-        self.init(resource: resource, prefetchedData: prefetchedData, networkService: networkService,
-                  dataProviderDidUpdate: dataProviderDidUpdate, whenStateChanges: whenStateChanges)
+        self.init(resource: resource, prefetchedData: prefetchedData, networkService: networkService, whenStateChanges: whenStateChanges)
     }
     
     /**
