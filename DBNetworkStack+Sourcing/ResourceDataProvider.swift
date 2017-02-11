@@ -58,7 +58,9 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     
     var fetchedData: Array<Object>?
     public var dataProviderDidUpdate: ProcessUpdatesCallback<Object>?
-    public var whenDataSourceProcessUpdates: (([DataProviderUpdate<Object>]?) -> Void)?
+    /// Closure which gets called, when a data inside the provider changes and those changes should be propagated to the datasource.
+    /// **Warning:** Only set this when you are updating the datasource.
+    public var whenDataProviderChanged: ProcessUpdatesCallback<Object>?
     
     // MARK: Network properties
     let networkService: NetworkServiceProviding
@@ -148,7 +150,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      */
     func dataProviderDidChangeContets(with updates: [DataProviderUpdate<Object>]?) {
         dataProviderDidUpdate?(updates)
-        whenDataSourceProcessUpdates?(updates)
+        whenDataProviderChanged?(updates)
     }
 }
 
