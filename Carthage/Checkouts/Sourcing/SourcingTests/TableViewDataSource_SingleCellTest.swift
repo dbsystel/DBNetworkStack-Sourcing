@@ -98,9 +98,9 @@ class TableViewDataSourceSingleCellTest: XCTestCase {
     
     func testDequCells() {
         //Given
-        var didCallAdditionalConfiguartion = false
-        let cell = CellConfiguration<UITableViewCellMock<Int>>(cellIdentifier: cellIdentifier, nib: nil, additionalConfiguartion: { _, _ in
-            didCallAdditionalConfiguartion = true
+        var didCallAdditionalConfigurtion = false
+        let cell = CellConfiguration<UITableViewCellMock<Int>>(cellIdentifier: cellIdentifier, nib: nil, additionalConfigurtion: { _, _ in
+            didCallAdditionalConfigurtion = true
         })
         let realTableView = UITableView()
         
@@ -114,18 +114,20 @@ class TableViewDataSourceSingleCellTest: XCTestCase {
         XCTAssertEqual(UITableViewCellMock.configuredObject, 10)
         XCTAssertEqual(tableViewMock.lastUsedReuseIdetifiers.first, cellIdentifier)
         XCTAssertTrue(cellForGivenRow is UITableViewCellMock<Int>)
-        XCTAssertTrue(didCallAdditionalConfiguartion)
+        XCTAssertTrue(didCallAdditionalConfigurtion)
     }
     
     func testUpdateDataSourceWithNoData() {
         //Given
-        let dataSource = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
-
+        let cellConfig: [CellConfiguring] = [CellConfiguration<UITableViewCellMock<Int>>(cellIdentifier: cellIdentifier)]
+        let dataSource = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, anyCells: cellConfig)
+        let reloadCount = tableViewMock.reloadedCount
         //When
+        
         dataSource.process(updates: nil)
         
         //Then
-        XCTAssertEqual(tableViewMock.reloadedCount, 2)
+        XCTAssertEqual(tableViewMock.reloadedCount, reloadCount + 1)
     }
     
     func testSelectedObject() {
@@ -152,7 +154,7 @@ class TableViewDataSourceSingleCellTest: XCTestCase {
         let realTableView = UITableView()
         
         //When
-        let dataSource = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
+        let dataSource = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell, displaySectionIndexTitles: true)
         let sectionTitles = dataSource.sectionIndexTitles(for: realTableView)
         
         //Then
@@ -375,6 +377,18 @@ class TableViewDataSourceSingleCellTest: XCTestCase {
         //Then
         XCTAssertEqual(dataModificator.deletedIndexPath, deletedIndexPath)
         XCTAssert(dataModificator.triggeredByUserInteraction ?? false)
+    }
+    
+    func testTitleForHeaderInSection() {
+        //Given
+        let dataProvider = ArrayDataProvider(sections: [[2], [1, 3, 10]], headerTitles: ["foo", "bar"])
+        let dataSource = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell, dataModificator: dataModificator)
+        
+        //When
+        let sectionTitle = dataSource.tableView(UITableView(), titleForHeaderInSection: 1)
+        
+        //Then
+        XCTAssertEqual(sectionTitle, "bar")
     }
     
 }

@@ -19,15 +19,17 @@ final public class TableViewDataSource<Object>: NSObject, UITableViewDataSource,
             tableView.reloadData()
         }
     }
-    private let cells: Array<CellDequeable>
+    private let cells: Array<CellConfiguring>
+    public var displaySectionIndexTitles: Bool
     
     public init<TypedDataProvider: DataProviding>(tableView: TableViewRepresenting, dataProvider: TypedDataProvider,
-                anyCells: Array<CellDequeable>, dataModificator: DataModifying? = nil)
-                where TypedDataProvider.Object == Object {
+                anyCells: Array<CellConfiguring>, dataModificator: DataModifying? = nil, displaySectionIndexTitles: Bool = false)
+                where TypedDataProvider.Element == Object {
         self.tableView = tableView
-        self.dataProvider = AnyDataProvider(dataProvider: dataProvider)
+        self.dataProvider = AnyDataProvider(dataProvider)
         self.dataModificator = dataModificator
         self.cells = anyCells
+        self.displaySectionIndexTitles = displaySectionIndexTitles
         super.init()
         dataProvider.whenDataProviderChanged = { [weak self] updates in
             self?.process(updates: updates)
@@ -40,13 +42,13 @@ final public class TableViewDataSource<Object>: NSObject, UITableViewDataSource,
         tableView.reloadData()
     }
     
-    private func register(cells: Array<CellDequeable>) {
+    private func register(cells: Array<CellConfiguring>) {
         for cell in cells where cell.nib != nil {
             tableView.registerNib(cell.nib, forCellReuseIdentifier: cell.cellIdentifier)
         }
     }
     
-    private func cellDequeableForIndexPath(_ object: Object) -> CellDequeable? {
+    private func cellDequeableForIndexPath(_ object: Object) -> CellConfiguring? {
         return cells.first(where: { $0.canConfigureCell(with: object) })
     }
     
@@ -107,7 +109,19 @@ final public class TableViewDataSource<Object>: NSObject, UITableViewDataSource,
     }
     
     public func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return dataProvider.sectionIndexTitles
+        return displaySectionIndexTitles ? dataProvider.sectionIndexTitles : nil
+    }
+    
+    public func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let count = dataProvider.headerTitles?.count ?? -1
+        if section == 0 && count == 0 {
+            return nil
+        }
+        if section > count {
+            return nil
+        } else {
+            return dataProvider.headerTitles?[section]
+        }
     }
     
     public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
@@ -115,7 +129,7 @@ final public class TableViewDataSource<Object>: NSObject, UITableViewDataSource,
     }
     
     public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        dataModificator?.moveItemAt(sourceIndexPath: sourceIndexPath, to: destinationIndexPath, causedByUserInteraction: true)
+        dataModificator?.moveItemAt(sourceIndexPath: sourceIndexPath, to: destinationIndexPath, triggerdByTableView: true)
     }
     
     public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -124,7 +138,7 @@ final public class TableViewDataSource<Object>: NSObject, UITableViewDataSource,
     
     public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if let dataModificator = dataModificator, editingStyle == .delete {
-            dataModificator.deleteItem(at: indexPath, causedByUserInteraction: true)
+            dataModificator.deleteItem(at: indexPath, triggerdByTableView: true)
         }
     }
     
@@ -143,17 +157,17 @@ final public class TableViewDataSource<Object>: NSObject, UITableViewDataSource,
 // MARK: Typesafe initializers
 
 public extension TableViewDataSource {
-    convenience init<CellConfig: StaticCellDequeable, TypedDataProvider: DataProviding>(tableView: TableViewRepresenting,
-                     dataProvider: TypedDataProvider, cell: CellConfig, dataModificator: DataModifying? = nil)
-        where TypedDataProvider.Object == Object, CellConfig.Object == Object, CellConfig.Cell: UITableViewCell {
-            let typeErasedDataProvider = AnyDataProvider(dataProvider: dataProvider)
-            self.init(tableView: tableView, dataProvider: typeErasedDataProvider, anyCells: [cell], dataModificator: dataModificator)
+    convenience init<CellConfig: StaticCellConfiguring, TypedDataProvider: DataProviding>(tableView: TableViewRepresenting,
+                     dataProvider: TypedDataProvider, cell: CellConfig, dataModificator: DataModifying? = nil, displaySectionIndexTitles: Bool = false)
+        where TypedDataProvider.Element == Object, CellConfig.Object == Object, CellConfig.Cell: UITableViewCell {
+            let typeErasedDataProvider = AnyDataProvider(dataProvider)
+            self.init(tableView: tableView, dataProvider: typeErasedDataProvider, anyCells: [cell], dataModificator: dataModificator, displaySectionIndexTitles: displaySectionIndexTitles)
     }
     
-    convenience init<CellConfig: StaticCellDequeable, TypedDataProvider: DataProviding>(tableView: TableViewRepresenting,
-                     dataProvider: TypedDataProvider, cells: Array<CellConfig>, dataModificator: DataModifying? = nil)
-        where TypedDataProvider.Object == Object, CellConfig.Object == Object, CellConfig.Cell: UITableViewCell {
-            let typeErasedDataProvider = AnyDataProvider(dataProvider: dataProvider)
-            self.init(tableView: tableView, dataProvider: typeErasedDataProvider, anyCells: cells, dataModificator: dataModificator)
+    convenience init<CellConfig: StaticCellConfiguring, TypedDataProvider: DataProviding>(tableView: TableViewRepresenting,
+                     dataProvider: TypedDataProvider, cells: Array<CellConfig>, dataModificator: DataModifying? = nil, displaySectionIndexTitles: Bool = false)
+        where TypedDataProvider.Element == Object, CellConfig.Object == Object, CellConfig.Cell: UITableViewCell {
+            let typeErasedDataProvider = AnyDataProvider(dataProvider)
+            self.init(tableView: tableView, dataProvider: typeErasedDataProvider, anyCells: cells, dataModificator: dataModificator, displaySectionIndexTitles: displaySectionIndexTitles)
     }
 }

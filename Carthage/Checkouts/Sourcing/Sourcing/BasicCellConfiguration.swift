@@ -25,28 +25,46 @@
 
 import UIKit
 
-public struct BasicCellConfiguration<CellToConfigure, ObjectOfCell>: CellDequeable, StaticCellDequeable {
+public struct BasicCellConfiguration<CellToConfigure, ObjectOfCell>: CellConfiguring, StaticCellConfiguring {
     public typealias Cell = CellToConfigure
     public typealias Object = ObjectOfCell
     
     public let cellIdentifier: String
     public let nib: UINib?
-    let configuration: (Object, Cell) -> Void
-    let additionalConfiguartion: ((Object, Cell) -> Void)?
+    public let configuration: (Object, Cell) -> Void
     
-    public init(cellIdentifier: String, configuration: @escaping (Object, Cell) -> Void,
-                nib: UINib? = nil, additionalConfiguartion: ((Object, Cell) -> Void)? = nil) {
+    public init(cellIdentifier: String, configuration: @escaping (Object, Cell) -> Void, nib: UINib? = nil) {
         self.cellIdentifier = cellIdentifier
         self.configuration = configuration
         self.nib = nib
-        self.additionalConfiguartion = additionalConfiguartion
     }
     
     public func configure(_ cell: AnyObject, with object: Any) -> AnyObject {
         if let object = object as? Object, let cell = cell as? Cell {
             configuration(object, cell)
-            additionalConfiguartion?(object, cell)
         }
         return cell
     }
 }
+
+extension BasicCellConfiguration where CellToConfigure: ConfigurableCell, CellToConfigure.DataSource == ObjectOfCell {
+    public init(cellIdentifier: String, nib: UINib? = nil, additionalConfigurtion: ((Object, Cell) -> Void)? = nil) {
+        self.init(cellIdentifier: cellIdentifier, configuration: { object, cell in
+            cell.configure(with: object)
+            additionalConfigurtion?(object, cell)
+        }, nib: nib)
+    }
+}
+
+extension BasicCellConfiguration where CellToConfigure: ConfigurableCell & CellIdentifierProviding, CellToConfigure.DataSource == ObjectOfCell {
+    public init(nib: UINib? = nil, additionalConfigurtion: ((Object, Cell) -> Void)? = nil) {
+        self.init(cellIdentifier: CellToConfigure.cellIdentifier, nib: nib, additionalConfigurtion: additionalConfigurtion)
+    }
+}
+
+extension BasicCellConfiguration where CellToConfigure: CellIdentifierProviding {
+    public init(configuration: @escaping (Object, Cell) -> Void, nib: UINib? = nil) {
+        self.init(cellIdentifier: CellToConfigure.cellIdentifier, configuration: configuration, nib: nib)
+    }
+}
+

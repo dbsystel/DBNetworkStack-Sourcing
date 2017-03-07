@@ -124,7 +124,7 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.hasSucceded)
-        XCTAssertEqual(location.latitude, resourceDataProvider.data.first?.first?.latitude)
+        XCTAssertEqual(location.latitude, resourceDataProvider.contents.first?.first?.latitude)
         XCTAssert(notifiedDataSourceToProcess)
         XCTAssert(didUpdateContents)
     }

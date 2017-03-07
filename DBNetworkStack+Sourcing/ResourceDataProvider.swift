@@ -45,7 +45,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     public let sectionIndexTitles: Array<String>? = nil
     
     /// The provided data
-    open var data: Array<Array<Object>> {
+    open var contents: Array<Array<Object>> {
         return [fetchedData ?? prefetchedData]
     }
     
