@@ -32,11 +32,7 @@ struct ListResourceMock<ModelElement>: ArrayResourceModeling {
     typealias Element = ModelElement
     let result: Array<Element>
     var parse: (_ data: Data) throws -> Array<Element> {
-        return test
-    }
-    
-    func test(data: Data) -> Array<Element> {
-        return result
+        return { _ in return self.result }
     }
     
     var request: NetworkRequestRepresening {
