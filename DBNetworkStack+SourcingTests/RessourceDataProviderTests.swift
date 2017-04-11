@@ -18,7 +18,7 @@ struct LocationCoordinate {
 
 class ResourceDataProviderTests: XCTestCase {
     var resourceDataProvider: ResourceDataProvider<LocationCoordinate>!
-    let networkService = FastNetworkService()
+    var networkService: NetworkServiceMock!
     
     let location = LocationCoordinate(longitude: 0, latitude: 0)
     
@@ -27,6 +27,8 @@ class ResourceDataProviderTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
+        
+        networkService = NetworkServiceMock()
         
         resourceDataProvider = ResourceDataProvider(resource: nil, networkService: networkService, whenStateChanges: { _ in })
         resourceDataProvider.dataProviderDidUpdate = { [weak self] _ in
@@ -58,7 +60,7 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
-        XCTAssert(!networkService.didRequestAResource)
+        XCTAssertEqual(networkService.requestCount, 0)
     }
     
     func testReplacePreloadedWithResources() {
@@ -72,7 +74,7 @@ class ResourceDataProviderTests: XCTestCase {
             self?.didUpdateContents = true
         }
         resourceDataProvider.load()
-        networkService.completeCurrentRequest?()
+        networkService.returnSuccess()
         
         //Then
         XCTAssert(resourceDataProvider.state.hasSucceded)
@@ -88,7 +90,7 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.isLoading)
-        XCTAssert(networkService.didRequestAResource)
+        XCTAssertEqual(networkService.requestCount, 1)
     }
     
     func testLoadResourceNil() {
@@ -99,7 +101,7 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
-        XCTAssert(!networkService.didRequestAResource)
+        XCTAssertEqual(networkService.requestCount, 0)
     }
     
     func testLoadResource_skipLoadingState() {
@@ -111,7 +113,7 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
-        XCTAssert(networkService.didRequestAResource)
+        XCTAssertEqual(networkService.requestCount, 1)
     }
     
     func testLoadSucceed() {
@@ -120,8 +122,7 @@ class ResourceDataProviderTests: XCTestCase {
         
         //When
         resourceDataProvider.reconfigure(with: resource)
-        networkService.completeCurrentRequest?()
-        
+        networkService.returnSuccess()
         //Then
         XCTAssert(resourceDataProvider.state.hasSucceded)
         XCTAssertEqual(location.latitude, resourceDataProvider.contents.first?.first?.latitude)
@@ -145,7 +146,7 @@ class ResourceDataProviderTests: XCTestCase {
         
         //When
         resourceDataProvider.reconfigure(with: resource)
-        networkService.errorCurrentRequest?(.unknownError)
+        networkService.returnError(with: .unknownError)
         
         //Then
         XCTAssert(resourceDataProvider.state.hasError)
@@ -162,7 +163,7 @@ class ResourceDataProviderTests: XCTestCase {
         //When
         dataProvider.sortDescriptor = { $0 < $1 }
         dataProvider.load()
-        networkService.completeCurrentRequest?()
+        networkService.returnSuccess()
         
         //Then
         let firstObject = dataProvider.object(at: IndexPath(item: 0, section: 0))
@@ -175,11 +176,11 @@ class ResourceDataProviderTests: XCTestCase {
         
         //When
         resourceDataProvider.reconfigure(with: resource)
-        networkService.errorCurrentRequest?(.cancelled)
+        networkService.returnError(with: .cancelled)
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
-        XCTAssert(networkService.didRequestAResource)
+        XCTAssertEqual(networkService.requestCount, 1)
     }
     
     func testOnNetworkRequestCanceldWithNoEmptyData() {
@@ -190,10 +191,10 @@ class ResourceDataProviderTests: XCTestCase {
         
         //When
         resourceDataProvider.reconfigure(with: resource)
-        networkService.errorCurrentRequest?(.cancelled)
+        networkService.returnError(with: .cancelled)
         
         //Then
         XCTAssert(resourceDataProvider.state.hasSucceded)
-        XCTAssert(networkService.didRequestAResource)
+        XCTAssertEqual(networkService.requestCount, 1)
     }
 }

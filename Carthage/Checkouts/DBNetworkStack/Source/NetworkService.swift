@@ -26,6 +26,7 @@
 //
 
 import Foundation
+import Dispatch
 
 /**
  `NetworkService` handles network request for resources by using a given `NetworkAccessProviding`
@@ -46,12 +47,13 @@ public final class NetworkService: NetworkServiceProviding, BaseURLProviding {
     }
     
     @discardableResult
-    public func request<T: ResourceModeling>(_ resource: T, onCompletion: @escaping (T.Model) -> Void,
+    public func request<T: ResourceModeling>(queue: DispatchQueue, resource: T, onCompletion: @escaping (T.Model) -> Void,
                         onError: @escaping (DBNetworkStackError) -> Void) -> NetworkTaskRepresenting {
         let baseURL = self.baseURL(with: resource)
         let reuqest = resource.request.urlRequest(with: baseURL)
         let dataTask = networkAccess.load(request: reuqest, callback: { data, response, error in
-            self.processAsyncResponse(response: response, resource: resource, data: data, error: error, onCompletion: onCompletion, onError: onError)
+            self.processAsyncResponse(queue: queue, response: response, resource: resource, data: data,
+                                      error: error, onCompletion: onCompletion, onError: onError)
         })
         return dataTask
     }
