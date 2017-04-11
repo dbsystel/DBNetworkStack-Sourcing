@@ -14,12 +14,9 @@ import Sourcing
 let networkService: NetworkServiceProviding = // Network service which implements DBNetworkStack.NetworkServiceProviding
 let resource = // Some resource which implements DBNetworkStack.ArrayResourceProviding
 
-let dataSource: TableViewDataSource<ResourceDataProvider<Int>, CellConfiguration<Int>> = //
+let dataSource: TableViewDataSource<Int> = //
 
-let ressourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService,
-            dataProviderDidUpdate: { [weak self] updates in
-                                    self?.dataSource.processUpdates(updates)
-            }, whenStateChanges: { newState in })
+let ressourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService, whenStateChanges: { _ in })
         
 // Start loading content
 ressourceDataProvider.load()
@@ -34,7 +31,6 @@ If you have default local data you can provide it upfront. It will be replaced w
  ressourceDataProvider = ResourceDataProvider(
             resource: nil, prefetchedData: [1, 2, 3],
             networkService: networkService,
-            dataProviderDidUpdate: {  _ in },
             whenStateChanges: { _ in }
  )
 ```
