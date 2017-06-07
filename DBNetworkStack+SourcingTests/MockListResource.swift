@@ -28,14 +28,14 @@
 
 import DBNetworkStack
 
-struct ListResourceMock<ModelElement>: ArrayResourceModeling {
-    typealias Element = ModelElement
-    let result: Array<Element>
-    var parse: (_ data: Data) throws -> Array<Element> {
-        return { _ in return self.result }
-    }
-    
-    var request: NetworkRequestRepresening {
-        return NetworkRequest(path: "", baseURLKey: "")
-    }
-}
+//struct ListResourceMock<ModelElement>: ArrayResourceModeling {
+//    typealias Element = ModelElement
+//    let result: Array<Element>
+//    var parse: (_ data: Data) throws -> Array<Element> {
+//        return { _ in return self.result }
+//    }
+//    
+//    var request: NetworkRequestRepresening {
+//        return NetworkRequest(path: "", baseURLKey: "")
+//    }
+//}
