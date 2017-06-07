@@ -14,7 +14,6 @@
 		C613C35C1DBF35D600E397B8 /* Sourcing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C35A1DBF35D600E397B8 /* Sourcing.framework */; };
 		C613C35E1DBF35E900E397B8 /* ResourceDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C35D1DBF35E900E397B8 /* ResourceDataProvider.swift */; };
 		C613C3621DBF362800E397B8 /* RessourceDataProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C3611DBF362800E397B8 /* RessourceDataProviderTests.swift */; };
-		C68FF1FC1E1A708D00A2513F /* MockListResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C68FF1F61E1A69EA00A2513F /* MockListResource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +37,6 @@
 		C613C35A1DBF35D600E397B8 /* Sourcing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sourcing.framework; path = Carthage/Build/iOS/Sourcing.framework; sourceTree = "<group>"; };
 		C613C35D1DBF35E900E397B8 /* ResourceDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceDataProvider.swift; sourceTree = "<group>"; };
 		C613C3611DBF362800E397B8 /* RessourceDataProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RessourceDataProviderTests.swift; sourceTree = "<group>"; };
-		C68FF1F61E1A69EA00A2513F /* MockListResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockListResource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,7 +112,6 @@
 		C68FF1FA1E1A6A6E00A2513F /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
-				C68FF1F61E1A69EA00A2513F /* MockListResource.swift */,
 			);
 			name = Mocks;
 			sourceTree = "<group>";
@@ -291,7 +288,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C613C3621DBF362800E397B8 /* RessourceDataProviderTests.swift in Sources */,
-				C68FF1FC1E1A708D00A2513F /* MockListResource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
