@@ -32,12 +32,6 @@ import DBNetworkStack
  */
 public class ResourceDataProvider<Object>: ArrayDataProviding {
     
-    /// Data which get provided when in no data is fetched
-    public var prefetchedData: [Object] = []
-    
-    /// Function which sorts the result of the ressource
-    public var sortDescriptor: ((Object, Object) -> Bool)?
-    
     /// Function which gets called when state changes
     public var whenStateChanges: ((ResourceDataProviderState) -> Void)?
     
@@ -45,10 +39,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     public let sectionIndexTitles: Array<String>? = nil
     
     /// The provided data
-    open var contents: Array<Array<Object>> {
-        return [fetchedData ?? prefetchedData]
-    }
-    
+    open var contents: Array<Array<Object>> = []
     /// Describes the current stae of the data provider. Listen for state changes with the `whenStateChanges` callback
     public internal(set) var state: ResourceDataProviderState = .empty {
         didSet { whenStateChanges?(state) }
@@ -56,7 +47,6 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     var stateBeforeLoadingStarted: ResourceDataProviderState = .empty
     var resource: Resource<Array<Object>>?
     
-    var fetchedData: Array<Object>?
     public var dataProviderDidUpdate: ProcessUpdatesCallback<Object>?
     /// Closure which gets called, when a data inside the provider changes and those changes should be propagated to the datasource.
     /// **Warning:** Only set this when you are updating the datasource.
@@ -75,15 +65,11 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      - parameter mapFetchedObjectToArray: A function which maps a object to an array for using it as a dataSoruce. `nil` by default.
      - parameter delegate: A delegate for listing to events. `nil` by default.
      */
-    public init(resource: Resource<Array<Object>>?, prefetchedData: [Object] = [], networkService: NetworkServiceProviding,
+    public init(resource: Resource<Array<Object>>?, networkService: NetworkServiceProviding,
                 whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
         self.resource = resource
-        self.prefetchedData = prefetchedData
         self.networkService = networkService
         self.whenStateChanges = whenStateChanges
-        if !prefetchedData.isEmpty {
-            self.state = .success
-        }
     }
     
     /**
@@ -94,7 +80,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      */
     public func reconfigure(with resource: Resource<Array<Object>>?, clearBeforeLoading: Bool = true) {
         if resource == nil {
-            fetchedData = nil
+            contents = []
         }
         self.resource = resource
         load(clearBeforeLoading: clearBeforeLoading)
@@ -122,12 +108,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     
     func loadDidSucess(with newFetchedData: Array<Object>) {
         currentRequest = nil
-        if let sortDescriptor = sortDescriptor {
-            fetchedData = newFetchedData.sorted(by: sortDescriptor)
-        } else {
-            fetchedData = newFetchedData
-        }
-        
+        contents = [newFetchedData]
         state = .success
         dataProviderDidChangeContets(with: nil)
     }
@@ -164,12 +145,12 @@ public extension ResourceDataProvider {
      - parameter mapFetchedObjectToArray: A function which maps a object to an array for using it as a dataSoruce. `nil` by default.
      - parameter delegate: A delegate for listing to events. `nil` by default.
      */
-    public convenience init<ArrayResource: ArrayResourceModeling>(resource: ArrayResource?, prefetchedData: [Object] = [],
-                            networkService: NetworkServiceProviding, whenStateChanges: @escaping ((ResourceDataProviderState) -> Void))
+    public convenience init<ArrayResource: ArrayResourceModeling>(resource: ArrayResource?, networkService: NetworkServiceProviding,
+                            whenStateChanges: @escaping ((ResourceDataProviderState) -> Void))
                             where ArrayResource.Element == Object {
         // swiftlint:disable:next force_cast
         let resource = resource?.wrapped() as! Resource<Array<Object>>?
-        self.init(resource: resource, prefetchedData: prefetchedData, networkService: networkService, whenStateChanges: whenStateChanges)
+        self.init(resource: resource, networkService: networkService, whenStateChanges: whenStateChanges)
     }
     
     /**
