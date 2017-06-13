@@ -164,11 +164,10 @@ public extension ResourceDataProvider {
      - parameter mapFetchedObjectToArray: A function which maps a object to an array for using it as a dataSoruce. `nil` by default.
      - parameter delegate: A delegate for listing to events. `nil` by default.
      */
-    public convenience init<ArrayResource: ArrayResourceModeling>(resource: ArrayResource?, prefetchedData: [Object] = [],
+    public convenience init<R: ResourceModeling>(resource: R?, prefetchedData: [Object] = [],
                             networkService: NetworkServiceProviding, whenStateChanges: @escaping ((ResourceDataProviderState) -> Void))
-                            where ArrayResource.Element == Object {
-        // swiftlint:disable:next force_cast
-        let resource = resource?.wrapped() as! Resource<Array<Object>>?
+                            where R.Model == Array<Object> {
+        let resource = resource?.wrapped()
         self.init(resource: resource, prefetchedData: prefetchedData, networkService: networkService, whenStateChanges: whenStateChanges)
     }
     
@@ -178,10 +177,9 @@ public extension ResourceDataProvider {
      - parameter resource: The new resource to fetch.
      - parameter clearBeforeLoading: when true the loading state will be skipped.
      */
-    public func reconfigure<ArrayResource: ArrayResourceModeling>(with resource: ArrayResource?, clearBeforeLoading: Bool = true)
-        where ArrayResource.Element == Object {
-        // swiftlint:disable:next force_cast
-        let resource = resource?.wrapped() as! Resource<Array<Object>>?
+    public func reconfigure<R: ResourceModeling>(with resource: R?, clearBeforeLoading: Bool = true)
+        where R.Model == Array<Object> {
+        let resource = resource?.wrapped()
         reconfigure(with: resource, clearBeforeLoading: clearBeforeLoading)
     }
 }
