@@ -16,6 +16,10 @@ struct LocationCoordinate {
     let latitude: Double
 }
 
+func testResource<T>(elements: [T]) -> Resource<Array<T>> {
+    return Resource(request: NetworkRequest(path: "", baseURLKey: ""), parse: { _ in return elements })
+}
+
 class ResourceDataProviderTests: XCTestCase {
     var resourceDataProvider: ResourceDataProvider<LocationCoordinate>!
     var networkService: NetworkServiceMock!
@@ -42,7 +46,7 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testInitEmpty() {
         //Given
-        let resource: ListResourceMock<LocationCoordinate>? = nil
+        let resource: Resource<Array<LocationCoordinate>>? = nil
         
         //When
         let resourceDataProvider = ResourceDataProvider(resource: resource,
@@ -55,7 +59,7 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testLoadResource() {
         //Given
-        let resource = ListResourceMock(result: [location])
+        let resource = testResource(elements: [location])
         
         //When
         resourceDataProvider.reconfigure(with: resource)
@@ -67,7 +71,7 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testLoadResourceNil() {
         //Given
-        let resource: ListResourceMock<LocationCoordinate>? = nil
+        let resource: Resource<Array<LocationCoordinate>>? = nil
         //When
         resourceDataProvider.reconfigure(with: resource)
         
@@ -78,7 +82,7 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testLoadResource_skipLoadingState() {
         //Given
-        let resource = ListResourceMock(result: [location])
+        let resource = testResource(elements: [location])
         
         //When
         resourceDataProvider.reconfigure(with: resource, clearBeforeLoading: false)
@@ -90,7 +94,7 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testLoadSucceed() {
         //Given
-        let resource = ListResourceMock(result: [location])
+        let resource = testResource(elements: [location])
         
         //When
         resourceDataProvider.reconfigure(with: resource)
@@ -114,7 +118,7 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testLoadError() {
         //Given
-        let resource = ListResourceMock(result: [location])
+        let resource = testResource(elements: [location])
         
         //When
         resourceDataProvider.reconfigure(with: resource)
@@ -127,7 +131,7 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testOnNetworkRequestCanceldWithEmptyData() {
         //Given
-        let resource = ListResourceMock(result: [location])
+        let resource = testResource(elements: [location])
         
         //When
         resourceDataProvider.reconfigure(with: resource)
@@ -142,7 +146,7 @@ class ResourceDataProviderTests: XCTestCase {
         //Given
         resourceDataProvider = ResourceDataProvider(resource: nil,
                                                     networkService: networkService, whenStateChanges: { _ in })
-        let resource = ListResourceMock(result: [location])
+        let resource = testResource(elements: [location])
         
         //When
         resourceDataProvider.reconfigure(with: resource)
