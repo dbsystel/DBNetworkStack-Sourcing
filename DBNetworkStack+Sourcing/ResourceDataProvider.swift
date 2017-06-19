@@ -144,8 +144,8 @@ public extension ResourceDataProvider {
     public convenience init<R: ResourceModeling>(resource: R?, networkService: NetworkServiceProviding,
                             whenStateChanges: @escaping ((ResourceDataProviderState) -> Void))
                             where R.Model == Array<Object> {
-        let resource = resource.map { Resource(resource: $0) }
-        self.init(resource: resource, networkService: networkService, whenStateChanges: whenStateChanges)
+        let resource = resource.map(Resource.init)
+        self.init(resource: resource, prefetchedData: prefetchedData, networkService: networkService, whenStateChanges: whenStateChanges)
     }
     
     /**
@@ -157,7 +157,7 @@ public extension ResourceDataProvider {
     @available(*, deprecated, message: "Use `Resource<Array<Object>> to compose a custom Resource`")
     public func reconfigure<R: ResourceModeling>(with resource: R?, skipLoadingState: Bool = false)
         where R.Model == Array<Object> {
-        let resource = resource.map { Resource(resource: $0) }
-        reconfigure(with: resource, skipLoadingState: skipLoadingState)
+            let resource = resource.map(Resource.init)
+        reconfigure(with: resource, clearBeforeLoading: clearBeforeLoading)
     }
 }
