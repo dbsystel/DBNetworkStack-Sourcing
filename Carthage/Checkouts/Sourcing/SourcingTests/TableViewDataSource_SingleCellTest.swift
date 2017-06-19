@@ -50,7 +50,7 @@ class TableViewDataSourceSingleCellTest: XCTestCase {
     
     func testSetDataSource() {
         //When
-        _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
+        let _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
         
         //Then
         XCTAssertEqual(tableViewMock.reloadedCount, 1)
@@ -65,7 +65,7 @@ class TableViewDataSourceSingleCellTest: XCTestCase {
         let cell = CellConfiguration<UITableViewCellMock<Int>>(cellIdentifier: cellIdentifier, nib: nib)
         
         //When
-        _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
+        let _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
         
         //Then
         XCTAssertEqual(tableViewMock.registerdNibs.count, 1)
@@ -303,7 +303,7 @@ class TableViewDataSourceSingleCellTest: XCTestCase {
     
     func testProcessUpdatesFromDataSource() {
         //Given
-        _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
+        let _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
         
         //When
         let deletion = DataProviderUpdate<Int>.deleteSection(0)

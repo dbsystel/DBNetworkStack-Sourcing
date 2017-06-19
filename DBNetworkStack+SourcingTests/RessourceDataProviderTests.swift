@@ -17,7 +17,9 @@ struct LocationCoordinate {
 }
 
 func testResource<T>(elements: [T]) -> Resource<Array<T>> {
-    return Resource(request: NetworkRequest(path: "", baseURLKey: ""), parse: { _ in return elements })
+    let url: URL! = URL(string: "bahn.de")
+    let request = URLRequest(path: "/", baseURL: url)
+    return Resource(request: request, parse: { _ in return elements })
 }
 
 class ResourceDataProviderTests: XCTestCase {

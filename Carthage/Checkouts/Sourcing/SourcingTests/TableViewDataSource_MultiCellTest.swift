@@ -50,7 +50,7 @@ class TableViewDataSourceMultiCellTest: XCTestCase {
                                       CellConfiguration<UITableViewCellMock<Int>>(cellIdentifier: secondCellIdentifier)]
 
         //When
-        _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, anyCells: cells)
+        let _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, anyCells: cells)
         
         //Then
         XCTAssertEqual(tableViewMock.reloadedCount, 1)
@@ -62,12 +62,11 @@ class TableViewDataSourceMultiCellTest: XCTestCase {
     func testRegisterNib() {
         //Given
         let nib = UINib(data: Data(), bundle: nil)
-        let cellConfig: [CellConfiguring] = [
-            CellConfiguration<UITableViewCellMock<Int>>(cellIdentifier: cellIdentifier, nib: nib, additionalConfiguration: nil),
-            CellConfiguration<UITableViewCellMock<String>>(nib: nib, additionalConfiguration: nil)]
+        let cellConfig: [CellConfiguring] = [CellConfiguration<UITableViewCellMock<Int>>(cellIdentifier: cellIdentifier, nib: nib, additionalConfiguration: nil),
+                                           CellConfiguration<UITableViewCellMock<String>>(nib: nib, additionalConfiguration: nil)]
         
         //When
-        _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, anyCells: cellConfig)
+        let _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, anyCells: cellConfig)
         
         //Then
         XCTAssertEqual(tableViewMock.registerdNibs.count, 2)
@@ -132,6 +131,7 @@ class TableViewDataSourceMultiCellTest: XCTestCase {
         XCTAssertTrue(stringCell is UITableViewCellMock<String>)
     }
 
+    
     func testSetNewTableView() {
         //Given
         let cellConfig: [CellConfiguring] = [CellConfiguration<UITableViewCellMock<Int>>(cellIdentifier: cellIdentifier)]
