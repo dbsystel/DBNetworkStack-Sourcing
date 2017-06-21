@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/lightsprint09/Sourcing.svg?branch=master)](https://travis-ci.org/lightsprint09/Sourcing)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![codecov](https://codecov.io/gh/lightsprint09/Sourcing/branch/master/graph/badge.svg)](https://codecov.io/gh/lightsprint09/Sourcing)
 
 # Sourcing
 
@@ -7,7 +8,9 @@
 * [DataProvider](#dataprovider)
    * [ArrayDataProvider](#arraydataprovider)
    * [FetchedResultsDataProvider](#fetchedresultsdataprovider)
+   * [DataProviderSwitcher](#dataproviderswitcher)
    * [AnyDataProvider](#anydataprovider)
+   * [AnyArrayDataProvider](#anyarraydataprovider)
    * [Custom DataProvider](#custom-dataprovider)
 * [DataModificator](#datamodificator)
   * [ArrayDataModificator](#arraydatamodificator)
@@ -17,8 +20,8 @@
    * [Multi Cell DataSources](#multicelldatasource)
 * [Cells](#cells)
    * [BasicCellConfiguration](#basiccellconfiguration)
-   * [ConfigurableCell & CellConfiguration](#configurablecell&cellconfiguration)
-   * [CellIdentifierProviding]
+   * [ConfigurableCell & CellConfiguration](#configurablecell--cellconfiguration)
+   * [CellIdentifierProviding](#cellidentifierproviding)
 * [Installation](#installation)
 
 Typesafe and flexible abstraction for TableView &amp; CollectionView DataSources written in Swift.
@@ -37,7 +40,7 @@ class TrainCell: UITableViewCell, ConfigurableCell {
 }
 
 //If your reuse identifier is the same a the class name
-extenion TrainCell: CellIdentifierProviding {}
+extension TrainCell: CellIdentifierProviding {}
 
 let trainCell = CellConfiguration<TrainCell>()
 let trains: [Train] = //
@@ -48,7 +51,7 @@ let dataSource = TableViewDataSource(tableView: tableView, dataProvider: dataPro
 A DataProvider encaupsulates you data. Use one of the given DataProviders or implement `DataProviding` to create your own DataProvider.
 
 ### ArrayDataProvider
-`ArrayDataProvider<Element>` wraps  `Array<Element>` to an DataProvider.
+`ArrayDataProvider<Element>` wraps `Array<Element>` to a DataProvider.
 
 ```swift
 let trains: [[Train]] = //
@@ -64,14 +67,38 @@ let fetchedResultsController: NSFetchedResultsController<CDTrain> = //
 let dataProvider = FetchedResultsDataProvider(fetchedResultsController: fetchedResultsController)
 ```
 
+### DataProviderSwitcher
+`DataProviderSwitcher` allows switching between different DataProviders dynamically by changing to a given state. It can help to compose DataPrvoiders.
+
+```swift
+enum State {
+  case initial
+  case loaded
+}
+let dataProviderSwitcher = DataProviderSwitcher<Train, State>(initialState: .initial, resolve: { state in 
+   switch state {
+      case .initial:
+        return AnyDataProvider(cachedDataProvider)
+      case .loaded:
+        return AnyDataProvider(networkResultDataProvider)
+   }
+} 
+
+//When state changes.
+dataProviderSwitcher.state = .loaded
+```
+
 ### AnyDataProvider
-`AnyDataProvider<Element>` is a Type Eraser (http://chris.eidhof.nl/post/type-erasers-in-swift/) for DataProvider. This can be usefull if you want to put diffrent DataProviders in a Container.
+`AnyDataProvider<Element>` is a Type Eraser (http://chris.eidhof.nl/post/type-erasers-in-swift/) for DataProviding. This can be useful if you want to put diffrent DataProviders in a Container.
 
 ```swift
 let fetchedResultsDataProvider = FetchedResultsDataProvider<CDTrain>(fetchedResultsController: fetchedResultsController)
 let arrayDataProvider = ArrayDataProvider<CDTrain>(sections: trains)
 let dataProviders: [AnyDataProvider<CDTrain>] = [AnyDataProvider(fetchedResultsDataProvider), AnyDataProvider(arrayDataProvider)]
 ```
+
+### AnyArrayDataProvider
+`AnyArrayDataProvider<Element>` is a Type Eraser (http://chris.eidhof.nl/post/type-erasers-in-swift/) for ArrayDataProviding. This can be useful if you want to put diffrent ArrayDataProviders in a Container or composing features to ArrayDataProvider like filtering, sorting, etc.
 
 ### Custom DataProvider
 If you want to create a simple DataProvider, implement the `ArrayDataProviding` like the following example
@@ -90,13 +117,13 @@ final public class DictionaryDataProvider<Object>: ArrayDataProviding {
     }
 }
 ```
-If you need full controll of your DataProvider implement `DataProviding`.
+If you need full controll of your DataProvider, implement `DataProviding`.
 
-Thirdparty Dataproviders:
+Thirdparty DataProviders:
 * [DBNetworkStack+Sourcing - NetworkDataProvider](https://github.com/dbsystel/DBNetworkStack-Sourcing)
 
 ## DataModificator
-DataModificator can handle modification caused by the user. If a user deletes a cell in the a TableView, DataModificator needs to handle the changes on the model side. If you do not provider a DataModificator to the DataSource, the views wont be editable. You create a custom DataModificator by implementing `DataModifying`
+DataModificator can handle modifications by the user. If a user deletes a cell in a TableView, DataModificator needs to handle the changes on the model side. If you do not provide a DataModificator to DataSource, the views won't be editable. You  can create a custom DataModificator by implementing `DataModifying`
 
 ### ArrayDataModificator
 An ArrayDataProvider supports modifications out of the box.
@@ -106,7 +133,7 @@ let dataProvider = ArrayDataProvider(rows: trains)
 let dataSource = TableViewDataSource(tableView: tableView, dataProvider: dataProvider, cell: trainCell, dataModificator: dataProvider)
 ```
 ## DataSource
-DataSources connect either UITablevView (TableViewDataSource) or UICollectionView(CollectionViewDataSource) with any given DataProvider.
+DataSources connect to either UITablevView (TableViewDataSource) or UICollectionView(CollectionViewDataSource) with any given DataProvider.
 
 ### TableViewDataSource
 ```swift
@@ -119,13 +146,13 @@ let dataSource = CollectionViewDataSource(tableView: tableView, dataProvider: da
 ```
 
 ### Multi Cell DataSources
-If you need to display diffrent kind of objects with different kind of cells, you cann do that too. DataSource looks up a matching cell for an object
+If you need to display different kind of objects with different cells, you can do that too. DataSource looks up a matching cell for an object.
 
 ## Cells
-For each cell you want to display you need a CellConfiguration. A configuration is a type object which sets up all elements on your custom cell or delegates the setup to the cell itself. Use `BasicCellConfiguration`, `CellConfiguration` or implement your own configuration by using `StaticCellConfiguring`.
+For each cell you want to display you'll need a CellConfiguration. A configuration is a type object which sets up all elements on your custom cell or delegates the setup to the cell itself. Use `BasicCellConfiguration`, `CellConfiguration` or implement your own configuration by using `StaticCellConfiguring`.
 
 ### BasicCellConfiguration
-`BasicCellConfiguration` gives you a lot of freedom how to configure your cell. You can provide custom cellIdentifier, nib and a block to configure your cell. If you do not provide a nib, it will use a already regsiterd cell from the storyboard. 
+`BasicCellConfiguration` gives you a lot of freedom on how to configure your cell. You can provide custom cellIdentifier, nib and a block to configure your cell. If you do not provide a nib, it will use an already registered cell from the storyboard. 
 ```swift
 let cellConfiguration: BasicCellConfiguration<TrainCell, Train> = BasicCellConfiguration(cellIdentifier: "TrainCell", configuration: { cell, train in 
    cell.trainNameLabel.text = train.name
@@ -160,6 +187,15 @@ let dataSource = CollectionViewDataSource(tableView: tableView, dataProvider: da
 ```
 This works for CollectionViewDataSource as well.
 
+### CellidentifierProviding
+
+When your cell class name is the same as you cell identifier you could implement `CellidentifierProviding` for this class.
+
+```swift
+extension TrainCell: CellidentifierProviding {}
+
+let cellConfiguration = CellConfiguration<TrainCell>() //No need to provide a cell identifier.
+```
 ## Requirements
 
 - iOS 9.3+
@@ -175,10 +211,10 @@ This works for CollectionViewDataSource as well.
 Specify the following in your `Cartfile`:
 
 ```ogdl
-github "lightsprint09/sourcing" ~> 2.0
+github "lightsprint09/sourcing" ~> 2.1
 ```
 ## Contributing
-Feel free to submit a pull request with new features, improvements on tests or documentation and bug fixes. Keep in mind that we welcome code that is well tested and documented.
+See CONTRIBUTING for details.
 
 ## Contact
 Lukas Schmidt ([Mail](mailto:lukas.la.schmidt@deutschebahn.com), [@lightsprint09](https://twitter.com/lightsprint09))

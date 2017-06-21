@@ -32,21 +32,27 @@ import Foundation
  The type can be fetched via HTTP(s) and parsed into the coresponding model object.
  */
 public struct Resource<Model>: ResourceModeling {
-    public let request: NetworkRequestRepresening
+    public let request: URLRequestConvertible
     public let parse: (_ data: Data) throws -> Model
     
-    public init(request: NetworkRequestRepresening, parse: @escaping (Data) throws -> Model) {
+    public init(request: URLRequestConvertible, parse: @escaping (Data) throws -> Model) {
         self.request = request
         self.parse = parse
     }
 }
 
 public extension ResourceModeling {
-    
     /// Wrappes self into a `Resource` to hide away implementation details. This could be helpful when you think your typeinformation gets leaked.
     ///
     /// - Returns: the wrapped ressource
+    @available(*, deprecated, message: "Use `init<R: ResourceModeling>(resource: R)`")
     func wrapped() -> Resource<Model> {
         return Resource(request: request, parse: parse)
+    }
+}
+
+public extension Resource {
+    init<R: ResourceModeling>(resource: R) where Model == R.Model {
+        self = Resource(request: resource.request, parse: resource.parse)
     }
 }
