@@ -60,10 +60,8 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      Creates an instance which fetches a gives resource and exposes the result as a DataProvider.
      
      - parameter resource: The resource to fetch.
-     - parameter prefetchedData: Data which is already in memory, like cached data.
      - parameter networkService: a networkservice for fetching resources
-     - parameter mapFetchedObjectToArray: A function which maps a object to an array for using it as a dataSoruce. `nil` by default.
-     - parameter delegate: A delegate for listing to events. `nil` by default.
+     - parameter whenStateChanges: Register for state changes with a given block.
      */
     public init(resource: Resource<Array<Object>>?, networkService: NetworkServiceProviding,
                 whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
@@ -76,23 +74,22 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      Fetches a new resource.
      
      - parameter resource: The new resource to fetch.
-     - parameter clearBeforeLoading: when true the loading state will be skipped.
+     - parameter skipLoadingState: when true the loading state will be skipped.
      */
-    public func reconfigure(with resource: Resource<Array<Object>>?, clearBeforeLoading: Bool = true) {
+    public func reconfigure(with resource: Resource<Array<Object>>?, skipLoadingState: Bool = false) {
         if resource == nil {
             contents = []
         }
         self.resource = resource
-        load(clearBeforeLoading: clearBeforeLoading)
+        load(skipLoadingState: skipLoadingState)
     }
     
-    // MARK: private
     /**
      Fetches the current resources via webservices.
      
-      - parameter clearBeforeLoading: when true the loading state will be skipped.
+      - parameter skipLoadingState: when true the loading state will be skipped.
      */
-    public func load(clearBeforeLoading: Bool = true) {
+    public func load(skipLoadingState: Bool = false) {
         stateBeforeLoadingStarted = state
         currentRequest?.cancel()
         guard let resource = resource else {
@@ -100,15 +97,15 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
             dataProviderDidChangeContets(with: nil)
             return
         }
-        if clearBeforeLoading {
+        if !skipLoadingState {
             state = .loading
         }
         currentRequest = networkService.request(resource, onCompletion: loadDidSucess, onError: loadDidError)
     }
     
-    func loadDidSucess(with newFetchedData: Array<Object>) {
+    func loadDidSucess(with result: Array<Object>) {
         currentRequest = nil
-        contents = [newFetchedData]
+        contents = [result]
         state = .success
         dataProviderDidChangeContets(with: nil)
     }
@@ -140,13 +137,11 @@ public extension ResourceDataProvider {
      Creates an instance which fetches a gives array resource and exposes the result as a DataProvider.
      
      - parameter resource: The array resource to fetch.
-     - parameter prefetchedData: Data which is already in memory, like cached data.
      - parameter networkService: a networkservice for fetching resources
-     - parameter mapFetchedObjectToArray: A function which maps a object to an array for using it as a dataSoruce. `nil` by default.
-     - parameter delegate: A delegate for listing to events. `nil` by default.
+     - parameter whenStateChanges: Register for state changes with a given block.
      */
     public convenience init<R: ResourceModeling>(resource: R?, networkService: NetworkServiceProviding,
-    whenStateChanges: @escaping ((ResourceDataProviderState) -> Void))
+                            whenStateChanges: @escaping ((ResourceDataProviderState) -> Void))
                             where R.Model == Array<Object> {
         let resource = resource?.wrapped()
         self.init(resource: resource, networkService: networkService, whenStateChanges: whenStateChanges)
@@ -156,11 +151,11 @@ public extension ResourceDataProvider {
      Fetches a new resource.
      
      - parameter resource: The new resource to fetch.
-     - parameter clearBeforeLoading: when true the loading state will be skipped.
+     - parameter skipLoadingState: when true the loading state will be skipped.
      */
-    public func reconfigure<R: ResourceModeling>(with resource: R?, clearBeforeLoading: Bool = true)
+    public func reconfigure<R: ResourceModeling>(with resource: R?, skipLoadingState: Bool = false)
         where R.Model == Array<Object> {
         let resource = resource?.wrapped()
-        reconfigure(with: resource, clearBeforeLoading: clearBeforeLoading)
+        reconfigure(with: resource, skipLoadingState: skipLoadingState)
     }
 }

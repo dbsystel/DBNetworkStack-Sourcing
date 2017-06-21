@@ -85,7 +85,7 @@ class ResourceDataProviderTests: XCTestCase {
         let resource = testResource(elements: [location])
         
         //When
-        resourceDataProvider.reconfigure(with: resource, clearBeforeLoading: false)
+        resourceDataProvider.reconfigure(with: resource, skipLoadingState: true)
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
@@ -142,7 +142,7 @@ class ResourceDataProviderTests: XCTestCase {
         XCTAssertEqual(networkService.requestCount, 1)
     }
     
-    func testOnNetworkRequestCanceldWithNoEmptyData() {
+    func testOnNetworkRequestCanceledWithNoEmptyData() {
         //Given
         resourceDataProvider = ResourceDataProvider(resource: nil,
                                                     networkService: networkService, whenStateChanges: { _ in })
