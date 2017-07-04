@@ -12,34 +12,17 @@ import DBNetworkStack
 import Sourcing
 
 let networkService: NetworkServiceProviding = // Network service which implements DBNetworkStack.NetworkServiceProviding
-let resource = // Some resource which implements DBNetworkStack.ArrayResourceProviding
+let resource: Resource<[Int]> = //
 
-let dataSource: TableViewDataSource<Int> = //
-
-let ressourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService, whenStateChanges: { _ in })
+let resourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService, whenStateChanges: { _ in })
         
 // Start loading content
-ressourceDataProvider.load()
+resourceDataProvider.load()
 ```
 
 ## Access state of the loading operation
 You can either pass a closure into `ResourceDataProvider.init` and get notified when state changes or you could access `ressourceDataProvider.state`.
 
-## Default data
-If you have default local data you can provide it upfront. It will be replaced with data from the network once the requests is done.
-```swift
- ressourceDataProvider = ResourceDataProvider(
-            resource: nil, prefetchedData: [1, 2, 3],
-            networkService: networkService,
-            whenStateChanges: { _ in }
- )
-```
-
-## Sorting loaded data
-Providing a sort descriptor will sort your response.
-```swift
-ressourceDataProvider.sortDescriptor = { $0 < $1 }
-```
 ## Requirements
 - iOS 9.0+
 - Xcode 8.0+
