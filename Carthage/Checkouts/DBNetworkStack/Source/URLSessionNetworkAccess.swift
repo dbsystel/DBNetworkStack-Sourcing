@@ -32,8 +32,7 @@ import Foundation
  */
 extension URLSession: URLSessionProtocol {}
 
-extension URLSessionDataTask: NetworkTaskRepresenting {
-}
+extension URLSessionDataTask: NetworkTaskRepresenting {}
 
 public protocol URLSessionProtocol: NetworkAccessProviding {
     

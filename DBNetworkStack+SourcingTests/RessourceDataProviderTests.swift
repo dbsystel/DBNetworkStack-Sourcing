@@ -18,7 +18,8 @@ struct LocationCoordinate {
 
 func testResource<T>(elements: [T]) -> Resource<Array<T>> {
     let url: URL! = URL(string: "bahn.de")
-    let request = URLRequest(path: "/", baseURL: url)
+    let request = URLRequest(url: url)
+    
     return Resource(request: request, parse: { _ in return elements })
 }
 

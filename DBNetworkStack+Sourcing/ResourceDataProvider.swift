@@ -167,7 +167,7 @@ public extension ResourceDataProvider {
     public convenience init<R: ResourceModeling>(resource: R?, prefetchedData: [Object] = [],
                             networkService: NetworkServiceProviding, whenStateChanges: @escaping ((ResourceDataProviderState) -> Void))
                             where R.Model == Array<Object> {
-        let resource = resource.map(Resource.init)
+        let resource = resource.map { Resource(resource: $0) }
         self.init(resource: resource, prefetchedData: prefetchedData, networkService: networkService, whenStateChanges: whenStateChanges)
     }
     
@@ -179,7 +179,7 @@ public extension ResourceDataProvider {
      */
     public func reconfigure<R: ResourceModeling>(with resource: R?, clearBeforeLoading: Bool = true)
         where R.Model == Array<Object> {
-            let resource = resource.map(Resource.init)
+        let resource = resource.map { Resource(resource: $0) }
         reconfigure(with: resource, clearBeforeLoading: clearBeforeLoading)
     }
 }
