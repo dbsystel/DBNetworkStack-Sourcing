@@ -143,7 +143,7 @@ public extension ResourceDataProvider {
     public convenience init<R: ResourceModeling>(resource: R?, networkService: NetworkServiceProviding,
                             whenStateChanges: @escaping ((ResourceDataProviderState) -> Void))
                             where R.Model == Array<Object> {
-        let resource = resource?.wrapped()
+        let resource = resource.map { Resource(resource: $0) }
         self.init(resource: resource, networkService: networkService, whenStateChanges: whenStateChanges)
     }
     
@@ -155,7 +155,7 @@ public extension ResourceDataProvider {
      */
     public func reconfigure<R: ResourceModeling>(with resource: R?, skipLoadingState: Bool = false)
         where R.Model == Array<Object> {
-        let resource = resource?.wrapped()
+        let resource = resource.map { Resource(resource: $0) }
         reconfigure(with: resource, skipLoadingState: skipLoadingState)
     }
 }
