@@ -3,24 +3,26 @@
 
 # DBNetworkStack-Sourcing
 
-This component acts as a bridge between [Sourcing](https://github.com/lightsprint09/Sourcing) and [DBNetworkStack](https://github.com/dbsystel/DBNetworkStack). It is a data provider, for resources fetched by a network service provider. 
+This component acts as a bridge between [Sourcing](https://github.com/lightsprint09/Sourcing) and [DBNetworkStack](https://github.com/dbsystel/DBNetworkStack). It is a data provider, for resources fetched by a network service. 
 
-## Loading
+## Usage
 ```swift
-import DBNetworkStackSourcing
-import DBNetworkStack
 import Sourcing
+import DBNetworkStack
+import DBNetworkStackSourcing
 
-let networkService: NetworkServiceProviding = // Network service which implements DBNetworkStack.NetworkServiceProviding
+let networkService: NetworkServiceProviding = //
 let resource: Resource<[Int]> = //
 
-let resourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService, whenStateChanges: { _ in })
+let resourceDataProvider = ResourceDataProvider<Int>(resource: resource, networkService: networkService, whenStateChanges: { state in
+        //handle state change
+})
         
 // Start loading content
 resourceDataProvider.load()
 ```
 
-## Access state of the loading operation
+### Access state of the loading operation
 You can either pass a closure into `ResourceDataProvider.init` and get notified when state changes or you could access `ressourceDataProvider.state`.
 
 ## Requirements
