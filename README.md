@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/dbsystel/DBNetworkStack-Sourcing.svg?branch=develop)](https://travis-ci.org/dbsystel/DBNetworkStack-Sourcing)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+ [![codecov](https://codecov.io/gh/dbsystel/DBNetworkStack-Sourcing/branch/develop/graph/badge.svg)](https://codecov.io/gh/dbsystel/DBNetworkStack-Sourcing)
 
 # DBNetworkStack-Sourcing
 
