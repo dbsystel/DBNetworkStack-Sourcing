@@ -1,13 +1,12 @@
-language: objective-c
-xcode_project: DBNetworkStack+Sourcing.xcodeproj # path to your xcodeproj folder
-xcode_scheme: DBNetworkStackSourcing
-osx_image: xcode8.3
-before_install:
-  - export SNAPSHOT_FORCE_DELETE=1
-  - fastlane snapshot reset_simulators
-install:
-  - carthage update --platform ios --no-use-binaries
-script: 
-- set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone SE,OS=latest' ONLY_ACTIVE_ARCH=NO clean build test -enableCodeCoverage YES | xcpretty
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode8.3
+      language: objective-c
+      env: "iOS"
+      install:
+        - carthage update --platform ios --no-use-binaries
+      script:
+        - set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -destination 'platform=iOS Simulator,name=iPhone SE,OS=latest' test CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -enableCodeCoverage YES | xcpretty
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)

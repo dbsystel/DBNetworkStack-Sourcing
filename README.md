@@ -1,45 +1,31 @@
 [![Build Status](https://travis-ci.org/dbsystel/DBNetworkStack-Sourcing.svg?branch=develop)](https://travis-ci.org/dbsystel/DBNetworkStack-Sourcing)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![codecov](https://codecov.io/gh/dbsystel/DBNetworkStack-Sourcing/branch/develop/graph/badge.svg)](https://codecov.io/gh/dbsystel/DBNetworkStack-Sourcing)
 
 # DBNetworkStack-Sourcing
 
-This component acts as a bridge between [Sourcing](https://github.com/lightsprint09/Sourcing) and [DBNetworkStack](https://github.com/dbsystel/DBNetworkStack). It is a data provider, for resources fetched by a network service provider. 
+This component acts as a bridge between [Sourcing](https://github.com/lightsprint09/Sourcing) and [DBNetworkStack](https://github.com/dbsystel/DBNetworkStack). It is a data provider, for resources fetched by a network service. 
 
-## Loading
+## Usage
 ```swift
-import DBNetworkStackSourcing
-import DBNetworkStack
 import Sourcing
+import DBNetworkStack
+import DBNetworkStackSourcing
 
-let networkService: NetworkServiceProviding = // Network service which implements DBNetworkStack.NetworkServiceProviding
-let resource = // Some resource which implements DBNetworkStack.ArrayResourceProviding
+let networkService: NetworkServiceProviding = //
+let resource: Resource<[Int]> = //
 
-let dataSource: TableViewDataSource<Int> = //
-
-let ressourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService, whenStateChanges: { _ in })
+let resourceDataProvider = ResourceDataProvider<Int>(resource: resource, networkService: networkService, whenStateChanges: { state in
+        //handle state change
+})
         
 // Start loading content
-ressourceDataProvider.load()
+resourceDataProvider.load()
 ```
 
-## Access state of the loading operation
+### Access state of the loading operation
 You can either pass a closure into `ResourceDataProvider.init` and get notified when state changes or you could access `ressourceDataProvider.state`.
 
-## Default data
-If you have default local data you can provide it upfront. It will be replaced with data from the network once the requests is done.
-```swift
- ressourceDataProvider = ResourceDataProvider(
-            resource: nil, prefetchedData: [1, 2, 3],
-            networkService: networkService,
-            whenStateChanges: { _ in }
- )
-```
-
-## Sorting loaded data
-Providing a sort descriptor will sort your response.
-```swift
-ressourceDataProvider.sortDescriptor = { $0 < $1 }
-```
 ## Requirements
 - iOS 9.0+
 - Xcode 8.0+
@@ -54,7 +40,7 @@ ressourceDataProvider.sortDescriptor = { $0 < $1 }
 Specify the following in your `Cartfile`:
 
 ```ogdl
-github "dbsystel/DBNetworkStack-Sourcing" ~> 0.5
+github "dbsystel/DBNetworkStack-Sourcing" ~> 0.6
 ```
 ## Contributing
 Feel free to submit a pull request with new features, improvements on tests or documentation and bug fixes. Keep in mind that we welcome code that is well tested and documented.
