@@ -132,6 +132,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     }
 }
 
+@available(*, deprecated, message: "Will be removed in next version")
 public extension ResourceDataProvider {
     /**
      Creates an instance which fetches a gives array resource and exposes the result as a DataProvider.
