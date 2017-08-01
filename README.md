@@ -26,6 +26,24 @@ resourceDataProvider.load()
 ### Access state of the loading operation
 You can either pass a closure into `ResourceDataProvider.init` and get notified when state changes or you could access `ressourceDataProvider.state`.
 
+### Reloading a resource
+```swift
+let newResource: Resource<[Int]> = //
+resourceDataProvider.reconfigure(with: newResource)
+```
+
+Somtimes it can be handy to skip the state of loading (e.g when inital loading displays a spinner and following reloads should not)
+```swift
+let newResource: Resource<[Int]> = //
+resourceDataProvider.reconfigure(with: newResource, skipLoadingState: true)
+```
+**skipLoadingState is availaibe in initial `load()` as well**
+
+### Accessing current contents
+```swift
+resourceDataProvider.contents
+```
+
 ## Requirements
 - iOS 9.0+
 - Xcode 8.0+
@@ -40,7 +58,7 @@ You can either pass a closure into `ResourceDataProvider.init` and get notified 
 Specify the following in your `Cartfile`:
 
 ```ogdl
-github "dbsystel/DBNetworkStack-Sourcing" ~> 0.6
+github "dbsystel/DBNetworkStack-Sourcing" ~> 0.7
 ```
 ## Contributing
 Feel free to submit a pull request with new features, improvements on tests or documentation and bug fixes. Keep in mind that we welcome code that is well tested and documented.
