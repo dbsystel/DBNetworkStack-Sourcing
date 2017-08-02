@@ -44,8 +44,8 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     public internal(set) var state: ResourceDataProviderState = .empty {
         didSet { whenStateChanges?(state) }
     }
-    var stateBeforeLoadingStarted: ResourceDataProviderState = .empty
-    var resource: Resource<Array<Object>>?
+    private var stateBeforeLoadingStarted: ResourceDataProviderState = .empty
+    private var resource: Resource<Array<Object>>?
     
     public var dataProviderDidUpdate: ProcessUpdatesCallback<Object>?
     /// Closure which gets called, when a data inside the provider changes and those changes should be propagated to the datasource.
@@ -53,8 +53,8 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     public var whenDataProviderChanged: ProcessUpdatesCallback<Object>?
     
     // MARK: Network properties
-    let networkService: NetworkServiceProviding
-    var currentRequest: NetworkTaskRepresenting?
+    private let networkService: NetworkServiceProviding
+    private var currentRequest: NetworkTaskRepresenting?
     
     /**
      Creates an instance which fetches a gives resource and exposes the result as a DataProvider.
@@ -74,7 +74,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      Fetches a new resource.
      
      - parameter resource: The new resource to fetch.
-     - parameter skipLoadingState: when true the loading state will be skipped.
+     - parameter skipLoadingState: when true the loading state will be skipped. Defaults to false
      */
     public func reconfigure(with resource: Resource<Array<Object>>?, skipLoadingState: Bool = false) {
         if resource == nil {
@@ -87,7 +87,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     /**
      Fetches the current resources via webservices.
      
-      - parameter skipLoadingState: when true the loading state will be skipped.
+      - parameter skipLoadingState: when true the loading state will be skipped. Defaults to false.
      */
     public func load(skipLoadingState: Bool = false) {
         stateBeforeLoadingStarted = state
@@ -103,7 +103,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
         currentRequest = networkService.request(resource, onCompletion: loadDidSucess, onError: loadDidError)
     }
     
-    func loadDidSucess(with result: Array<Object>) {
+    private func loadDidSucess(with result: Array<Object>) {
         currentRequest = nil
         contents = [result]
         state = .success
@@ -113,7 +113,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     /// Handles errors which occur during fetching a resource.
     ///
     /// - Parameter error: the error which occurs.
-    func loadDidError(with error: DBNetworkStackError) {
+    private func loadDidError(with error: DBNetworkStackError) {
         if case DBNetworkStackError.cancelled = error {
             state = stateBeforeLoadingStarted
             return
@@ -126,7 +126,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      
      - parameter updates: The updates.
      */
-    func dataProviderDidChangeContets(with updates: [DataProviderUpdate<Object>]?) {
+    private func dataProviderDidChangeContets(with updates: [DataProviderUpdate<Object>]?) {
         dataProviderDidUpdate?(updates)
         whenDataProviderChanged?(updates)
     }
@@ -140,6 +140,7 @@ public extension ResourceDataProvider {
      - parameter networkService: a networkservice for fetching resources
      - parameter whenStateChanges: Register for state changes with a given block.
      */
+    @available(*, deprecated, message: "Use `Resource<Array<Object>> to compose a custom Resource`")
     public convenience init<R: ResourceModeling>(resource: R?, networkService: NetworkServiceProviding,
                             whenStateChanges: @escaping ((ResourceDataProviderState) -> Void))
                             where R.Model == Array<Object> {
@@ -153,6 +154,7 @@ public extension ResourceDataProvider {
      - parameter resource: The new resource to fetch.
      - parameter skipLoadingState: when true the loading state will be skipped.
      */
+    @available(*, deprecated, message: "Use `Resource<Array<Object>> to compose a custom Resource`")
     public func reconfigure<R: ResourceModeling>(with resource: R?, skipLoadingState: Bool = false)
         where R.Model == Array<Object> {
         let resource = resource.map { Resource(resource: $0) }
