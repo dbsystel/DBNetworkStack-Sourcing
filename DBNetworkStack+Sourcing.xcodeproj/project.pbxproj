@@ -140,6 +140,7 @@
 				C613C33A1DBF2A1E00E397B8 /* Resources */,
 				C613C3561DBF355A00E397B8 /* 📦 Carthage Copy */,
 				C64A5ECB1E26478F00C4352D /* 🚧 SwiftLint */,
+				C6B116711F38F3B200870F3D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -255,6 +256,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
+		C6B116711F38F3B200870F3D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ $CONFIGURATION == \"Release\" ]; then\necho \"✂️Remove Frameworks File: ${CONFIGURATION}\"\ncd \"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/\"\nif [[ -d \"Frameworks\" ]]; then\nrm -fr Frameworks\nfi\nfi";
 		};
 		C6C183741DFB013F000A3314 /* 📦 Carthage Copy */ = {
 			isa = PBXShellScriptBuildPhase;
