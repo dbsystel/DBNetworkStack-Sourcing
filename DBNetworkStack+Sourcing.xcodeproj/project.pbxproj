@@ -246,6 +246,7 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/DBNetworkStack.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Sourcing.framework",
 			);
 			name = "📦 Carthage Copy";
 			outputPaths = (
