@@ -63,8 +63,4 @@ extension ResourceDataProviderState {
         }
         return false
     }
-
-    /* Returns the array of objects in the section.
-     */
-    public var objects: [Any]? = nil
 }
