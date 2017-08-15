@@ -42,6 +42,7 @@ public struct Resource<Model>: ResourceModeling {
 }
 
 public extension ResourceModeling {
+    
     /// Wrappes self into a `Resource` to hide away implementation details. This could be helpful when you think your typeinformation gets leaked.
     ///
     /// - Returns: the wrapped ressource

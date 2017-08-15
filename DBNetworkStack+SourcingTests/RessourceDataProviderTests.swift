@@ -47,16 +47,6 @@ class ResourceDataProviderTests: XCTestCase {
         XCTAssert(resourceDataProvider.state.isEmpty)
     }
     
-    func testGetPreloadedResources() {
-        //When
-        resourceDataProvider = ResourceDataProvider(resource: nil, prefetchedData: [location],
-                                                     networkService: networkService, whenStateChanges: { _ in })
-        
-        //Then
-        XCTAssert(resourceDataProvider.state.hasSucceded)
-        XCTAssertEqual(resourceDataProvider.numberOfItems(inSection: 0), 1)
-    }
-    
     func testInitEmpty() {
         //Given
         let resource: Resource<Array<LocationCoordinate>>? = nil
@@ -68,24 +58,6 @@ class ResourceDataProviderTests: XCTestCase {
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
         XCTAssertEqual(networkService.requestCount, 0)
-    }
-    
-    func testReplacePreloadedWithResources() {
-        //Given
-        let resource = testResource(elements: [location, location])
-        
-        //When
-        resourceDataProvider = ResourceDataProvider(resource: resource, prefetchedData: [location],
-                                                     networkService: networkService, whenStateChanges: { _ in })
-        resourceDataProvider.dataProviderDidUpdate = { [weak self] _ in
-            self?.didUpdateContents = true
-        }
-        resourceDataProvider.load()
-        networkService.returnSuccess()
-        
-        //Then
-        XCTAssert(resourceDataProvider.state.hasSucceded)
-        XCTAssertEqual(resourceDataProvider.numberOfItems(inSection: 0), 2)
     }
     
     func testLoadResource() {
@@ -116,7 +88,7 @@ class ResourceDataProviderTests: XCTestCase {
         let resource = testResource(elements: [location])
         
         //When
-        resourceDataProvider.reconfigure(with: resource, clearBeforeLoading: false)
+        resourceDataProvider.reconfigure(with: resource, skipLoadingState: true)
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
@@ -160,23 +132,6 @@ class ResourceDataProviderTests: XCTestCase {
         XCTAssert(!didUpdateContents)
     }
     
-    func testSortedResult() {
-        //Given
-        let unsortedValues = [3, 1, 5]
-        let resource = testResource(elements:  unsortedValues)
-        let dataProvider = ResourceDataProvider(resource: resource,
-                                                networkService: networkService, whenStateChanges: { _ in })
-        
-        //When
-        dataProvider.sortDescriptor = { $0 < $1 }
-        dataProvider.load()
-        networkService.returnSuccess()
-        
-        //Then
-        let firstObject = dataProvider.object(at: IndexPath(item: 0, section: 0))
-        XCTAssertEqual(firstObject, 1)
-    }
-    
     func testOnNetworkRequestCanceldWithEmptyData() {
         //Given
         let resource = testResource(elements: [location])
@@ -190,9 +145,9 @@ class ResourceDataProviderTests: XCTestCase {
         XCTAssertEqual(networkService.requestCount, 1)
     }
     
-    func testOnNetworkRequestCanceldWithNoEmptyData() {
+    func testOnNetworkRequestCanceledWithNoEmptyData() {
         //Given
-        resourceDataProvider = ResourceDataProvider(resource: nil, prefetchedData: [location],
+        resourceDataProvider = ResourceDataProvider(resource: nil,
                                                     networkService: networkService, whenStateChanges: { _ in })
         let resource = testResource(elements: [location])
         
@@ -201,7 +156,7 @@ class ResourceDataProviderTests: XCTestCase {
         networkService.returnError(with: .cancelled)
         
         //Then
-        XCTAssert(resourceDataProvider.state.hasSucceded)
+        XCTAssert(resourceDataProvider.state.isEmpty)
         XCTAssertEqual(networkService.requestCount, 1)
     }
 }
