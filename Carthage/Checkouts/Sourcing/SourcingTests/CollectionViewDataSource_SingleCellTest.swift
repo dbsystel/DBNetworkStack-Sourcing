@@ -52,7 +52,7 @@ class CollectionViewDataSourceSingleCellTest: XCTestCase {
     
     func testSetDataSource() {
         //When
-        let _ = CollectionViewDataSource(collectionView: collectionViewMock, dataProvider: dataProvider, cell: cell)
+        _ = CollectionViewDataSource(collectionView: collectionViewMock, dataProvider: dataProvider, cell: cell)
         
         //Then
         XCTAssertEqual(collectionViewMock.reloadedCount, 1)
@@ -67,7 +67,7 @@ class CollectionViewDataSourceSingleCellTest: XCTestCase {
         let cellConfig = CellConfiguration<UICollectionViewCellMock<Int>>(cellIdentifier: cellIdentifier, nib: nib)
         
         //When
-        let _ = CollectionViewDataSource(collectionView: collectionViewMock, dataProvider: dataProvider, cell: cellConfig)
+        _ = CollectionViewDataSource(collectionView: collectionViewMock, dataProvider: dataProvider, cell: cellConfig)
         
         //Then
         XCTAssertEqual(collectionViewMock.registerdNibs.count, 1)
@@ -131,7 +131,7 @@ class CollectionViewDataSourceSingleCellTest: XCTestCase {
     func testSelectedObject() {
         //When
         let dataSource = CollectionViewDataSource(collectionView: collectionViewMock, dataProvider: dataProvider, cell: cell)
-        collectionViewMock.selectedIndexPaths = [IndexPath(row: 0, section: 0), IndexPath(row: 2, section: 1)]
+        collectionViewMock.indexPathsForSelectedItems = [IndexPath(row: 0, section: 0), IndexPath(row: 2, section: 1)]
         let selectedObjects = dataSource.selectedObjects
         
         //Then
@@ -283,7 +283,7 @@ class CollectionViewDataSourceSingleCellTest: XCTestCase {
     
     func testProcessUpdatesFromDataSource() {
         //Given
-        let _ = CollectionViewDataSource(collectionView: collectionViewMock, dataProvider: dataProvider, cell: cell)
+        _ = CollectionViewDataSource(collectionView: collectionViewMock, dataProvider: dataProvider, cell: cell)
         //When
         let insertion = DataProviderUpdate<Int>.insertSection(0)
         dataProvider.reconfigure(with: [[]], updates: [insertion])

@@ -11,7 +11,7 @@
 |           | Main Features                  |
 | --------- | ------------------------------ |
 | 🛡        | Typed network resources        |
-| &#127968; | Protocol oriented architecture |
+| &#127968; | Value oriented architecture |
 | 🔀        | Exchangeable implementations   |
 | 🚄        | Extendable API                 |
 | 🎹        | Composable Features            |
@@ -22,15 +22,12 @@ The idea behind this project comes from this [talk.objc.io article](https://talk
 ## Basic Demo
 Lets say you want to fetch a ``html`` string.
 
-First you have to create a service, by providing a network access. You can use NSURLSession out of the box or provide your own custom solution by implementing  ```NetworkAccessProviding```. In addition you need to register baseURLs endpoints for request mapping. This gives you the flexibility to change your endpoints very easily when your environment changes.
+First you have to create a service, by providing a network access. You can use URLSession out of the box or provide your own custom solution by implementing  ```NetworkAccessProviding```.
 
 ```swift
 
-let url = NSURL(string: "https://httpbin.org")!
-let baseURLKey = "httpBin"
-
-let networkAccess = NSURLSession(configuration: .defaultSessionConfiguration())
-let networkService = NetworkService(networkAccess: networkAccess, endPoints: [baseURLKey: url])
+let networkAccess = URLSession(configuration: .default)
+let networkService = NetworkService(networkAccess: networkAccess)
 
 ```
 
@@ -38,68 +35,57 @@ Create a resource with a request to fetch your data.
 
 ```swift
 
-let request = NetworkRequest(path: "/", baseURLKey: baseURLKey)
-let resource = Resource(request: request, parse: { String(data: $0, encoding: NSUTF8StringEncoding) })
+let url = URL(string: "https://httpbin.org")!
+let request = URLRequest(path: "/", baseURL: url)
+let resource = Resource(request: request, parse: { String(data: $0, encoding: .utf8) })
 
 ```
-Request your resource and handle the response
+Request your resource and handle the result
 ```swift
 networkService.request(resource, onCompletion: { htmlText in
     print(htmlText)
 }, onError: { error in
-        //Handle errors
+    //Handle errors
 })
 
 ```
 
-## JSON Mapping Demo
+## Loade types conforming to `Decodable`
 ```swift
-struct IPOrigin {
-    let ipAddress: String
+struct IPOrigin: Decodable {
+    let origin: String
 }
 
-extension IPOrigin: JSONMappable {
-    init(object: Dictionary<String, AnyObject>) throws {
-       /// Do your mapping
-    }
-}
+let url: URL! = URL(string: "https://www.httpbin.org")
+let request = URLRequest(path: "ip", baseURL: url)
 
-let request = NetworkRequest(path: "/ip", baseURLKey: baseURLKey)
-let resource = JSONResource<IPOrigin>(request: request)
+let resource = Resource<IPOrigin>(request: request, decoder: JSONDecoder())
 
 networkService.request(resource, onCompletion: { origin in
     print(origin)
 }, onError: { error in
-        //Handle errors
+    //Handle errors
 })
 ```
 
-## Extendability
-The following example outlines how to extend DBNetworkStack to support XML response models:
+## Accessing HTTPResponse
 
+Request your resource and handle the result & response. This is similar to just requesting a resulting model.
 ```swift
-protocol XMLMappable {
-    init(object: Dictionary<String, AnyObject>) throws
-}
-
-struct XMLResource<T : XMLMappable> : ResourceModeling {
-    let request: NetworkRequestRepresening
-    
-    init(request: NetworkRequestRepresening) {
-        self.request = request
-    }
-    
-    var parse: (data: NSData) throws -> T {
-        return { data in
-            let xmlObject = // Your data to xml object conversion
-            try! T(object: xmlObject) as T
-        }
+extension Resource where Model: XMLDocument {
+    public init(request: URLRequestConvertible) {
+        self.init(request: request, parse: { try XMLDocument(data: $0 })
     }
 }
 ```
-```XMLMappable``` defines the protocol, response model objects must conform to. The model class conforming to this protocol is responsible to convert a generic representation of the model into it’s specialized form.
-```XMLResource<T : XMLMappable>``` defines a resource based on a given ```XMLMappable``` model. The parse function is responsible of converting raw response data to a generic representation.
 
+## Extendability
+The following example outlines how to extend DBNetworkStack to support the imaginary type `XMLDocument`:
+
+You are now able to call:
+```swift
+let xmlDocument = Resource<XMLDocument>(request: someRequest)
+```
 
 ## Protocol oriented architecture / Exchangability
 
@@ -107,11 +93,10 @@ The following table shows all the protocols and their default implementations.
 
 | Protocol                         | Default Implementation |
 | -------------------------------- | ---------------------- |
-| ```NetworkAccessProviding```     | ```NSURLSession```     |
+| ```NetworkAccessProviding```     | ```URLSession```     |
 | ```NetworkServiceProviding```    | ```NetworkService```   |
-| ```NetworkRequestRepresenting``` | ```NetworkRequest```   |
-| ```NetworkTaskRepresenting```    | ```NSURLSessionTask``` |
-| ```ResourceModelling```          | ```Resource<Model>```  |
+| ```URLRequestConvertible```  | ```URLRequest```   |
+| ```NetworkTaskRepresenting```    | ```URLSessionTask``` |
 
 ## Composable Features
 
@@ -123,8 +108,8 @@ The following table shows all the protocols and their default implementations.
 ## Requirements
 
 - iOS 9.0+ / macOS 10.10+ / tvOS 9.0+ / watchOS 2.0+
-- Xcode 8.0+
-- Swift 3.0
+- Xcode 9.0+
+- Swift 3.2/Swift4.0
 
 ## Installation
 
@@ -135,7 +120,7 @@ The following table shows all the protocols and their default implementations.
 Specify the following in your `Cartfile`:
 
 ```ogdl
-github "dbsystel/dbnetworkstack" ~> 0.3
+github "dbsystel/dbnetworkstack" ~> 0.6
 ```
 
 ### CocoaPods
