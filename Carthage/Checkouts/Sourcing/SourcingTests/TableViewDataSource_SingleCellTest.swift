@@ -53,7 +53,7 @@ class TableViewDataSourceSingleCellTest: XCTestCase {
         _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
         
         //Then
-        XCTAssertEqual(tableViewMock.reloadedCount, 1)
+        XCTAssertEqual(tableViewMock.executionCount.reloaded, 1)
         XCTAssertNotNil(tableViewMock.dataSource)
         if #available(iOS 10.0, *) {
             XCTAssertNotNil(tableViewMock.prefetchDataSource)
@@ -113,10 +113,10 @@ class TableViewDataSourceSingleCellTest: XCTestCase {
         let cellForGivenRow = dataSource.tableView(realTableView, cellForRowAt: IndexPath(row: 2, section: 1))
         
         //Then
-        let UITableViewCellMock = (tableViewMock.cellMocks[cellIdentifier] as! UITableViewCellMock<Int>)
+        let UITableViewCellMock = (tableViewMock.cellDequeueMock.cells[cellIdentifier] as! UITableViewCellMock<Int>)
         XCTAssertEqual(UITableViewCellMock.configurationCount, 1)
         XCTAssertEqual(UITableViewCellMock.configuredObject, 10)
-        XCTAssertEqual(tableViewMock.lastUsedReuseIdetifiers.first, cellIdentifier)
+        XCTAssertEqual(tableViewMock.cellDequeueMock.dequeueCellReuseIdentifiers.first, cellIdentifier)
         XCTAssertTrue(cellForGivenRow is UITableViewCellMock<Int>)
         XCTAssertTrue(didCallAdditionalConfigurtion)
     }
@@ -124,14 +124,14 @@ class TableViewDataSourceSingleCellTest: XCTestCase {
     func testUpdateDataSourceWithNoData() {
         //Given
         let cellConfig: [CellConfiguring] = [CellConfiguration<UITableViewCellMock<Int>>(cellIdentifier: cellIdentifier)]
-        let dataSource = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, anyCells: cellConfig)
-        let reloadCount = tableViewMock.reloadedCount
+        _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, anyCells: cellConfig)
+        let reloadCount = tableViewMock.executionCount.reloaded
         //When
         
-        dataSource.process(updates: nil)
+        dataProvider.reconfigure(with: [0])
         
         //Then
-        XCTAssertEqual(tableViewMock.reloadedCount, reloadCount + 1)
+        XCTAssertEqual(tableViewMock.executionCount.reloaded, reloadCount + 1)
     }
     
     func testSelectedObject() {
@@ -176,7 +176,7 @@ class TableViewDataSourceSingleCellTest: XCTestCase {
         
         //Then
         XCTAssertNotNil(secondTableview.dataSource)
-        XCTAssertEqual(secondTableview.reloadedCount, 1)
+        XCTAssertEqual(secondTableview.executionCount.reloaded, 1)
     }
     
     func testMoveIndexPaths() {
@@ -199,110 +199,111 @@ class TableViewDataSourceSingleCellTest: XCTestCase {
     
     func testProcessUpdatesInsert() {
         //Given
-        let dataSource = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
+        _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
         
         //When
         let insertionIndexPath = IndexPath(row: 0, section: 0)
         let insertion = DataProviderUpdate<Int>.insert(insertionIndexPath)
-        dataSource.process(updates: [insertion])
+        dataProvider.reconfigure(with: [0], updates: [insertion])
         
         //Then
-        XCTAssertEqual(tableViewMock.insertedIndexPaths?.count, 1)
-        XCTAssertEqual(tableViewMock.insertedIndexPaths?.first, insertionIndexPath)
-        XCTAssertEqual(tableViewMock.beginUpdatesCalledCount, 1)
-        XCTAssertEqual(tableViewMock.endUpdatesCalledCount, 1)
+        XCTAssertEqual(tableViewMock.modifiedIndexPaths.inserted?.count, 1)
+        XCTAssertEqual(tableViewMock.modifiedIndexPaths.inserted?.first, insertionIndexPath)
+        XCTAssertEqual(tableViewMock.executionCount.beginUpdates, 1)
+        XCTAssertEqual(tableViewMock.executionCount.endUpdates, 1)
     }
     
     func testProcessUpdatesDelete() {
         //Given
-        let dataSource = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
+        _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
         
         //When
         let deletetionIndexPath = IndexPath(row: 0, section: 0)
         let deletion = DataProviderUpdate<Int>.delete(deletetionIndexPath)
-        dataSource.process(updates: [deletion])
+        dataProvider.reconfigure(with: [0], updates: [deletion])
         
         //Then
-        XCTAssertEqual(tableViewMock.deletedIndexPaths?.count, 1)
-        XCTAssertEqual(tableViewMock.deletedIndexPaths?.first, deletetionIndexPath)
-        XCTAssertEqual(tableViewMock.beginUpdatesCalledCount, 1)
-        XCTAssertEqual(tableViewMock.endUpdatesCalledCount, 1)
+        XCTAssertEqual(tableViewMock.modifiedIndexPaths.deleted?.count, 1)
+        XCTAssertEqual(tableViewMock.modifiedIndexPaths.deleted?.first, deletetionIndexPath)
+        XCTAssertEqual(tableViewMock.executionCount.beginUpdates, 1)
+        XCTAssertEqual(tableViewMock.executionCount.endUpdates, 1)
     }
     
     func testProcessUpdatesMove() {
         //Given
-        let dataSource = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
+        _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
         
         //When
         let oldIndexPath = IndexPath(row: 0, section: 0)
         let newIndexPath = IndexPath(row: 0, section: 0)
         let move = DataProviderUpdate<Int>.move(oldIndexPath, newIndexPath)
-        dataSource.process(updates: [move])
+        dataProvider.reconfigure(with: [0], updates: [move])
         
         //Then
-        XCTAssertEqual(tableViewMock.movedIndexPath?.from, oldIndexPath)
-        XCTAssertEqual(tableViewMock.movedIndexPath?.to, newIndexPath)
-        XCTAssertEqual(tableViewMock.beginUpdatesCalledCount, 1)
-        XCTAssertEqual(tableViewMock.endUpdatesCalledCount, 1)
+        XCTAssertEqual(tableViewMock.modifiedIndexPaths.moved?.from, oldIndexPath)
+        XCTAssertEqual(tableViewMock.modifiedIndexPaths.moved?.to, newIndexPath)
+        XCTAssertEqual(tableViewMock.executionCount.beginUpdates, 1)
+        XCTAssertEqual(tableViewMock.executionCount.endUpdates, 1)
     }
+    
     func testProcessUpdatesUpdate() {
         //Given
-        let dataSource = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
+        _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
         
         //When
         let indexPath = IndexPath(row: 0, section: 0)
         let update = DataProviderUpdate<Int>.update(indexPath, 1)
-        dataSource.process(updates: [update])
+        dataProvider.reconfigure(with: [0], updates: [update])
         
         //Then
-        XCTAssertEqual(tableViewMock.reloadedIndexPaths?.first, indexPath)
-        XCTAssertEqual(tableViewMock.beginUpdatesCalledCount, 1)
-        XCTAssertEqual(tableViewMock.endUpdatesCalledCount, 1)
+        XCTAssertEqual(tableViewMock.modifiedIndexPaths.reloaded?.first, indexPath)
+        XCTAssertEqual(tableViewMock.executionCount.beginUpdates, 1)
+        XCTAssertEqual(tableViewMock.executionCount.endUpdates, 1)
     }
     
     func testProcessUpdatesInsertSection() {
         //Given
-        let dataSource = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
+        _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
         
         //When
         let insertion = DataProviderUpdate<Int>.insertSection(0)
-        dataSource.process(updates: [insertion])
+        dataProvider.reconfigure(with: [0], updates: [insertion])
         
         //Then
-        XCTAssertEqual(tableViewMock.insertedSections?.count, 1)
-        XCTAssertEqual(tableViewMock.insertedSections?.first, 0)
-        XCTAssertEqual(tableViewMock.beginUpdatesCalledCount, 1)
-        XCTAssertEqual(tableViewMock.endUpdatesCalledCount, 1)
+        XCTAssertEqual(tableViewMock.modifiedSections.inserted?.count, 1)
+        XCTAssertEqual(tableViewMock.modifiedSections.inserted?.first, 0)
+        XCTAssertEqual(tableViewMock.executionCount.beginUpdates, 1)
+        XCTAssertEqual(tableViewMock.executionCount.endUpdates, 1)
     }
     
     func testProcessUpdatesDeleteSection() {
         //Given
-        let dataSource = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
+        _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
         
         //When
         let deletion = DataProviderUpdate<Int>.deleteSection(0)
-        dataSource.process(updates: [deletion])
+        dataProvider.reconfigure(with: [0], updates: [deletion])
         
         //Then
-        XCTAssertEqual(tableViewMock.deleteSections?.count, 1)
-        XCTAssertEqual(tableViewMock.deleteSections?.first, 0)
-        XCTAssertEqual(tableViewMock.beginUpdatesCalledCount, 1)
-        XCTAssertEqual(tableViewMock.endUpdatesCalledCount, 1)
+        XCTAssertEqual(tableViewMock.modifiedSections.deleted?.count, 1)
+        XCTAssertEqual(tableViewMock.modifiedSections.deleted?.first, 0)
+        XCTAssertEqual(tableViewMock.executionCount.beginUpdates, 1)
+        XCTAssertEqual(tableViewMock.executionCount.endUpdates, 1)
     }
     
     func testProcessUpdatesMoveSection() {
         //Given
-        let dataSource = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
+        _ = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
         
         //When
         let deletion = DataProviderUpdate<Int>.moveSection(0, 1)
-        dataSource.process(updates: [deletion])
+        dataProvider.reconfigure(with: [0], updates: [deletion])
         
         //Then
-        XCTAssertEqual(tableViewMock.movedSection?.from, 0)
-        XCTAssertEqual(tableViewMock.movedSection?.to, 1)
-        XCTAssertEqual(tableViewMock.beginUpdatesCalledCount, 1)
-        XCTAssertEqual(tableViewMock.endUpdatesCalledCount, 1)
+        XCTAssertEqual(tableViewMock.modifiedSections.moved?.from, 0)
+        XCTAssertEqual(tableViewMock.modifiedSections.moved?.to, 1)
+        XCTAssertEqual(tableViewMock.executionCount.beginUpdates, 1)
+        XCTAssertEqual(tableViewMock.executionCount.endUpdates, 1)
     }
     
     func testProcessUpdatesFromDataSource() {
@@ -314,10 +315,10 @@ class TableViewDataSourceSingleCellTest: XCTestCase {
         dataProvider.reconfigure(with: [[]], updates: [deletion])
         
         //Then
-        XCTAssertEqual(tableViewMock.deleteSections?.count, 1)
-        XCTAssertEqual(tableViewMock.deleteSections?.first, 0)
-        XCTAssertEqual(tableViewMock.beginUpdatesCalledCount, 1)
-        XCTAssertEqual(tableViewMock.endUpdatesCalledCount, 1)
+        XCTAssertEqual(tableViewMock.modifiedSections.deleted?.count, 1)
+        XCTAssertEqual(tableViewMock.modifiedSections.deleted?.first, 0)
+        XCTAssertEqual(tableViewMock.executionCount.beginUpdates, 1)
+        XCTAssertEqual(tableViewMock.executionCount.endUpdates, 1)
     }
     
     func testPrefetchItemsAtIndexPaths() {
@@ -358,6 +359,17 @@ class TableViewDataSourceSingleCellTest: XCTestCase {
         
     }
     
+    func testCanMoveCellAtIndexPathWithOutDataModificator() {
+        //Given
+        let dataSource = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
+        
+        //When
+        let canMove = dataSource.tableView(UITableView(), canMoveRowAt: IndexPath(row: 0, section: 0))
+        
+        //Then
+        XCTAssertFalse(canMove)
+    }
+    
     func testCanDeleteCell() {
         //Given
         dataModificator.canDeleteItemAt = true
@@ -368,6 +380,17 @@ class TableViewDataSourceSingleCellTest: XCTestCase {
         
         //Then
         XCTAssert(canDelete)
+    }
+    
+    func testCanDeleteCellWithOutDataModificator() {
+        //Given
+        let dataSource = TableViewDataSource(tableView: tableViewMock, dataProvider: dataProvider, cell: cell)
+        
+        //When
+        let canDelete = dataSource.tableView(UITableView(), canEditRowAt: IndexPath(row: 0, section: 0))
+        
+        //Then
+        XCTAssertFalse(canDelete)
     }
     
     func testDeleteCell() {

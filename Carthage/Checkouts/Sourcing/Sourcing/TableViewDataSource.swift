@@ -19,11 +19,11 @@ final public class TableViewDataSource<Object>: NSObject, UITableViewDataSource,
             tableView.reloadData()
         }
     }
-    private let cells: Array<CellConfiguring>
+    private let cells: [CellConfiguring]
     public var displaySectionIndexTitles: Bool
     
     public init<TypedDataProvider: DataProviding>(tableView: UITableView, dataProvider: TypedDataProvider,
-                anyCells: Array<CellConfiguring>, dataModificator: DataModifying? = nil, displaySectionIndexTitles: Bool = false)
+                anyCells: [CellConfiguring], dataModificator: DataModifying? = nil, displaySectionIndexTitles: Bool = false)
                 where TypedDataProvider.Element == Object {
         self.tableView = tableView
         self.dataProvider = AnyDataProvider(dataProvider)
@@ -42,7 +42,7 @@ final public class TableViewDataSource<Object>: NSObject, UITableViewDataSource,
         tableView.reloadData()
     }
     
-    private func register(cells: Array<CellConfiguring>) {
+    private func register(cells: [CellConfiguring]) {
         for cell in cells where cell.nib != nil {
             tableView.register(cell.nib, forCellReuseIdentifier: cell.cellIdentifier)
         }
@@ -52,6 +52,28 @@ final public class TableViewDataSource<Object>: NSObject, UITableViewDataSource,
         return cells.first(where: { $0.canConfigureCell(with: object) })
     }
     
+    private func process(update: DataProviderUpdate<Object>) {
+        switch update {
+        case .insert(let indexPath):
+            tableView.insertRows(at: [indexPath], with: .automatic)
+        case .update(let indexPath, _):
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        case .move(let indexPath, let newIndexPath):
+            tableView.moveRow(at: indexPath, to: newIndexPath)
+        case .delete(let indexPath):
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        case .insertSection(let sectionIndex):
+            tableView.insertSections(IndexSet(integer: sectionIndex), with: .automatic)
+        case .deleteSection(let sectionIndex):
+            tableView.deleteSections(IndexSet(integer: sectionIndex), with: .automatic)
+        case .moveSection(let indexPath, let newIndexPath):
+            tableView.moveSection(indexPath, toSection: newIndexPath)
+        }
+    }
+    
+    /// Execute updates on your TableView. TableView will do a matching animation for each update
+    ///
+    /// - Parameter updates: list of updates to execute
     public func process(updates: [DataProviderUpdate<Object>]?) {
         guard let updates = updates else {
             return tableView.reloadData()
@@ -59,25 +81,6 @@ final public class TableViewDataSource<Object>: NSObject, UITableViewDataSource,
         tableView.beginUpdates()
         updates.forEach(process)
         tableView.endUpdates()
-    }
-    
-    func process(update: DataProviderUpdate<Object>) {
-        switch update {
-        case .insert(let indexPath):
-            tableView.insertRows(at: [indexPath], with: .fade)
-        case .update(let indexPath, _):
-            tableView.reloadRows(at: [indexPath], with: .none)
-        case .move(let indexPath, let newIndexPath):
-            tableView.moveRow(at: indexPath, to: newIndexPath)
-        case .delete(let indexPath):
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        case .insertSection(let sectionIndex):
-            tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
-        case .deleteSection(let sectionIndex):
-            tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
-        case .moveSection(let indexPath, let newIndexPath):
-            tableView.moveSection(indexPath, toSection: newIndexPath)
-        }
     }
     
     public var selectedObject: Object? {
@@ -157,19 +160,19 @@ final public class TableViewDataSource<Object>: NSObject, UITableViewDataSource,
 // MARK: Typesafe initializers
 
 public extension TableViewDataSource {
-    convenience init<CellConfig: StaticCellConfiguring, TypedDataProvider: DataProviding>(tableView: UITableView,
-                     dataProvider: TypedDataProvider, cell: CellConfig,
+    convenience init<Cell: StaticCellConfiguring, TypedDataProvider: DataProviding>(tableView: UITableView,
+                     dataProvider: TypedDataProvider, cell: Cell,
                      dataModificator: DataModifying? = nil, displaySectionIndexTitles: Bool = false)
-        where TypedDataProvider.Element == Object, CellConfig.Object == Object, CellConfig.Cell: UITableViewCell {
+        where TypedDataProvider.Element == Object, Cell.Object == Object, Cell.Cell: UITableViewCell {
             let typeErasedDataProvider = AnyDataProvider(dataProvider)
             self.init(tableView: tableView, dataProvider: typeErasedDataProvider, anyCells: [cell],
                       dataModificator: dataModificator, displaySectionIndexTitles: displaySectionIndexTitles)
     }
     
-    convenience init<CellConfig: StaticCellConfiguring, TypedDataProvider: DataProviding>(tableView: UITableView,
-                     dataProvider: TypedDataProvider, cells: Array<CellConfig>,
+    convenience init<Cell: StaticCellConfiguring, TypedDataProvider: DataProviding>(tableView: UITableView,
+                     dataProvider: TypedDataProvider, cells: [Cell],
                      dataModificator: DataModifying? = nil, displaySectionIndexTitles: Bool = false)
-        where TypedDataProvider.Element == Object, CellConfig.Object == Object, CellConfig.Cell: UITableViewCell {
+        where TypedDataProvider.Element == Object, Cell.Object == Object, Cell.Cell: UITableViewCell {
             let typeErasedDataProvider = AnyDataProvider(dataProvider)
             self.init(tableView: tableView, dataProvider: typeErasedDataProvider, anyCells: cells,
                       dataModificator: dataModificator, displaySectionIndexTitles: displaySectionIndexTitles)
