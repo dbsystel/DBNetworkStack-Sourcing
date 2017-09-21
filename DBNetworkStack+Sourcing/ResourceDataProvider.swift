@@ -113,8 +113,8 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     /// Handles errors which occur during fetching a resource.
     ///
     /// - Parameter error: the error which occurs.
-    private func loadDidError(with error: DBNetworkStackError) {
-        if case DBNetworkStackError.cancelled = error {
+    private func loadDidError(with error: NetworkError) {
+        if case .cancelled = error {
             state = stateBeforeLoadingStarted
             return
         }
@@ -129,35 +129,5 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     private func dataProviderDidChangeContets(with updates: [DataProviderUpdate<Object>]?) {
         dataProviderDidUpdate?(updates)
         whenDataProviderChanged?(updates)
-    }
-}
-
-public extension ResourceDataProvider {
-    /**
-     Creates an instance which fetches a gives array resource and exposes the result as a DataProvider.
-     
-     - parameter resource: The array resource to fetch.
-     - parameter networkService: a networkservice for fetching resources
-     - parameter whenStateChanges: Register for state changes with a given block.
-     */
-    @available(*, deprecated, message: "Use `Resource<Array<Object>> to compose a custom Resource`")
-    public convenience init<R: ResourceModeling>(resource: R?, networkService: NetworkServiceProviding,
-                            whenStateChanges: @escaping ((ResourceDataProviderState) -> Void))
-                            where R.Model == Array<Object> {
-        let resource = resource.map { Resource(resource: $0) }
-        self.init(resource: resource, networkService: networkService, whenStateChanges: whenStateChanges)
-    }
-    
-    /**
-     Fetches a new resource.
-     
-     - parameter resource: The new resource to fetch.
-     - parameter skipLoadingState: when true the loading state will be skipped.
-     */
-    @available(*, deprecated, message: "Use `Resource<Array<Object>> to compose a custom Resource`")
-    public func reconfigure<R: ResourceModeling>(with resource: R?, skipLoadingState: Bool = false)
-        where R.Model == Array<Object> {
-        let resource = resource.map { Resource(resource: $0) }
-        reconfigure(with: resource, skipLoadingState: skipLoadingState)
     }
 }

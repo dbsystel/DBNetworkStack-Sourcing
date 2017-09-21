@@ -30,7 +30,7 @@ import DBNetworkStack
 
 public enum ResourceDataProviderState {
     case success
-    case error(DBNetworkStackError)
+    case error(NetworkError)
     case loading
     case empty
 }
@@ -44,7 +44,7 @@ extension ResourceDataProviderState {
     }
     
     public var hasError: Bool {
-        if case .error(_) = self {
+        if case .error = self {
             return true
         }
         return false
