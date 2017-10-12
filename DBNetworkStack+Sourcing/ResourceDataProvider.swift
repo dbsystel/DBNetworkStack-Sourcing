@@ -45,7 +45,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
         didSet { whenStateChanges?(state) }
     }
     private var stateBeforeLoadingStarted: ResourceDataProviderState = .empty
-    private var resource: Resource<[Object]>?
+    private var resource: Resource<[[Object]]>?
     
     public var dataProviderDidUpdate: ProcessUpdatesCallback<Object>?
     /// Closure which gets called, when a data inside the provider changes and those changes should be propagated to the datasource.
@@ -63,11 +63,44 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      - parameter networkService: a networkservice for fetching resources
      - parameter whenStateChanges: Register for state changes with a given block.
      */
-    public init(resource: Resource<[Object]>?, networkService: NetworkServiceProviding,
+    public init(resource: Resource<[[Object]]>, networkService: NetworkServiceProviding,
                 whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
         self.resource = resource
         self.networkService = networkService
         self.whenStateChanges = whenStateChanges
+    }
+    
+    /**
+     Creates an instance which fetches a gives resource and exposes the result as a DataProvider.
+     
+     - parameter networkService: a networkservice for fetching resources
+     - parameter whenStateChanges: Register for state changes with a given block.
+     */
+    public init(networkService: NetworkServiceProviding,
+                whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
+        self.resource = nil
+        self.networkService = networkService
+        self.whenStateChanges = whenStateChanges
+    }
+    
+    /**
+     Creates an instance which fetches a gives resource and exposes the result as a DataProvider.
+     
+     - parameter resource: The resource to fetch.
+     - parameter networkService: a networkservice for fetching resources
+     - parameter whenStateChanges: Register for state changes with a given block.
+     */
+    public convenience init(resource: Resource<[Object]>, networkService: NetworkServiceProviding,
+                            whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
+        let twoDimensionalResource = resource.map { [$0] }
+        self.init(resource: twoDimensionalResource, networkService: networkService, whenStateChanges: whenStateChanges)
+    }
+    
+    /// Clears all content and changes state to `.empty`
+    public func clear() {
+        resource = nil
+        contents = []
+        load(skipLoadingState: false)
     }
     
     /**
@@ -76,12 +109,23 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      - parameter resource: The new resource to fetch.
      - parameter skipLoadingState: when true the loading state will be skipped. Defaults to false
      */
-    public func reconfigure(with resource: Resource<[Object]>?, skipLoadingState: Bool = false) {
-        if resource == nil {
-            contents = []
-        }
+    public func reconfigure(with resource: Resource<[[Object]]>, skipLoadingState: Bool = false) {
         self.resource = resource
         load(skipLoadingState: skipLoadingState)
+    }
+    
+    /**
+     Replaces the current resource with a new one. It directly triggers a reload.
+     
+     If you want to silently change the contents by fetching a different resource you should `skipLoadingState: true`.
+     This prevents `ResourceDataProvider` to switch in the loding state. After content change notification gets trigged.
+     
+     - parameter resource: The new resource to fetch.
+     - parameter skipLoadingState: when true the loading state will be skipped. Defaults to false
+     */
+    public func reconfigure(with resource: Resource<[Object]>, skipLoadingState: Bool = false) {
+        let twoDimensionalResource = resource.map { [$0] }
+        reconfigure(with: twoDimensionalResource, skipLoadingState: skipLoadingState)
     }
     
     /**
@@ -94,7 +138,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
         currentRequest?.cancel()
         guard let resource = resource else {
             state = .empty
-            dataProviderDidChangeContets(with: nil)
+            dataProviderDidChangeContets()
             return
         }
         if !skipLoadingState {
@@ -103,11 +147,11 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
         currentRequest = networkService.request(resource, onCompletion: loadDidSucess, onError: loadDidError)
     }
     
-    private func loadDidSucess(with result: [Object]) {
+    private func loadDidSucess(with result: [[Object]]) {
         currentRequest = nil
-        contents = [result]
+        contents = result
         state = .success
-        dataProviderDidChangeContets(with: nil)
+        dataProviderDidChangeContets()
     }
 
     /// Handles errors which occur during fetching a resource.
@@ -126,8 +170,8 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      
      - parameter updates: The updates.
      */
-    private func dataProviderDidChangeContets(with updates: [DataProviderUpdate<Object>]?) {
-        dataProviderDidUpdate?(updates)
-        whenDataProviderChanged?(updates)
+    private func dataProviderDidChangeContets() {
+        dataProviderDidUpdate?(nil)
+        whenDataProviderChanged?(nil)
     }
 }
