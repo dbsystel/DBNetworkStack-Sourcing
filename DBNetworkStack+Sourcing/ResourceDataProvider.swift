@@ -36,16 +36,16 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     public var whenStateChanges: ((ResourceDataProviderState) -> Void)?
     
     /// Section Index Titles for `UITableView`. Related to `UITableViewDataSource` method `sectionIndexTitlesForTableView`
-    public let sectionIndexTitles: Array<String>? = nil
+    public let sectionIndexTitles: [String]? = nil
     
     /// The provided data
-    open var contents: Array<Array<Object>> = []
+    open var contents: [[Object]] = []
     /// Describes the current stae of the data provider. Listen for state changes with the `whenStateChanges` callback
     public internal(set) var state: ResourceDataProviderState = .empty {
         didSet { whenStateChanges?(state) }
     }
     private var stateBeforeLoadingStarted: ResourceDataProviderState = .empty
-    private var resource: Resource<Array<Object>>?
+    private var resource: Resource<[Object]>?
     
     public var dataProviderDidUpdate: ProcessUpdatesCallback<Object>?
     /// Closure which gets called, when a data inside the provider changes and those changes should be propagated to the datasource.
@@ -63,7 +63,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      - parameter networkService: a networkservice for fetching resources
      - parameter whenStateChanges: Register for state changes with a given block.
      */
-    public init(resource: Resource<Array<Object>>?, networkService: NetworkServiceProviding,
+    public init(resource: Resource<[Object]>?, networkService: NetworkServiceProviding,
                 whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
         self.resource = resource
         self.networkService = networkService
@@ -76,7 +76,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      - parameter resource: The new resource to fetch.
      - parameter skipLoadingState: when true the loading state will be skipped. Defaults to false
      */
-    public func reconfigure(with resource: Resource<Array<Object>>?, skipLoadingState: Bool = false) {
+    public func reconfigure(with resource: Resource<[Object]>?, skipLoadingState: Bool = false) {
         if resource == nil {
             contents = []
         }
@@ -103,7 +103,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
         currentRequest = networkService.request(resource, onCompletion: loadDidSucess, onError: loadDidError)
     }
     
-    private func loadDidSucess(with result: Array<Object>) {
+    private func loadDidSucess(with result: [Object]) {
         currentRequest = nil
         contents = [result]
         state = .success
