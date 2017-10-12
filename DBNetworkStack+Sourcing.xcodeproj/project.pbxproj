@@ -93,7 +93,6 @@
 		C613C3491DBF2A1E00E397B8 /* DBNetworkStack+SourcingTests */ = {
 			isa = PBXGroup;
 			children = (
-				C68FF1FA1E1A6A6E00A2513F /* Mocks */,
 				C613C3611DBF362800E397B8 /* RessourceDataProviderTests.swift */,
 				C613C34C1DBF2A1E00E397B8 /* Info.plist */,
 			);
@@ -107,13 +106,6 @@
 				C613C35A1DBF35D600E397B8 /* Sourcing.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		C68FF1FA1E1A6A6E00A2513F /* Mocks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Mocks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
