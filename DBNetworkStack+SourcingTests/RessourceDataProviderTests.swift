@@ -25,11 +25,6 @@ import DBNetworkStackSourcing
 import DBNetworkStack
 import Sourcing
 
-struct LocationCoordinate {
-    let longitude: Double
-    let latitude: Double
-}
-
 func testResource<T>(elements: [T]) -> Resource<Array<T>> {
     let url: URL! = URL(string: "bahn.de")
     let request = URLRequest(url: url)
@@ -38,10 +33,8 @@ func testResource<T>(elements: [T]) -> Resource<Array<T>> {
 }
 
 class ResourceDataProviderTests: XCTestCase {
-    var resourceDataProvider: ResourceDataProvider<LocationCoordinate>!
+    var resourceDataProvider: ResourceDataProvider<String>!
     var networkService: NetworkServiceMock!
-    
-    let location = LocationCoordinate(longitude: 0, latitude: 0)
     
     var didUpdateContents = false
     var notifiedDataSourceToProcess = false
@@ -73,7 +66,7 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testInitWithResource() {
         //Given
-        let resource = testResource(elements: [location])
+        let resource = testResource(elements: ["Result"])
         
         //When
         let resourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService, whenStateChanges: { _ in })
@@ -85,7 +78,7 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testLoadResource() {
         //Given
-        let resource = testResource(elements: [location])
+        let resource = testResource(elements: ["Result"])
         
         //When
         resourceDataProvider.reconfigure(with: resource)
@@ -93,6 +86,21 @@ class ResourceDataProviderTests: XCTestCase {
         //Then
         XCTAssert(resourceDataProvider.state.isLoading)
         XCTAssertEqual(networkService.requestCount, 1)
+    }
+    
+    func testLoadTransformedResource() {
+        //Given
+        let resource = testResource(elements: ["Result"])
+        
+        //When
+        let resourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService, whenStateChanges: { _ in })
+        resourceDataProvider.load()
+        networkService.returnSuccess()
+        
+        //Then
+        XCTAssert(resourceDataProvider.state.hasSucceded)
+        XCTAssertEqual(networkService.requestCount, 1)
+        XCTAssertEqual("Result", resourceDataProvider.contents.first?.first)
     }
     
     func testClear() {
@@ -106,7 +114,7 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testLoadResource_skipLoadingState() {
         //Given
-        let resource = testResource(elements: [location])
+        let resource = testResource(elements: ["Result"])
         
         //When
         resourceDataProvider.reconfigure(with: resource, skipLoadingState: true)
@@ -118,21 +126,21 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testLoadSucceed() {
         //Given
-        let resource = testResource(elements: [location])
+        let resource = testResource(elements: ["Result"])
         
         //When
         resourceDataProvider.reconfigure(with: resource)
         networkService.returnSuccess()
         //Then
         XCTAssert(resourceDataProvider.state.hasSucceded)
-        XCTAssertEqual(location.latitude, resourceDataProvider.contents.first?.first?.latitude)
+        XCTAssertEqual("Result", resourceDataProvider.contents.first?.first)
         XCTAssert(notifiedDataSourceToProcess)
         XCTAssert(didUpdateContents)
     }
     
     func testLoadError() {
         //Given
-        let resource = testResource(elements: [location])
+        let resource = testResource(elements: ["Result"])
         
         //When
         resourceDataProvider.reconfigure(with: resource)
@@ -145,7 +153,7 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testOnNetworkRequestCanceldWithEmptyData() {
         //Given
-        let resource = testResource(elements: [location])
+        let resource = testResource(elements: ["Result"])
         
         //When
         resourceDataProvider.reconfigure(with: resource)
@@ -159,7 +167,7 @@ class ResourceDataProviderTests: XCTestCase {
     func testOnNetworkRequestCanceledWithNoEmptyData() {
         //Given
         resourceDataProvider = ResourceDataProvider(networkService: networkService, whenStateChanges: { _ in })
-        let resource = testResource(elements: [location])
+        let resource = testResource(elements: ["Result"])
         
         //When
         resourceDataProvider.reconfigure(with: resource)
