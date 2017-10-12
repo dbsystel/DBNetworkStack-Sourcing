@@ -25,7 +25,7 @@ import DBNetworkStack
 public enum ResourceDataProviderState {
     case success
     case error(NetworkError)
-    case loading
+    case loading(NetworkTaskRepresenting)
     case empty
 }
 

@@ -101,7 +101,10 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     }
     
     /**
-     Fetches a new resource.
+     Replaces the current resource with a new one. It directly triggers a reload.
+     
+     If you want to silently change the contents by fetching a different resource you should `skipLoadingState: true`.
+     This prevents `ResourceDataProvider` to switch in the loding state. After content change notification gets trigged.
      
      - parameter resource: The new resource to fetch.
      - parameter skipLoadingState: when true the loading state will be skipped. Defaults to false
@@ -138,10 +141,11 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
             dataProviderDidChangeContets()
             return
         }
-        if !skipLoadingState {
-            state = .loading
-        }
+        
         currentRequest = networkService.request(resource, onCompletion: loadDidSucess, onError: loadDidError)
+        if let currentRequest = currentRequest, !skipLoadingState {
+            state = .loading(currentRequest)
+        }
     }
     
     private func loadDidSucess(with result: [[Object]]) {
