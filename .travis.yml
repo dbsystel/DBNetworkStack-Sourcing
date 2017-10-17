@@ -3,6 +3,14 @@ matrix:
     - os: osx
       osx_image: xcode9
       language: objective-c
+      env: "macOS"
+      install:
+        - carthage update --platform macos --no-use-binaries
+      script:
+        - set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -destination 'platform=OS X' test CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -enableCodeCoverage NO | xcpretty
+    - os: osx
+      osx_image: xcode9
+      language: objective-c
       env: "iOS"
       install:
         - carthage update --platform ios --no-use-binaries
@@ -10,3 +18,25 @@ matrix:
         - set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -destination 'platform=iOS Simulator,name=iPhone SE,OS=latest' test CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -enableCodeCoverage YES | xcpretty
       after_success:
         - bash <(curl -s https://codecov.io/bash)
+    - os: osx
+      osx_image: xcode9
+      language: objective-c
+      env: "watchOS"
+      install:
+        - carthage update --platform watchos --no-use-binaries
+      script:
+        - set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -destination 'platform=watchOS Simulator,name=Apple Watch Series 2 - 38mm' build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty
+    - os: osx
+      osx_image: xcode9
+      language: objective-c
+      env: "tvOS"
+      install:
+        - carthage update --platform tvos --no-use-binaries
+      script:
+        - set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -destination 'platform=tvOS Simulator,name=Apple TV 1080p,OS=latest' test CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -enableCodeCoverage NO | xcpretty
+    - os: osx
+      osx_image: xcode9
+      language: objective-c
+      env: "SPM, Carthage, CocoaPods"
+      script:
+        - carthage build --no-skip-current
