@@ -37,7 +37,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     
     /// The provided data
     open var contents: [[Object]] = []
-    /// Describes the current stae of the data provider. Listen for state changes with the `whenStateChanges` callback
+    /// Describes the current state of the data provider. Listen for state changes with the `whenStateChanges` callback
     public internal(set) var state: ResourceDataProviderState = .empty {
         didSet { whenStateChanges?(state) }
     }
@@ -54,7 +54,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     private var currentRequest: NetworkTaskRepresenting?
     
     /**
-     Creates an instance which fetches a gives resource and exposes the result as a DataProvider.
+     Creates an instance which fetches a given resource and exposes the result as a DataProvider.
      
      - parameter resource: The resource to fetch.
      - parameter networkService: a networkservice for fetching resources
@@ -68,7 +68,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     }
     
     /**
-     Creates an instance which fetches a gives resource and exposes the result as a DataProvider.
+     Creates an instance which fetches a given resource and exposes the result as a DataProvider.
      
      - parameter networkService: a networkservice for fetching resources
      - parameter whenStateChanges: Register for state changes with a given block.
@@ -138,7 +138,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
         currentRequest?.cancel()
         guard let resource = resource else {
             state = .empty
-            dataProviderDidChangeContets()
+            dataProviderDidChangeContent()
             return
         }
         
@@ -152,7 +152,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
         currentRequest = nil
         contents = result
         state = .success
-        dataProviderDidChangeContets()
+        dataProviderDidChangeContent()
     }
 
     /// Handles errors which occur during fetching a resource.
@@ -171,7 +171,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      
      - parameter updates: The updates.
      */
-    private func dataProviderDidChangeContets() {
+    private func dataProviderDidChangeContent() {
         dataProviderDidUpdate?(nil)
         whenDataProviderChanged?(nil)
     }
