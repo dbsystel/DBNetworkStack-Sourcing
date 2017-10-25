@@ -33,8 +33,10 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     public var whenStateChanges: ((ResourceDataProviderState) -> Void)?
     
     /// Section Index Titles for `UITableView`. Related to `UITableViewDataSource` method `sectionIndexTitlesForTableView`
-    public var sectionIndexTitles: [String]? = nil
-    public var headerTitles: [String]? = nil
+    public var sectionIndexTitles: [String]?
+    
+    /// Section header titles whicht get displayed for each section
+    public var headerTitles: [String]?
     
     /// The provided data
     open var contents: [[Object]] = []
@@ -104,7 +106,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     /**
      Replaces the current resource with a new one. It directly triggers a reload.
      
-     If you want to silently change the contents by fetching a different resource you should `skipLoadingState: true`.
+     If you want to silently change the content by fetching a different resource you should `skipLoadingState: true`.
      This prevents `ResourceDataProvider` to switch in the loding state. After content change notification gets trigged.
      
      - parameter resource: The new resource to fetch.
@@ -118,7 +120,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     /**
      Replaces the current resource with a new one. It directly triggers a reload.
      
-     If you want to silently change the contents by fetching a different resource you should `skipLoadingState: true`.
+     If you want to silently change the content by fetching a different resource you should `skipLoadingState: true`.
      This prevents `ResourceDataProvider` to switch in the loding state. After content change notification gets trigged.
      
      - parameter resource: The new resource to fetch.
