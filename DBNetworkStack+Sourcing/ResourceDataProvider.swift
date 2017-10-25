@@ -33,7 +33,8 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     public var whenStateChanges: ((ResourceDataProviderState) -> Void)?
     
     /// Section Index Titles for `UITableView`. Related to `UITableViewDataSource` method `sectionIndexTitlesForTableView`
-    public let sectionIndexTitles: [String]? = nil
+    public var sectionIndexTitles: [String]? = nil
+    public var headerTitles: [String]? = nil
     
     /// The provided data
     open var contents: [[Object]] = []
