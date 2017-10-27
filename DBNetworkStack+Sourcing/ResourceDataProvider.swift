@@ -57,6 +57,19 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     private var currentRequest: NetworkTaskRepresenting?
     
     /**
+     Creates an instance with a given resource and exposes the result as a DataProvider. To load the given request you need first reconfigure a resource and call `.load()`.
+     
+     - parameter networkService: a networkservice for fetching resources
+     - parameter whenStateChanges: Register for state changes with a given block.
+     */
+    public init(networkService: NetworkServiceProviding,
+                whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
+        self.resource = nil
+        self.networkService = networkService
+        self.whenStateChanges = whenStateChanges
+    }
+    
+    /**
      Creates an instance with a given resource and exposes the result as a DataProvider. To load the given request you need not call `.load()`.
      
      - parameter resource: The resource to fetch.
@@ -71,20 +84,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     }
     
     /**
-     Creates an instance with a given resource and exposes the result as a DataProvider. To load the given request you need not call `.load()`.
-     
-     - parameter networkService: a networkservice for fetching resources
-     - parameter whenStateChanges: Register for state changes with a given block.
-     */
-    public init(networkService: NetworkServiceProviding,
-                whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
-        self.resource = nil
-        self.networkService = networkService
-        self.whenStateChanges = whenStateChanges
-    }
-    
-    /**
-     Creates an instance which fetches a given resource and exposes the result as a DataProvider.
+     Creates an instance which fetches a given resource and exposes the result as a DataProvider. To load the given request you need not call `.load()`.
      
      - parameter resource: The resource to fetch.
      - parameter networkService: a networkservice for fetching resources
