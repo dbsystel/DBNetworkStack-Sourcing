@@ -25,11 +25,13 @@ import DBNetworkStackSourcing
 import DBNetworkStack
 import Sourcing
 
-func testResource<T>(elements: [T]) -> Resource<Array<T>> {
-    let url: URL! = URL(string: "bahn.de")
-    let request = URLRequest(url: url)
-    
-    return Resource(request: request, parse: { _ in return elements })
+extension Resource {
+    static func mockWith(result: Model) -> Resource<Model> {
+        let url: URL! = URL(string: "bahn.de")
+        let request = URLRequest(url: url)
+        
+        return Resource(request: request, parse: { _ in return result })
+    }
 }
 
 class ResourceDataProviderTests: XCTestCase {
@@ -66,7 +68,7 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testInitWithResource() {
         //Given
-        let resource = testResource(elements: ["Result"])
+        let resource = Resource.mockWith(result: ["Result"])
         
         //When
         let resourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService, whenStateChanges: { _ in })
@@ -76,12 +78,13 @@ class ResourceDataProviderTests: XCTestCase {
         XCTAssertEqual(networkService.requestCount, 0)
     }
     
-    func testLoadResource() {
+    func testReconfigureResource() {
         //Given
-        let resource = testResource(elements: ["Result"])
+        let resource = Resource.mockWith(result: ["Result"])
         
         //When
         resourceDataProvider.reconfigure(with: resource)
+        resourceDataProvider.load()
         
         //Then
         XCTAssert(resourceDataProvider.state.isLoading)
@@ -90,7 +93,7 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testLoadTransformedResource() {
         //Given
-        let resource = testResource(elements: ["Result"])
+        let resource = Resource.mockWith(result: ["Result"])
         
         //When
         let resourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService, whenStateChanges: { _ in })
@@ -114,10 +117,11 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testLoadResource_skipLoadingState() {
         //Given
-        let resource = testResource(elements: ["Result"])
+        let resource = Resource.mockWith(result: ["Result"])
         
         //When
-        resourceDataProvider.reconfigure(with: resource, skipLoadingState: true)
+        resourceDataProvider.reconfigure(with: resource)
+        resourceDataProvider.load(skipLoadingState: true)
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
@@ -126,11 +130,13 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testLoadSucceed() {
         //Given
-        let resource = testResource(elements: ["Result"])
+        let resource = Resource.mockWith(result: ["Result"])
+        resourceDataProvider.reconfigure(with: resource)
         
         //When
-        resourceDataProvider.reconfigure(with: resource)
+        resourceDataProvider.load()
         networkService.returnSuccess()
+        
         //Then
         XCTAssert(resourceDataProvider.state.hasSucceded)
         XCTAssertEqual("Result", resourceDataProvider.contents.first?.first)
@@ -140,10 +146,12 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testLoadError() {
         //Given
-        let resource = testResource(elements: ["Result"])
+        let resource = Resource.mockWith(result: ["Result"])
+        resourceDataProvider.reconfigure(with: resource)
         
         //When
-        resourceDataProvider.reconfigure(with: resource)
+        
+        resourceDataProvider.load()
         networkService.returnError(with: .unknownError)
         
         //Then
@@ -153,10 +161,11 @@ class ResourceDataProviderTests: XCTestCase {
     
     func testOnNetworkRequestCanceldWithEmptyData() {
         //Given
-        let resource = testResource(elements: ["Result"])
+        let resource = Resource.mockWith(result: ["Result"])
+        resourceDataProvider.reconfigure(with: resource)
         
         //When
-        resourceDataProvider.reconfigure(with: resource)
+        resourceDataProvider.load()
         networkService.returnError(with: .cancelled)
         
         //Then
