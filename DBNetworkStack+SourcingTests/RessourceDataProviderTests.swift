@@ -76,12 +76,13 @@ class ResourceDataProviderTests: XCTestCase {
         XCTAssertEqual(networkService.requestCount, 0)
     }
     
-    func testLoadResource() {
+    func testReconfigureResource() {
         //Given
         let resource = testResource(elements: ["Result"])
         
         //When
         resourceDataProvider.reconfigure(with: resource)
+        resourceDataProvider.load()
         
         //Then
         XCTAssert(resourceDataProvider.state.isLoading)
@@ -117,7 +118,8 @@ class ResourceDataProviderTests: XCTestCase {
         let resource = testResource(elements: ["Result"])
         
         //When
-        resourceDataProvider.reconfigure(with: resource, skipLoadingState: true)
+        resourceDataProvider.reconfigure(with: resource)
+        resourceDataProvider.load(skipLoadingState: true)
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
@@ -127,10 +129,12 @@ class ResourceDataProviderTests: XCTestCase {
     func testLoadSucceed() {
         //Given
         let resource = testResource(elements: ["Result"])
+        resourceDataProvider.reconfigure(with: resource)
         
         //When
-        resourceDataProvider.reconfigure(with: resource)
+        resourceDataProvider.load()
         networkService.returnSuccess()
+        
         //Then
         XCTAssert(resourceDataProvider.state.hasSucceded)
         XCTAssertEqual("Result", resourceDataProvider.contents.first?.first)
@@ -141,9 +145,11 @@ class ResourceDataProviderTests: XCTestCase {
     func testLoadError() {
         //Given
         let resource = testResource(elements: ["Result"])
+        resourceDataProvider.reconfigure(with: resource)
         
         //When
-        resourceDataProvider.reconfigure(with: resource)
+        
+        resourceDataProvider.load()
         networkService.returnError(with: .unknownError)
         
         //Then
@@ -154,9 +160,10 @@ class ResourceDataProviderTests: XCTestCase {
     func testOnNetworkRequestCanceldWithEmptyData() {
         //Given
         let resource = testResource(elements: ["Result"])
+        resourceDataProvider.reconfigure(with: resource)
         
         //When
-        resourceDataProvider.reconfigure(with: resource)
+        resourceDataProvider.load()
         networkService.returnError(with: .cancelled)
         
         //Then
