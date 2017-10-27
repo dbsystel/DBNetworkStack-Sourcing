@@ -57,7 +57,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     private var currentRequest: NetworkTaskRepresenting?
     
     /**
-     Creates an instance which fetches a given resource and exposes the result as a DataProvider.
+     Creates an instance with a given resource and exposes the result as a DataProvider. To load the given request you need not call `.load()`.
      
      - parameter resource: The resource to fetch.
      - parameter networkService: a networkservice for fetching resources
@@ -71,7 +71,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     }
     
     /**
-     Creates an instance which fetches a given resource and exposes the result as a DataProvider.
+     Creates an instance with a given resource and exposes the result as a DataProvider. To load the given request you need not call `.load()`.
      
      - parameter networkService: a networkservice for fetching resources
      - parameter whenStateChanges: Register for state changes with a given block.
