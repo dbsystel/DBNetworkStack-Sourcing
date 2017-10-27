@@ -104,35 +104,29 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     }
     
     /**
-     Replaces the current resource with a new one. It directly triggers a reload.
-     
-     If you want to silently change the content by fetching a different resource you should `skipLoadingState: true`.
-     This prevents `ResourceDataProvider` to switch in the loding state. After content change notification gets trigged.
+     Replaces the current resource with a new one.
      
      - parameter resource: The new resource to fetch.
-     - parameter skipLoadingState: when true the loading state will be skipped. Defaults to false
      */
-    public func reconfigure(with resource: Resource<[[Object]]>, skipLoadingState: Bool = false) {
+    public func reconfigure(with resource: Resource<[[Object]]>) {
         self.resource = resource
-        load(skipLoadingState: skipLoadingState)
     }
     
     /**
-     Replaces the current resource with a new one. It directly triggers a reload.
-     
-     If you want to silently change the content by fetching a different resource you should `skipLoadingState: true`.
-     This prevents `ResourceDataProvider` to switch in the loding state. After content change notification gets trigged.
+     Replaces the current resource with a new one.
      
      - parameter resource: The new resource to fetch.
-     - parameter skipLoadingState: when true the loading state will be skipped. Defaults to false
      */
-    public func reconfigure(with resource: Resource<[Object]>, skipLoadingState: Bool = false) {
+    public func reconfigure(with resource: Resource<[Object]>) {
         let twoDimensionalResource = resource.map { [$0] }
-        reconfigure(with: twoDimensionalResource, skipLoadingState: skipLoadingState)
+        reconfigure(with: twoDimensionalResource)
     }
     
     /**
      Fetches the current resources via webservices.
+     
+     If you want to silently change the content by fetching a different resource you should `skipLoadingState: true`.
+     This prevents `ResourceDataProvider` to switch into loding state.
      
       - parameter skipLoadingState: when true the loading state will be skipped. Defaults to false.
      */
