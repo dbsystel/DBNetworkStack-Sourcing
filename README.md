@@ -46,8 +46,8 @@ resourceDataProvider.contents
 
 ## Requirements
 - iOS 9.0+
-- Xcode 8.0+
-- Swift 3.0
+- Xcode 9.0+
+- Swift 4.0
 
 ## Installation
 
@@ -58,7 +58,7 @@ resourceDataProvider.contents
 Specify the following in your `Cartfile`:
 
 ```ogdl
-github "dbsystel/DBNetworkStack-Sourcing" ~> 0.8
+github "dbsystel/DBNetworkStack-Sourcing" ~> 0.9
 ```
 ## Contributing
 Feel free to submit a pull request with new features, improvements on tests or documentation and bug fixes. Keep in mind that we welcome code that is well tested and documented.
