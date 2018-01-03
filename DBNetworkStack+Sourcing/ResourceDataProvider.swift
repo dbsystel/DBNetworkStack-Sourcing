@@ -33,19 +33,21 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     /// Function which gets called when state changes
     public weak var delegate: ResourceDataProviderDelagte?
     
-    /// The provided data
-    open var content: [[Object]] = []
-    /// Describes the current state of the data provider. Listen for state changes with the `whenStateChanges` callback
-    public internal(set) var state: ResourceDataProviderState = .empty {
-        didSet { delegate?.resourceDataProviderDidChangeState(newState: state) }
-    }
-    private var stateBeforeLoadingStarted: ResourceDataProviderState = .empty
-    private var resource: Resource<[[Object]]>?
+    /// The provided data which was fetched by the resource
+    public var content: [[Object]] = []
     
+    /// Describes the current state of the data provider. Listen for state changes by implementing `ResourceDataProviderDelagte`.
+    public internal(set) var state: ResourceDataProviderState = .empty {
+        didSet { delegate?.resourceDataProviderDidChangeState(from: oldValue, to: state) }
+    }
+    
+    /// An observable where you can list on changes for the data provider.
     public var observable: DataProviderObservable {
         return defaultObserver
     }
     
+    private var stateBeforeLoadingStarted: ResourceDataProviderState = .empty
+    private var resource: Resource<[[Object]]>?
     private let defaultObserver = DefaultDataProviderObservable()
     
     // MARK: Network properties

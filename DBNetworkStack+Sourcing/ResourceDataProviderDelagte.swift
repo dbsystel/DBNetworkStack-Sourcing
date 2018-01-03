@@ -23,5 +23,5 @@
 import Foundation
 
 public protocol ResourceDataProviderDelagte: class {
-    func resourceDataProviderDidChangeState(newState: ResourceDataProviderState)
+    func resourceDataProviderDidChangeState(from state: ResourceDataProviderState, to newState: ResourceDataProviderState)
 }
