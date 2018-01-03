@@ -12,36 +12,47 @@ import Sourcing
 import DBNetworkStack
 import DBNetworkStackSourcing
 
-let networkService: NetworkServiceProviding = //
+let networkService: NetworkService = //
 let resource: Resource<[Int]> = //
 
-let resourceDataProvider = ResourceDataProvider<Int>(resource: resource, networkService: networkService, whenStateChanges: { state in
-        //handle state change
-})
+let resourceDataProvider = ResourceDataProvider<Int>(resource: resource, networkService: networkService)
         
 // Start loading content
 resourceDataProvider.load()
 ```
 
 ### Access state of the loading operation
-You can either pass a closure into `ResourceDataProvider.init` and get notified when state changes or you could access `ressourceDataProvider.state`.
+You can either pass a delegate into `ResourceDataProvider.init` and get notified when state changes or you could access `ressourceDataProvider.state`.
+
+```swift
+let delegate: ResourceDataProviderDelegate = //
+let resourceDataProvider = ResourceDataProvider<Int>(resource: resource, networkService: networkService, delegate: delegate)
+
+// Set delegate later.
+resourceDataProvider.delegate = delegate
+
+// Access the current state.
+resourceDataProvider.state
+```
 
 ### Reloading a resource
 ```swift
 let newResource: Resource<[Int]> = //
 resourceDataProvider.reconfigure(with: newResource)
+resourceDataProvider.load()
 ```
 
 Somtimes it can be handy to skip the state of loading (e.g when inital loading displays a spinner and following reloads should not)
 ```swift
 let newResource: Resource<[Int]> = //
-resourceDataProvider.reconfigure(with: newResource, skipLoadingState: true)
+resourceDataProvider.reconfigure(with: newResource)
+resourceDataProvider.load(skipLoadingState: true)
 ```
 **skipLoadingState is availaibe in initial `load()` as well**
 
-### Accessing current contents
+### Accessing current content
 ```swift
-resourceDataProvider.contents
+resourceDataProvider.content
 ```
 
 ## Requirements
