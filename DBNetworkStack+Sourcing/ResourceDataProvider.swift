@@ -28,45 +28,41 @@ import DBNetworkStack
  `ResourceDataProvider` provides fetching JSONResources and transforming them into a DataProvider(DataSource) for colllection/table views.
  */
 public class ResourceDataProvider<Object>: ArrayDataProviding {
+    public typealias Element = Object
     
     /// Function which gets called when state changes
-    public var whenStateChanges: ((ResourceDataProviderState) -> Void)?
-    
-    /// Section Index Titles for `UITableView`. Related to `UITableViewDataSource` method `sectionIndexTitlesForTableView`
-    public var sectionIndexTitles: [String]?
-    
-    /// Section header titles whicht get displayed for each section
-    public var headerTitles: [String]?
+    public weak var delegate: ResourceDataProviderDelagte?
     
     /// The provided data
-    open var contents: [[Object]] = []
+    open var content: [[Object]] = []
     /// Describes the current state of the data provider. Listen for state changes with the `whenStateChanges` callback
     public internal(set) var state: ResourceDataProviderState = .empty {
-        didSet { whenStateChanges?(state) }
+        didSet { delegate?.resourceDataProviderDidChangeState(newState: state) }
     }
     private var stateBeforeLoadingStarted: ResourceDataProviderState = .empty
     private var resource: Resource<[[Object]]>?
     
-    public var dataProviderDidUpdate: ProcessUpdatesCallback<Object>?
-    /// Closure which gets called, when a data inside the provider changes and those changes should be propagated to the datasource.
-    /// **Warning:** Only set this when you are updating the datasource.
-    public var whenDataProviderChanged: ProcessUpdatesCallback<Object>?
+    public var observable: DataProviderObservable {
+        return defaultObserver
+    }
+    
+    private let defaultObserver = DefaultDataProviderObservable()
     
     // MARK: Network properties
-    private let networkService: NetworkServiceProviding
-    private var currentRequest: NetworkTaskRepresenting?
+    private let networkService: NetworkService
+    private var currentRequest: NetworkTask?
     
     /**
-     Creates an instance with a given resource and exposes the result as a DataProvider. To load the given request you need first reconfigure a resource and call `.load()`.
+     Creates an instance with a given resource and exposes the result as a DataProvider.
+     To load the given request you need first reconfigure a resource and call `.load()`.
      
      - parameter networkService: a networkservice for fetching resources
      - parameter whenStateChanges: Register for state changes with a given block.
      */
-    public init(networkService: NetworkServiceProviding,
-                whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
+    public init(networkService: NetworkService, delegate: ResourceDataProviderDelagte? = nil) {
         self.resource = nil
         self.networkService = networkService
-        self.whenStateChanges = whenStateChanges
+        self.delegate = delegate
     }
     
     /**
@@ -76,11 +72,10 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      - parameter networkService: a networkservice for fetching resources
      - parameter whenStateChanges: Register for state changes with a given block.
      */
-    public init(resource: Resource<[[Object]]>, networkService: NetworkServiceProviding,
-                whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
+    public init(resource: Resource<[[Object]]>, networkService: NetworkService, delegate: ResourceDataProviderDelagte? = nil) {
         self.resource = resource
         self.networkService = networkService
-        self.whenStateChanges = whenStateChanges
+        self.delegate = delegate
     }
     
     /**
@@ -90,16 +85,15 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      - parameter networkService: a networkservice for fetching resources
      - parameter whenStateChanges: Register for state changes with a given block.
      */
-    public convenience init(resource: Resource<[Object]>, networkService: NetworkServiceProviding,
-                            whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
+    public convenience init(resource: Resource<[Object]>, networkService: NetworkService, delegate: ResourceDataProviderDelagte? = nil) {
         let twoDimensionalResource = resource.map { [$0] }
-        self.init(resource: twoDimensionalResource, networkService: networkService, whenStateChanges: whenStateChanges)
+        self.init(resource: twoDimensionalResource, networkService: networkService, delegate: delegate)
     }
     
     /// Clears all content and changes state to `.empty`
     public func clear() {
         resource = nil
-        contents = []
+        content = []
         load(skipLoadingState: false)
     }
     
@@ -147,7 +141,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     
     private func loadDidSucess(with result: [[Object]]) {
         currentRequest = nil
-        contents = result
+        content = result
         state = .success
         dataProviderDidChangeContent()
     }
@@ -169,7 +163,6 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      - parameter updates: The updates.
      */
     private func dataProviderDidChangeContent() {
-        dataProviderDidUpdate?(nil)
-        whenDataProviderChanged?(nil)
+        defaultObserver.send(updates: .unknown)
     }
 }

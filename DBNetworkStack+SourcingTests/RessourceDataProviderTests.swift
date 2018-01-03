@@ -34,32 +34,39 @@ extension Resource {
     }
 }
 
+class ResourceDataProviderDelagteMock: ResourceDataProviderDelagte {
+    var state: ResourceDataProviderState?
+    
+    func resourceDataProviderDidChangeState(newState: ResourceDataProviderState) {
+        state = newState
+    }
+}
+
 class ResourceDataProviderTests: XCTestCase {
     var resourceDataProvider: ResourceDataProvider<String>!
     var networkService: NetworkServiceMock!
     
-    var didUpdateContents = false
     var notifiedDataSourceToProcess = false
+    var resourceDataProviderDelagteMock: ResourceDataProviderDelagteMock!
     
     override func setUp() {
         super.setUp()
         
         networkService = NetworkServiceMock()
         
-        resourceDataProvider = ResourceDataProvider(networkService: networkService, whenStateChanges: { _ in })
-        resourceDataProvider.dataProviderDidUpdate = { [weak self] _ in
-            self?.didUpdateContents = true
+        resourceDataProviderDelagteMock = ResourceDataProviderDelagteMock()
+        resourceDataProvider = ResourceDataProvider(networkService: networkService, delegate: resourceDataProviderDelagteMock)
+        
+        resourceDataProvider.observable.addObserver { [weak self] _ in
             self?.notifiedDataSourceToProcess = true
         }
-        didUpdateContents = false
         notifiedDataSourceToProcess = false
         XCTAssert(resourceDataProvider.state.isEmpty)
     }
     
     func testInitEmpty() {
-        
         //When
-        let resourceDataProvider = ResourceDataProvider<Int>(networkService: networkService, whenStateChanges: { _ in })
+        let resourceDataProvider = ResourceDataProvider<Int>(networkService: networkService)
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
@@ -71,7 +78,7 @@ class ResourceDataProviderTests: XCTestCase {
         let resource = Resource.mockWith(result: ["Result"])
         
         //When
-        let resourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService, whenStateChanges: { _ in })
+        let resourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService)
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
@@ -88,22 +95,41 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.isLoading)
+        XCTAssert(resourceDataProviderDelagteMock.state?.isLoading ?? false)
+        XCTAssert(!notifiedDataSourceToProcess)
         XCTAssertEqual(networkService.requestCount, 1)
     }
     
-    func testLoadTransformedResource() {
+    func testLoadResource() {
         //Given
         let resource = Resource.mockWith(result: ["Result"])
         
         //When
-        let resourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService, whenStateChanges: { _ in })
+        let resourceDataProvider = ResourceDataProvider(resource: resource, networkService: networkService, delegate: resourceDataProviderDelagteMock)
         resourceDataProvider.load()
         networkService.returnSuccess()
         
         //Then
         XCTAssert(resourceDataProvider.state.hasSucceded)
+        XCTAssert(resourceDataProviderDelagteMock.state?.hasSucceded ?? false)
         XCTAssertEqual(networkService.requestCount, 1)
-        XCTAssertEqual("Result", resourceDataProvider.contents.first?.first)
+        XCTAssertEqual("Result", resourceDataProvider.content.first?.first)
+    }
+    
+    func testReconfigureSucceed() {
+        //Given
+        let resource = Resource.mockWith(result: ["Result"])
+        resourceDataProvider.reconfigure(with: resource)
+        
+        //When
+        resourceDataProvider.load()
+        networkService.returnSuccess()
+        
+        //Then
+        XCTAssert(resourceDataProvider.state.hasSucceded)
+        XCTAssert(resourceDataProviderDelagteMock.state?.hasSucceded ?? false)
+        XCTAssertEqual("Result", resourceDataProvider.content.first?.first)
+        XCTAssert(notifiedDataSourceToProcess)
     }
     
     func testClear() {
@@ -112,6 +138,8 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
+        XCTAssert(resourceDataProviderDelagteMock.state?.isEmpty ?? false)
+        XCTAssert(notifiedDataSourceToProcess)
         XCTAssertEqual(networkService.requestCount, 0)
     }
     
@@ -125,23 +153,8 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
+        XCTAssertNil(resourceDataProviderDelagteMock.state)
         XCTAssertEqual(networkService.requestCount, 1)
-    }
-    
-    func testLoadSucceed() {
-        //Given
-        let resource = Resource.mockWith(result: ["Result"])
-        resourceDataProvider.reconfigure(with: resource)
-        
-        //When
-        resourceDataProvider.load()
-        networkService.returnSuccess()
-        
-        //Then
-        XCTAssert(resourceDataProvider.state.hasSucceded)
-        XCTAssertEqual("Result", resourceDataProvider.contents.first?.first)
-        XCTAssert(notifiedDataSourceToProcess)
-        XCTAssert(didUpdateContents)
     }
     
     func testLoadError() {
@@ -156,7 +169,7 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.hasError)
-        XCTAssert(!didUpdateContents)
+        XCTAssert(!notifiedDataSourceToProcess)
     }
     
     func testOnNetworkRequestCanceldWithEmptyData() {

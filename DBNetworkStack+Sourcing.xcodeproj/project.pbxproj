@@ -14,6 +14,7 @@
 		C613C35C1DBF35D600E397B8 /* Sourcing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C35A1DBF35D600E397B8 /* Sourcing.framework */; };
 		C613C35E1DBF35E900E397B8 /* ResourceDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C35D1DBF35E900E397B8 /* ResourceDataProvider.swift */; };
 		C613C3621DBF362800E397B8 /* RessourceDataProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C3611DBF362800E397B8 /* RessourceDataProviderTests.swift */; };
+		C66C7BA01FFBC819009B8C78 /* ResourceDataProviderDelagte.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66C7B9F1FFBC819009B8C78 /* ResourceDataProviderDelagte.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 		C613C35A1DBF35D600E397B8 /* Sourcing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sourcing.framework; path = Carthage/Build/iOS/Sourcing.framework; sourceTree = "<group>"; };
 		C613C35D1DBF35E900E397B8 /* ResourceDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceDataProvider.swift; sourceTree = "<group>"; };
 		C613C3611DBF362800E397B8 /* RessourceDataProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RessourceDataProviderTests.swift; sourceTree = "<group>"; };
+		C66C7B9F1FFBC819009B8C78 /* ResourceDataProviderDelagte.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceDataProviderDelagte.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 		C613C33E1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing */ = {
 			isa = PBXGroup;
 			children = (
+				C66C7B9F1FFBC819009B8C78 /* ResourceDataProviderDelagte.swift */,
 				C613C35D1DBF35E900E397B8 /* ResourceDataProvider.swift */,
 				C60F99B51DFC59B600628F31 /* ResourceDataProviderState.swift */,
 				C613C33F1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.h */,
@@ -256,6 +259,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C60F99B61DFC59B600628F31 /* ResourceDataProviderState.swift in Sources */,
+				C66C7BA01FFBC819009B8C78 /* ResourceDataProviderDelagte.swift in Sources */,
 				C613C35E1DBF35E900E397B8 /* ResourceDataProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
