@@ -1,11 +1,20 @@
 language: objective-c
 osx_image: xcode9
-
+before_install:
+  - gem install jazzy
 script:
   - carthage bootstrap
   - set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -destination "platform=tvOS Simulator,name=Apple TV 1080p" test | xcpretty
   - set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -destination "platform=watchOS Simulator,name=Apple Watch - 38mm" build | xcpretty
   - set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -destination "platform=iOS Simulator,name=iPhone SE" test | xcpretty
   - carthage build --no-skip-current
+  - jazzy --clean --author "DBSystel" --github_url https://github.com/dbsystel/DBNetworkStack --module DBNetworkStack --output docs
 after_success:
-        - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)
+deploy:
+  provider: pages
+  local_dir: ${TRAVIS_BUILD_DIR}/docs
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  on:
+    branch: master
