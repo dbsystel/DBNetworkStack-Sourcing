@@ -20,8 +20,13 @@
 //  DEALINGS IN THE SOFTWARE.
 //
 
-import Foundation
-
+/// The `ResourceDataProviderDelagte` protocol defines methods which allow you to manage state changes of the resource data provider.
 public protocol ResourceDataProviderDelagte: class {
-    func resourceDataProviderDidChangeState(from state: ResourceDataProviderState, to newState: ResourceDataProviderState)
+    
+    /// Tells the delegate that state has changed
+    ///
+    /// - Parameters:
+    ///   - oldState: the old state
+    ///   - newState: the new state
+    func resourceDataProviderDidChangeState(from oldState: ResourceDataProviderState, to newState: ResourceDataProviderState)
 }
