@@ -54,6 +54,9 @@ class ResourceDataProviderTests: XCTestCase {
         didUpdateContents = false
         notifiedDataSourceToProcess = false
         XCTAssert(resourceDataProvider.state.isEmpty)
+        XCTAssertFalse(resourceDataProvider.state.hasSucceded)
+        XCTAssertFalse(resourceDataProvider.state.hasError)
+        XCTAssertFalse(resourceDataProvider.state.isLoading)
     }
     
     func testInitEmpty() {
@@ -63,6 +66,9 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
+        XCTAssertFalse(resourceDataProvider.state.hasSucceded)
+        XCTAssertFalse(resourceDataProvider.state.hasError)
+        XCTAssertFalse(resourceDataProvider.state.isLoading)
         XCTAssertEqual(networkService.requestCount, 0)
     }
     
@@ -75,6 +81,9 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
+        XCTAssertFalse(resourceDataProvider.state.hasSucceded)
+        XCTAssertFalse(resourceDataProvider.state.hasError)
+        XCTAssertFalse(resourceDataProvider.state.isLoading)
         XCTAssertEqual(networkService.requestCount, 0)
     }
     
@@ -88,6 +97,9 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.isLoading)
+        XCTAssertFalse(resourceDataProvider.state.hasSucceded)
+        XCTAssertFalse(resourceDataProvider.state.hasError)
+        XCTAssertFalse(resourceDataProvider.state.isEmpty)
         XCTAssertEqual(networkService.requestCount, 1)
     }
     
@@ -102,6 +114,9 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.hasSucceded)
+        XCTAssertFalse(resourceDataProvider.state.isEmpty)
+        XCTAssertFalse(resourceDataProvider.state.hasError)
+        XCTAssertFalse(resourceDataProvider.state.isLoading)
         XCTAssertEqual(networkService.requestCount, 1)
         XCTAssertEqual("Result", resourceDataProvider.contents.first?.first)
     }
@@ -112,6 +127,9 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
+        XCTAssertFalse(resourceDataProvider.state.hasSucceded)
+        XCTAssertFalse(resourceDataProvider.state.hasError)
+        XCTAssertFalse(resourceDataProvider.state.isLoading)
         XCTAssertEqual(networkService.requestCount, 0)
     }
     
@@ -125,6 +143,9 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
+        XCTAssertFalse(resourceDataProvider.state.hasSucceded)
+        XCTAssertFalse(resourceDataProvider.state.hasError)
+        XCTAssertFalse(resourceDataProvider.state.isLoading)
         XCTAssertEqual(networkService.requestCount, 1)
     }
     
@@ -139,6 +160,9 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.hasSucceded)
+        XCTAssertFalse(resourceDataProvider.state.isEmpty)
+        XCTAssertFalse(resourceDataProvider.state.hasError)
+        XCTAssertFalse(resourceDataProvider.state.isLoading)
         XCTAssertEqual("Result", resourceDataProvider.contents.first?.first)
         XCTAssert(notifiedDataSourceToProcess)
         XCTAssert(didUpdateContents)
@@ -156,6 +180,9 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.hasError)
+        XCTAssertFalse(resourceDataProvider.state.hasSucceded)
+        XCTAssertFalse(resourceDataProvider.state.isEmpty)
+        XCTAssertFalse(resourceDataProvider.state.isLoading)
         XCTAssert(!didUpdateContents)
     }
     
@@ -170,6 +197,9 @@ class ResourceDataProviderTests: XCTestCase {
         
         //Then
         XCTAssert(resourceDataProvider.state.isEmpty)
+        XCTAssertFalse(resourceDataProvider.state.hasSucceded)
+        XCTAssertFalse(resourceDataProvider.state.hasError)
+        XCTAssertFalse(resourceDataProvider.state.isLoading)
         XCTAssertEqual(networkService.requestCount, 1)
     }
     
