@@ -53,16 +53,17 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     public var whenDataProviderChanged: ProcessUpdatesCallback<Object>?
     
     // MARK: Network properties
-    private let networkService: NetworkServiceProviding
-    private var currentRequest: NetworkTaskRepresenting?
+    private let networkService: NetworkService
+    private var currentRequest: NetworkTask?
     
     /**
-     Creates an instance with a given resource and exposes the result as a DataProvider. To load the given request you need first reconfigure a resource and call `.load()`.
+     Creates an instance with a given resource and exposes the result as a DataProvider.
+     To load the given request you need first reconfigure a resource and call `.load()`.
      
      - parameter networkService: a networkservice for fetching resources
      - parameter whenStateChanges: Register for state changes with a given block.
      */
-    public init(networkService: NetworkServiceProviding,
+    public init(networkService: NetworkService,
                 whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
         self.resource = nil
         self.networkService = networkService
@@ -76,7 +77,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      - parameter networkService: a networkservice for fetching resources
      - parameter whenStateChanges: Register for state changes with a given block.
      */
-    public init(resource: Resource<[[Object]]>, networkService: NetworkServiceProviding,
+    public init(resource: Resource<[[Object]]>, networkService: NetworkService,
                 whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
         self.resource = resource
         self.networkService = networkService
@@ -90,7 +91,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      - parameter networkService: a networkservice for fetching resources
      - parameter whenStateChanges: Register for state changes with a given block.
      */
-    public convenience init(resource: Resource<[Object]>, networkService: NetworkServiceProviding,
+    public convenience init(resource: Resource<[Object]>, networkService: NetworkService,
                             whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
         let twoDimensionalResource = resource.map { [$0] }
         self.init(resource: twoDimensionalResource, networkService: networkService, whenStateChanges: whenStateChanges)
