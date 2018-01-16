@@ -1,2 +1,2 @@
 github "lightsprint09/Sourcing" ~> 2.4
-github "dbsystel/DBNetworkStack" == 0.7
+github "dbsystel/DBNetworkStack" ~> 1.0
