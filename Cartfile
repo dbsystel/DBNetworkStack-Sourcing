@@ -1,2 +1,2 @@
 github "lightsprint09/Sourcing" "master"
-github "dbsystel/DBNetworkStack" "develop"
+github "dbsystel/DBNetworkStack" ~> 1.0

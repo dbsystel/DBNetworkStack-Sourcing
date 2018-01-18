@@ -71,10 +71,9 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      - parameter whenStateChanges: Register for state changes with a given block.
      - parameter delegate: The delegate of the data provider. Defaults to nil.
      */
-    public init(networkService: NetworkService, delegate: ResourceDataProviderDelagte? = nil) {
+    public init(networkService: NetworkService) {
         self.resource = nil
         self.networkService = networkService
-        self.delegate = delegate
     }
     
     /**
@@ -83,12 +82,10 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      
      - parameter resource: The resource to fetch.
      - parameter networkService: a networkservice for fetching resources
-     - parameter delegate: The delegate of the data provider. Defaults to nil.
      */
-    public init(resource: Resource<[[Object]]>, networkService: NetworkService, delegate: ResourceDataProviderDelagte? = nil) {
+    public init(resource: Resource<[[Object]]>, networkService: NetworkService) {
         self.resource = resource
         self.networkService = networkService
-        self.delegate = delegate
     }
     
     /**
@@ -97,11 +94,10 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
      
      - parameter resource: The resource to fetch.
      - parameter networkService: a networkservice for fetching resources
-     - parameter delegate: The delegate of the data provider. Defaults to nil.
      */
-    public convenience init(resource: Resource<[Object]>, networkService: NetworkService, delegate: ResourceDataProviderDelagte? = nil) {
+    public convenience init(resource: Resource<[Object]>, networkService: NetworkService) {
         let twoDimensionalResource = resource.map { [$0] }
-        self.init(resource: twoDimensionalResource, networkService: networkService, delegate: delegate)
+        self.init(resource: twoDimensionalResource, networkService: networkService)
     }
     
     /// Clears all content and changes state to `.empty`

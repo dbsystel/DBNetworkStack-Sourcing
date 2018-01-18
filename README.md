@@ -69,7 +69,7 @@ resourceDataProvider.content
 Specify the following in your `Cartfile`:
 
 ```ogdl
-github "dbsystel/DBNetworkStack-Sourcing" ~> 0.9
+github "dbsystel/DBNetworkStack-Sourcing" ~> 0.9.5
 ```
 ## Contributing
 Feel free to submit a pull request with new features, improvements on tests or documentation and bug fixes. Keep in mind that we welcome code that is well tested and documented.
