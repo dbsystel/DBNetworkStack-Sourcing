@@ -36,7 +36,7 @@ import DBNetworkStack
  ```
  
  */
-public class ResourceDataProvider<Object>: ArrayDataProviding {
+public class ResourceDataProvider<Object>: CollectionDataProvider {
     public typealias Element = Object
     
     /// Function which gets called when state changes
