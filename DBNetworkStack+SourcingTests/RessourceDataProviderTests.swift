@@ -26,6 +26,7 @@ import DBNetworkStack
 import Sourcing
 
 extension Resource {
+    
     static func mockWith(result: Model) -> Resource<Model> {
         let url: URL! = URL(string: "bahn.de")
         let request = URLRequest(url: url)
@@ -123,7 +124,7 @@ class ResourceDataProviderTests: XCTestCase {
         
         //When
         resourceDataProvider.load()
-        networkService.returnSuccess()
+        networkService.returnSuccess(with: [["Result"]])
         
         //Then
         XCTAssert(resourceDataProvider.state.hasSucceded)
@@ -146,7 +147,7 @@ class ResourceDataProviderTests: XCTestCase {
         
         //When
         resourceDataProvider.load()
-        networkService.returnSuccess()
+        networkService.returnSuccess(with: [["Result"]])
         
         //Then
         XCTAssert(resourceDataProvider.state.hasSucceded)
