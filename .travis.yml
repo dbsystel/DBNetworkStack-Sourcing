@@ -4,8 +4,8 @@ before_install:
   - gem install jazzy
 script:
   - carthage bootstrap
-  - set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -destination "platform=tvOS Simulator,name=Apple TV 1080p" test | xcpretty
-  - set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -destination "platform=watchOS Simulator,name=Apple Watch - 38mm" build | xcpretty
+  - set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -destination "platform=tvOS Simulator,name=Apple TV" test | xcpretty
+  - set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -destination "platform=Apple Watch Series 4 - 44mm" build | xcpretty
   - set -o pipefail && xcodebuild -scheme DBNetworkStackSourcing -destination "platform=iOS Simulator,name=iPhone SE" test | xcpretty
   - carthage build --no-skip-current
   - jazzy --clean --author "DBSystel" --github_url https://github.com/dbsystel/DBNetworkStack --module DBNetworkStackSourcing --output docs
