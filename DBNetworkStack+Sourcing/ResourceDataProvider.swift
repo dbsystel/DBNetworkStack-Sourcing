@@ -69,7 +69,6 @@ public class ResourceDataProvider<Object>: CollectionDataProvider {
      
      - parameter networkService: a networkservice for fetching resources
      - parameter whenStateChanges: Register for state changes with a given block.
-     - parameter delegate: The delegate of the data provider. Defaults to nil.
      */
     public init(networkService: NetworkService) {
         self.resource = nil
