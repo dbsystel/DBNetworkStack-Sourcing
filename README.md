@@ -22,7 +22,7 @@ resourceDataProvider.load()
 ```
 
 ### Access state of the loading operation
-You can either pass a delegate into `ResourceDataProvider.init` and get notified when state changes or you could access `ressourceDataProvider.state`.
+You can either set a delegate and get notified when state changes or you could access `ressourceDataProvider.state`.
 
 ```swift
 let delegate: ResourceDataProviderDelegate = //
