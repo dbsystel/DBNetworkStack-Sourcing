@@ -26,9 +26,9 @@ You can either pass a delegate into `ResourceDataProvider.init` and get notified
 
 ```swift
 let delegate: ResourceDataProviderDelegate = //
-let resourceDataProvider = ResourceDataProvider<Int>(resource: resource, networkService: networkService, delegate: delegate)
+let resourceDataProvider = ResourceDataProvider<Int>(resource: resource, networkService: networkService)
 
-// Set delegate later.
+// Set delegate to get notified about state changes.
 resourceDataProvider.delegate = delegate
 
 // Access the current state.
@@ -69,7 +69,7 @@ resourceDataProvider.content
 Specify the following in your `Cartfile`:
 
 ```ogdl
-github "dbsystel/DBNetworkStack-Sourcing" ~> 0.9.5
+github "dbsystel/DBNetworkStack-Sourcing" ~> 1.0
 ```
 ## Contributing
 Feel free to submit a pull request with new features, improvements on tests or documentation and bug fixes. Keep in mind that we welcome code that is well tested and documented.
