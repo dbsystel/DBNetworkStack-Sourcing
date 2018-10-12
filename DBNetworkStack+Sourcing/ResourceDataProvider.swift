@@ -25,87 +25,90 @@ import Sourcing
 import DBNetworkStack
 
 /**
- `ResourceDataProvider` provides fetching JSONResources and transforming them into a DataProvider(DataSource) for colllection/table views.
+ `ResourceDataProvider` provides fetching resources and transforming them into a data provider. It provides its own state so you can react to it.
+ **Example**:
+ ```swift
+ let networkService: NetworkService = //
+ let resource: Resource<[Train]> = //
+ 
+ let dataProvider = ResourceDataProvider(resource: resource, networkService: networkService)
+ dataProvider.load()
+ ```
+ 
  */
-public class ResourceDataProvider<Object>: ArrayDataProviding {
+public class ResourceDataProvider<Object>: CollectionDataProvider {
+    public typealias Element = Object
     
     /// Function which gets called when state changes
-    public var whenStateChanges: ((ResourceDataProviderState) -> Void)?
+    public weak var delegate: ResourceDataProviderDelagte?
     
-    /// Section Index Titles for `UITableView`. Related to `UITableViewDataSource` method `sectionIndexTitlesForTableView`
-    public var sectionIndexTitles: [String]?
+    /// The provided data which was fetched by the resource
+    public var content: [[Object]] = []
     
-    /// Section header titles whicht get displayed for each section
-    public var headerTitles: [String]?
-    
-    /// The provided data
-    open var contents: [[Object]] = []
-    /// Describes the current state of the data provider. Listen for state changes with the `whenStateChanges` callback
+    /// Describes the current state of the data provider. Listen for state changes by implementing `ResourceDataProviderDelagte`.
     public internal(set) var state: ResourceDataProviderState = .empty {
-        didSet { whenStateChanges?(state) }
+        didSet { delegate?.resourceDataProviderDidChangeState(from: oldValue, to: state) }
     }
+    
+    /// An observable where you can list on changes for the data provider.
+    public var observable: DataProviderObservable {
+        return defaultObserver
+    }
+    
     private var stateBeforeLoadingStarted: ResourceDataProviderState = .empty
     private var resource: Resource<[[Object]]>?
-    
-    public var dataProviderDidUpdate: ProcessUpdatesCallback<Object>?
-    /// Closure which gets called, when a data inside the provider changes and those changes should be propagated to the datasource.
-    /// **Warning:** Only set this when you are updating the datasource.
-    public var whenDataProviderChanged: ProcessUpdatesCallback<Object>?
+    private let defaultObserver = DefaultDataProviderObservable()
     
     // MARK: Network properties
     private let networkService: NetworkService
     private var currentRequest: NetworkTask?
     
     /**
-     Creates an instance with a given resource and exposes the result as a DataProvider.
+     Creates an instance with a given resource and exposes the result as a data provider.
      To load the given request you need first reconfigure a resource and call `.load()`.
      
      - parameter networkService: a networkservice for fetching resources
      - parameter whenStateChanges: Register for state changes with a given block.
      */
-    public init(networkService: NetworkService,
-                whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
+    public init(networkService: NetworkService) {
         self.resource = nil
         self.networkService = networkService
-        self.whenStateChanges = whenStateChanges
     }
     
     /**
-     Creates an instance with a given resource and exposes the result as a DataProvider. To load the given request you need not call `.load()`.
+     Creates an instance with a given resource and exposes the result as a data provider.
+     To load the given request you need to call `.load()`.
      
      - parameter resource: The resource to fetch.
      - parameter networkService: a networkservice for fetching resources
-     - parameter whenStateChanges: Register for state changes with a given block.
      */
-    public init(resource: Resource<[[Object]]>, networkService: NetworkService,
-                whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
+    public init(resource: Resource<[[Object]]>, networkService: NetworkService) {
         self.resource = resource
         self.networkService = networkService
-        self.whenStateChanges = whenStateChanges
     }
     
     /**
-     Creates an instance which fetches a given resource and exposes the result as a DataProvider. To load the given request you need not call `.load()`.
+     Creates an instance which fetches a given resource and exposes the result as a data provider.
+     To load the given request you need not call `.load()`.
      
      - parameter resource: The resource to fetch.
      - parameter networkService: a networkservice for fetching resources
-     - parameter whenStateChanges: Register for state changes with a given block.
      */
-    public convenience init(resource: Resource<[Object]>, networkService: NetworkService,
-                            whenStateChanges: @escaping ((ResourceDataProviderState) -> Void)) {
+    public convenience init(resource: Resource<[Object]>, networkService: NetworkService) {
         let twoDimensionalResource = resource.map { [$0] }
-        self.init(resource: twoDimensionalResource, networkService: networkService, whenStateChanges: whenStateChanges)
+        self.init(resource: twoDimensionalResource, networkService: networkService)
     }
     
     /// Clears all content and changes state to `.empty`
     public func clear() {
         resource = nil
-        contents = []
+        content = []
         load(skipLoadingState: false)
     }
     
     /**
      Replaces the current resource with a new one.
+     To load the given request you need not call `.load()`.
      
      - parameter resource: The new resource to fetch.
      */
@@ -115,6 +118,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     
     /**
      Replaces the current resource with a new one.
+     To load the given request you need not call `.load()`.
      
      - parameter resource: The new resource to fetch.
      */
@@ -124,12 +128,12 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     }
     
     /**
-     Fetches the current resources via webservices.
+     Fetches the current resources via the network service.
      
-     If you want to silently change the content by fetching a different resource you should `skipLoadingState: true`.
+     If you want to silently change the content by fetching a different resource you should pass `skipLoadingState: true`.
      This prevents `ResourceDataProvider` to switch into loding state.
      
-      - parameter skipLoadingState: when true the loading state will be skipped. Defaults to false.
+      - parameter skipLoadingState: when true, the loading state will be skipped. Defaults to false.
      */
     public func load(skipLoadingState: Bool = false) {
         stateBeforeLoadingStarted = state
@@ -148,7 +152,7 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
     
     private func loadDidSucess(with result: [[Object]]) {
         currentRequest = nil
-        contents = result
+        content = result
         state = .success
         dataProviderDidChangeContent()
     }
@@ -164,13 +168,8 @@ public class ResourceDataProvider<Object>: ArrayDataProviding {
         state = .error(error)
     }
     
-    /**
-     Gets called when data updates.
-     
-     - parameter updates: The updates.
-     */
+    /// Gets called when data updates.
     private func dataProviderDidChangeContent() {
-        dataProviderDidUpdate?(nil)
-        whenDataProviderChanged?(nil)
+        defaultObserver.send(updates: .unknown)
     }
 }

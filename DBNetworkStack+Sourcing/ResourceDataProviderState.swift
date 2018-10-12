@@ -22,14 +22,20 @@
 
 import DBNetworkStack
 
+/// Represents the state of a resource data provider
 public enum ResourceDataProviderState {
+    /// When loading a resource succeeds. Even if the result is empty, the state is `.sucess` and not `.empty`.
     case success
+    /// When an error occurs. The associated value represents the error
     case error(NetworkError)
+    /// When loading happens. The associated value is the loading task
     case loading(NetworkTask)
+    /// When the data provider has not yet loaded anything.
     case empty
 }
 
 extension ResourceDataProviderState {
+    /// When loading happens.
     public var isLoading: Bool {
         if case .loading = self {
             return true
@@ -37,6 +43,7 @@ extension ResourceDataProviderState {
         return false
     }
     
+    /// When an error occurs.
     public var hasError: Bool {
         if case .error = self {
             return true
@@ -44,6 +51,7 @@ extension ResourceDataProviderState {
         return false
     }
     
+    /// When loading a resource succeeds. Even if the result is empty, the state is `.sucess` and not `.empty`.
     public var hasSucceded: Bool {
         if case .success = self {
             return true
@@ -51,6 +59,7 @@ extension ResourceDataProviderState {
         return false
     }
     
+    /// When the data provider has not yet loaded anything.
     public var isEmpty: Bool {
         if case .empty = self {
             return true
