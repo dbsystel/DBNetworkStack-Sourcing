@@ -233,7 +233,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if [ \\\"${CONFIGURATION}\\\" != \\\"Release\\\" ];\nthen if which swiftlint >/dev/null;\nthen\nswiftlint\nelse\necho \\\"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\\\"\nfi\nfi\n";
 		};
 		C6C183741DFB013F000A3314 /* 📦 Carthage Copy */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -247,7 +247,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "for path in $FRAMEWORK_SEARCH_PATHS\ndo\nif [ -d \"${path}/Sourcing.framework\" ] && [[ $path == *\"Carthage\"* ]]; then\nexport SCRIPT_INPUT_FILE_COUNT=1\nexport SCRIPT_INPUT_FILE_0=\"${path}/Sourcing.framework\"\n/usr/local/bin/carthage copy-frameworks\nbreak\nfi\nif [ -d \"${path}/DBNetworkStack.framework\" ] && [[ $path == *\"Carthage\"* ]]; then\nexport SCRIPT_INPUT_FILE_COUNT=1\nexport SCRIPT_INPUT_FILE_0=\"${path}/DBNetworkStack.framework\"\n/usr/local/bin/carthage copy-frameworks\nbreak\nfi\n\ndone";
+			shellScript = "for path in $FRAMEWORK_SEARCH_PATHS\ndo\nif [ -d \"${path}/Sourcing.framework\" ] && [[ $path == *\"Carthage\"* ]]; then\nexport SCRIPT_INPUT_FILE_COUNT=1\nexport SCRIPT_INPUT_FILE_0=\"${path}/Sourcing.framework\"\n/usr/local/bin/carthage copy-frameworks\nbreak\nfi\nif [ -d \"${path}/DBNetworkStack.framework\" ] && [[ $path == *\"Carthage\"* ]]; then\nexport SCRIPT_INPUT_FILE_COUNT=1\nexport SCRIPT_INPUT_FILE_0=\"${path}/DBNetworkStack.framework\"\n/usr/local/bin/carthage copy-frameworks\nbreak\nfi\n\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
