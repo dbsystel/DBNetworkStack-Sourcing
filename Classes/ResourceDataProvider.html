@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ResourceDataProvider Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/ResourceDataProvider" class="dashAnchor"></a>
+    <a title="ResourceDataProvider Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">DBNetworkStackSourcing Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/dbsystel/DBNetworkStack"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">DBNetworkStackSourcing Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        ResourceDataProvider Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/ResourceDataProvider.html">ResourceDataProvider</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/ResourceDataProviderState.html">ResourceDataProviderState</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/ResourceDataProviderDelagte.html">ResourceDataProviderDelagte</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>ResourceDataProvider</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">ResourceDataProvider</span><span class="o">&lt;</span><span class="kt">Object</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">CollectionDataProvider</span></code></pre>
+
+                </div>
+              </div>
+            <p><code>ResourceDataProvider</code> provides fetching resources and transforming them into a data provider. It provides its own state so you can react to it.
+<strong>Example</strong>:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">networkService</span><span class="p">:</span> <span class="kt">NetworkService</span> <span class="o">=</span> <span class="c1">//</span>
+<span class="k">let</span> <span class="nv">resource</span><span class="p">:</span> <span class="kt">Resource</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">Train</span><span class="p">]</span><span class="o">&gt;</span> <span class="o">=</span> <span class="c1">//</span>
+
+<span class="k">let</span> <span class="nv">dataProvider</span> <span class="o">=</span> <span class="kt">ResourceDataProvider</span><span class="p">(</span><span class="nv">resource</span><span class="p">:</span> <span class="n">resource</span><span class="p">,</span> <span class="nv">networkService</span><span class="p">:</span> <span class="n">networkService</span><span class="p">)</span>
+<span class="n">dataProvider</span><span class="o">.</span><span class="nf">load</span><span class="p">()</span>
+</code></pre>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Sourcing12DataProviderP7ElementQa"></a>
+                    <a name="//apple_ref/swift/Alias/Element" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Sourcing12DataProviderP7ElementQa">Element</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">Element</span> <span class="o">=</span> <span class="kt">Object</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:22DBNetworkStackSourcing20ResourceDataProviderC8delegateAA0deF7Delagte_pSgXwvp"></a>
+                    <a name="//apple_ref/swift/Property/delegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:22DBNetworkStackSourcing20ResourceDataProviderC8delegateAA0deF7Delagte_pSgXwvp">delegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Function which gets called when state changes</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/ResourceDataProviderDelagte.html">ResourceDataProviderDelagte</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:22DBNetworkStackSourcing20ResourceDataProviderC7contentSaySayxGGvp"></a>
+                    <a name="//apple_ref/swift/Property/content" class="dashAnchor"></a>
+                    <a class="token" href="#/s:22DBNetworkStackSourcing20ResourceDataProviderC7contentSaySayxGGvp">content</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided data which was fetched by the resource</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">content</span><span class="p">:</span> <span class="p">[[</span><span class="kt">Object</span><span class="p">]]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:22DBNetworkStackSourcing20ResourceDataProviderC5stateAA0deF5StateOvp"></a>
+                    <a name="//apple_ref/swift/Property/state" class="dashAnchor"></a>
+                    <a class="token" href="#/s:22DBNetworkStackSourcing20ResourceDataProviderC5stateAA0deF5StateOvp">state</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Describes the current state of the data provider. Listen for state changes by implementing <code><a href="../Protocols/ResourceDataProviderDelagte.html">ResourceDataProviderDelagte</a></code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">state</span><span class="p">:</span> <span class="kt"><a href="../Enums/ResourceDataProviderState.html">ResourceDataProviderState</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:22DBNetworkStackSourcing20ResourceDataProviderC10observable0C00eF10Observable_pvp"></a>
+                    <a name="//apple_ref/swift/Property/observable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:22DBNetworkStackSourcing20ResourceDataProviderC10observable0C00eF10Observable_pvp">observable</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An observable where you can list on changes for the data provider.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">observable</span><span class="p">:</span> <span class="kt">DataProviderObservable</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Network%20properties"></a>
+                <a name="//apple_ref/swift/Section/Network properties" class="dashAnchor"></a>
+                <a href="#/Network%20properties">
+                  <h3 class="section-name">Network properties</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:22DBNetworkStackSourcing20ResourceDataProviderC14networkServiceACyxG0aB007NetworkH0_p_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(networkService:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:22DBNetworkStackSourcing20ResourceDataProviderC14networkServiceACyxG0aB007NetworkH0_p_tcfc">init(networkService:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an instance with a given resource and exposes the result as a data provider.
+To load the given request you need first reconfigure a resource and call <code>.load()</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">networkService</span><span class="p">:</span> <span class="kt">NetworkService</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>networkService</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>a networkservice for fetching resources</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>whenStateChanges</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Register for state changes with a given block.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:22DBNetworkStackSourcing20ResourceDataProviderC8resource14networkServiceACyxG0aB00D0VySaySayxGGG_AG07NetworkI0_ptcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(resource:networkService:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:22DBNetworkStackSourcing20ResourceDataProviderC8resource14networkServiceACyxG0aB00D0VySaySayxGGG_AG07NetworkI0_ptcfc">init(resource:networkService:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an instance with a given resource and exposes the result as a data provider.
+To load the given request you need to call <code>.load()</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">resource</span><span class="p">:</span> <span class="kt">Resource</span><span class="o">&lt;</span><span class="p">[[</span><span class="kt">Object</span><span class="p">]]</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">networkService</span><span class="p">:</span> <span class="kt">NetworkService</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>resource</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The resource to fetch.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>networkService</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>a networkservice for fetching resources</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:22DBNetworkStackSourcing20ResourceDataProviderC8resource14networkServiceACyxG0aB00D0VySayxGG_AG07NetworkI0_ptcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(resource:networkService:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:22DBNetworkStackSourcing20ResourceDataProviderC8resource14networkServiceACyxG0aB00D0VySayxGG_AG07NetworkI0_ptcfc">init(resource:networkService:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an instance which fetches a given resource and exposes the result as a data provider.
+To load the given request you need not call <code>.load()</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="nf">init</span><span class="p">(</span><span class="nv">resource</span><span class="p">:</span> <span class="kt">Resource</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">Object</span><span class="p">]</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">networkService</span><span class="p">:</span> <span class="kt">NetworkService</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>resource</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The resource to fetch.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>networkService</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>a networkservice for fetching resources</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:22DBNetworkStackSourcing20ResourceDataProviderC5clearyyF"></a>
+                    <a name="//apple_ref/swift/Method/clear()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:22DBNetworkStackSourcing20ResourceDataProviderC5clearyyF">clear()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Clears all content and changes state to <code>.empty</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">clear</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:22DBNetworkStackSourcing20ResourceDataProviderC11reconfigure4withy0aB00D0VySaySayxGGG_tF"></a>
+                    <a name="//apple_ref/swift/Method/reconfigure(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:22DBNetworkStackSourcing20ResourceDataProviderC11reconfigure4withy0aB00D0VySaySayxGGG_tF">reconfigure(with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Replaces the current resource with a new one.
+To load the given request you need not call <code>.load()</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">reconfigure</span><span class="p">(</span><span class="n">with</span> <span class="nv">resource</span><span class="p">:</span> <span class="kt">Resource</span><span class="o">&lt;</span><span class="p">[[</span><span class="kt">Object</span><span class="p">]]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>resource</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The new resource to fetch.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:22DBNetworkStackSourcing20ResourceDataProviderC11reconfigure4withy0aB00D0VySayxGG_tF"></a>
+                    <a name="//apple_ref/swift/Method/reconfigure(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:22DBNetworkStackSourcing20ResourceDataProviderC11reconfigure4withy0aB00D0VySayxGG_tF">reconfigure(with:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Replaces the current resource with a new one.
+To load the given request you need not call <code>.load()</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">reconfigure</span><span class="p">(</span><span class="n">with</span> <span class="nv">resource</span><span class="p">:</span> <span class="kt">Resource</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">Object</span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>resource</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The new resource to fetch.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:22DBNetworkStackSourcing20ResourceDataProviderC4load16skipLoadingStateySb_tF"></a>
+                    <a name="//apple_ref/swift/Method/load(skipLoadingState:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:22DBNetworkStackSourcing20ResourceDataProviderC4load16skipLoadingStateySb_tF">load(skipLoadingState:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Fetches the current resources via the network service.</p>
+
+<p>If you want to silently change the content by fetching a different resource you should pass <code>skipLoadingState: true</code>.
+This prevents <code>ResourceDataProvider</code> to switch into loding state.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">load</span><span class="p">(</span><span class="nv">skipLoadingState</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>skipLoadingState</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>when true, the loading state will be skipped. Defaults to false.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external">DBSystel</a>. All rights reserved. (Last updated: 2019-01-02)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>DBNetworkStackSourcing  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="DBNetworkStackSourcing  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">DBNetworkStackSourcing Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/dbsystel/DBNetworkStack"><img src="img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">DBNetworkStackSourcing Reference</a>
+        <img id="carat" src="img/carat.png" />
+        DBNetworkStackSourcing  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/ResourceDataProvider.html">ResourceDataProvider</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/ResourceDataProviderState.html">ResourceDataProviderState</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/ResourceDataProviderDelagte.html">ResourceDataProviderDelagte</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <p><a href="https://travis-ci.org/dbsystel/DBNetworkStack-Sourcing"><img src="https://travis-ci.org/dbsystel/DBNetworkStack-Sourcing.svg?branch=develop" alt="Build Status"></a>
+<a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage Compatible"></a>
+<a href="https://codecov.io/gh/dbsystel/DBNetworkStack-Sourcing"><img src="https://codecov.io/gh/dbsystel/DBNetworkStack-Sourcing/branch/develop/graph/badge.svg" alt="codecov"></a></p>
+<h1 id='dbnetworkstack-sourcing' class='heading'>DBNetworkStack-Sourcing</h1>
+
+<p>This component acts as a bridge between <a href="https://github.com/lightsprint09/Sourcing">Sourcing</a> and <a href="https://github.com/dbsystel/DBNetworkStack">DBNetworkStack</a>. It is a data provider, for resources fetched by a network service. </p>
+<h2 id='usage' class='heading'>Usage</h2>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">Sourcing</span>
+<span class="kd">import</span> <span class="kt">DBNetworkStack</span>
+<span class="kd">import</span> <span class="kt">DBNetworkStackSourcing</span>
+
+<span class="k">let</span> <span class="nv">networkService</span><span class="p">:</span> <span class="kt">NetworkService</span> <span class="o">=</span> <span class="c1">//</span>
+<span class="k">let</span> <span class="nv">resource</span><span class="p">:</span> <span class="kt">Resource</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">Int</span><span class="p">]</span><span class="o">&gt;</span> <span class="o">=</span> <span class="c1">//</span>
+
+<span class="k">let</span> <span class="nv">resourceDataProvider</span> <span class="o">=</span> <span class="kt">ResourceDataProvider</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">resource</span><span class="p">:</span> <span class="n">resource</span><span class="p">,</span> <span class="nv">networkService</span><span class="p">:</span> <span class="n">networkService</span><span class="p">)</span>
+
+<span class="c1">// Start loading content</span>
+<span class="n">resourceDataProvider</span><span class="o">.</span><span class="nf">load</span><span class="p">()</span>
+</code></pre>
+<h3 id='access-state-of-the-loading-operation' class='heading'>Access state of the loading operation</h3>
+
+<p>You can either set a delegate and get notified when state changes or you could access <code>ressourceDataProvider.state</code>.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt">ResourceDataProviderDelegate</span> <span class="o">=</span> <span class="c1">//</span>
+<span class="k">let</span> <span class="nv">resourceDataProvider</span> <span class="o">=</span> <span class="kt">ResourceDataProvider</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">resource</span><span class="p">:</span> <span class="n">resource</span><span class="p">,</span> <span class="nv">networkService</span><span class="p">:</span> <span class="n">networkService</span><span class="p">)</span>
+
+<span class="c1">// Set delegate to get notified about state changes.</span>
+<span class="n">resourceDataProvider</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">delegate</span>
+
+<span class="c1">// Access the current state.</span>
+<span class="n">resourceDataProvider</span><span class="o">.</span><span class="n">state</span>
+</code></pre>
+<h3 id='reloading-a-resource' class='heading'>Reloading a resource</h3>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">newResource</span><span class="p">:</span> <span class="kt">Resource</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">Int</span><span class="p">]</span><span class="o">&gt;</span> <span class="o">=</span> <span class="c1">//</span>
+<span class="n">resourceDataProvider</span><span class="o">.</span><span class="nf">reconfigure</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">newResource</span><span class="p">)</span>
+<span class="n">resourceDataProvider</span><span class="o">.</span><span class="nf">load</span><span class="p">()</span>
+</code></pre>
+
+<p>Somtimes it can be handy to skip the state of loading (e.g when inital loading displays a spinner and following reloads should not)</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">newResource</span><span class="p">:</span> <span class="kt">Resource</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">Int</span><span class="p">]</span><span class="o">&gt;</span> <span class="o">=</span> <span class="c1">//</span>
+<span class="n">resourceDataProvider</span><span class="o">.</span><span class="nf">reconfigure</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">newResource</span><span class="p">)</span>
+<span class="n">resourceDataProvider</span><span class="o">.</span><span class="nf">load</span><span class="p">(</span><span class="nv">skipLoadingState</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+</code></pre>
+
+<p><strong>skipLoadingState is availaibe in initial <code>load()</code> as well</strong></p>
+<h3 id='accessing-current-content' class='heading'>Accessing current content</h3>
+<pre class="highlight swift"><code><span class="n">resourceDataProvider</span><span class="o">.</span><span class="n">content</span>
+</code></pre>
+<h2 id='requirements' class='heading'>Requirements</h2>
+
+<ul>
+<li>iOS 9.0+</li>
+<li>Xcode 9.0+</li>
+<li>Swift 4.0</li>
+</ul>
+<h2 id='installation' class='heading'>Installation</h2>
+<h3 id='carthage' class='heading'>Carthage</h3>
+
+<p><a href="https://github.com/Carthage/Carthage">Carthage</a> is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.</p>
+
+<p>Specify the following in your <code>Cartfile</code>:</p>
+<pre class="highlight plaintext"><code>github "dbsystel/DBNetworkStack-Sourcing" ~&gt; 1.0
+</code></pre>
+<h2 id='contributing' class='heading'>Contributing</h2>
+
+<p>Feel free to submit a pull request with new features, improvements on tests or documentation and bug fixes. Keep in mind that we welcome code that is well tested and documented.</p>
+<h2 id='contact' class='heading'>Contact</h2>
+
+<p>Lukas Schmidt (<a href="mailto:lukas.la.schmidt@deutschebahn.com">Mail</a>, <a href="https://twitter.com/lightsprint09">@lightsprint09</a>), 
+Christian Himmelsbach (<a href="mailto:christian.himmelsbach@deutschebahn.com">Mail</a>)</p>
+<h2 id='license' class='heading'>License</h2>
+
+<p>DBNetworkStack-Sourcing is released under the MIT license. See LICENSE for details.</p>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external">DBSystel</a>. All rights reserved. (Last updated: 2019-01-02)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
