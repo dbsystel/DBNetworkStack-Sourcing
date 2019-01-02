@@ -14,6 +14,7 @@
 		C613C35C1DBF35D600E397B8 /* Sourcing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C35A1DBF35D600E397B8 /* Sourcing.framework */; };
 		C613C35E1DBF35E900E397B8 /* ResourceDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C35D1DBF35E900E397B8 /* ResourceDataProvider.swift */; };
 		C613C3621DBF362800E397B8 /* RessourceDataProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C3611DBF362800E397B8 /* RessourceDataProviderTests.swift */; };
+		C66C7BA01FFBC819009B8C78 /* ResourceDataProviderDelagte.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66C7B9F1FFBC819009B8C78 /* ResourceDataProviderDelagte.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 		C613C35A1DBF35D600E397B8 /* Sourcing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sourcing.framework; path = Carthage/Build/iOS/Sourcing.framework; sourceTree = "<group>"; };
 		C613C35D1DBF35E900E397B8 /* ResourceDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceDataProvider.swift; sourceTree = "<group>"; };
 		C613C3611DBF362800E397B8 /* RessourceDataProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RessourceDataProviderTests.swift; sourceTree = "<group>"; };
+		C66C7B9F1FFBC819009B8C78 /* ResourceDataProviderDelagte.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceDataProviderDelagte.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 		C613C33E1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing */ = {
 			isa = PBXGroup;
 			children = (
+				C66C7B9F1FFBC819009B8C78 /* ResourceDataProviderDelagte.swift */,
 				C613C35D1DBF35E900E397B8 /* ResourceDataProvider.swift */,
 				C60F99B51DFC59B600628F31 /* ResourceDataProviderState.swift */,
 				C613C33F1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.h */,
@@ -167,7 +170,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = DBSystel;
 				TargetAttributes = {
 					C613C33B1DBF2A1E00E397B8 = {
@@ -230,7 +233,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+			shellScript = "if [ \\\"${CONFIGURATION}\\\" != \\\"Release\\\" ];\nthen if which swiftlint >/dev/null;\nthen\nswiftlint\nelse\necho \\\"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\\\"\nfi\nfi\n";
 		};
 		C6C183741DFB013F000A3314 /* 📦 Carthage Copy */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -244,7 +247,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "for path in $FRAMEWORK_SEARCH_PATHS\ndo\nif [ -d \"${path}/Sourcing.framework\" ] && [[ $path == *\"Carthage\"* ]]; then\nexport SCRIPT_INPUT_FILE_COUNT=1\nexport SCRIPT_INPUT_FILE_0=\"${path}/Sourcing.framework\"\n/usr/local/bin/carthage copy-frameworks\nbreak\nfi\nif [ -d \"${path}/DBNetworkStack.framework\" ] && [[ $path == *\"Carthage\"* ]]; then\nexport SCRIPT_INPUT_FILE_COUNT=1\nexport SCRIPT_INPUT_FILE_0=\"${path}/DBNetworkStack.framework\"\n/usr/local/bin/carthage copy-frameworks\nbreak\nfi\n\ndone";
+			shellScript = "for path in $FRAMEWORK_SEARCH_PATHS\ndo\nif [ -d \"${path}/Sourcing.framework\" ] && [[ $path == *\"Carthage\"* ]]; then\nexport SCRIPT_INPUT_FILE_COUNT=1\nexport SCRIPT_INPUT_FILE_0=\"${path}/Sourcing.framework\"\n/usr/local/bin/carthage copy-frameworks\nbreak\nfi\nif [ -d \"${path}/DBNetworkStack.framework\" ] && [[ $path == *\"Carthage\"* ]]; then\nexport SCRIPT_INPUT_FILE_COUNT=1\nexport SCRIPT_INPUT_FILE_0=\"${path}/DBNetworkStack.framework\"\n/usr/local/bin/carthage copy-frameworks\nbreak\nfi\n\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -254,6 +257,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C60F99B61DFC59B600628F31 /* ResourceDataProviderState.swift in Sources */,
+				C66C7BA01FFBC819009B8C78 /* ResourceDataProviderDelagte.swift in Sources */,
 				C613C35E1DBF35E900E397B8 /* ResourceDataProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -290,6 +294,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -297,6 +302,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -332,7 +338,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -360,6 +366,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -367,6 +374,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -396,7 +404,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos watchsimulator watchos appletvsimulator appletvos";
