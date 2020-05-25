@@ -10,8 +10,6 @@
 		C60F99B61DFC59B600628F31 /* ResourceDataProviderState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60F99B51DFC59B600628F31 /* ResourceDataProviderState.swift */; };
 		C613C3461DBF2A1E00E397B8 /* DBNetworkStackSourcing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C33C1DBF2A1E00E397B8 /* DBNetworkStackSourcing.framework */; };
 		C613C34D1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.h in Headers */ = {isa = PBXBuildFile; fileRef = C613C33F1DBF2A1E00E397B8 /* DBNetworkStack+Sourcing.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C613C35B1DBF35D600E397B8 /* DBNetworkStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C3591DBF35D600E397B8 /* DBNetworkStack.framework */; };
-		C613C35C1DBF35D600E397B8 /* Sourcing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C613C35A1DBF35D600E397B8 /* Sourcing.framework */; };
 		C613C35E1DBF35E900E397B8 /* ResourceDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C35D1DBF35E900E397B8 /* ResourceDataProvider.swift */; };
 		C613C3621DBF362800E397B8 /* RessourceDataProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C613C3611DBF362800E397B8 /* RessourceDataProviderTests.swift */; };
 		C66C7BA01FFBC819009B8C78 /* ResourceDataProviderDelagte.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66C7B9F1FFBC819009B8C78 /* ResourceDataProviderDelagte.swift */; };
@@ -34,8 +32,6 @@
 		C613C3401DBF2A1E00E397B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C613C3451DBF2A1E00E397B8 /* DBNetworkStackSourcingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DBNetworkStackSourcingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C613C34C1DBF2A1E00E397B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C613C3591DBF35D600E397B8 /* DBNetworkStack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DBNetworkStack.framework; path = Carthage/Build/iOS/DBNetworkStack.framework; sourceTree = "<group>"; };
-		C613C35A1DBF35D600E397B8 /* Sourcing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sourcing.framework; path = Carthage/Build/iOS/Sourcing.framework; sourceTree = "<group>"; };
 		C613C35D1DBF35E900E397B8 /* ResourceDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceDataProvider.swift; sourceTree = "<group>"; };
 		C613C3611DBF362800E397B8 /* RessourceDataProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RessourceDataProviderTests.swift; sourceTree = "<group>"; };
 		C66C7B9F1FFBC819009B8C78 /* ResourceDataProviderDelagte.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceDataProviderDelagte.swift; sourceTree = "<group>"; };
@@ -46,8 +42,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C613C35B1DBF35D600E397B8 /* DBNetworkStack.framework in Frameworks */,
-				C613C35C1DBF35D600E397B8 /* Sourcing.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,8 +99,6 @@
 		C613C3581DBF35D600E397B8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C613C3591DBF35D600E397B8 /* DBNetworkStack.framework */,
-				C613C35A1DBF35D600E397B8 /* Sourcing.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -170,7 +162,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = DBSystel;
 				TargetAttributes = {
 					C613C33B1DBF2A1E00E397B8 = {
@@ -187,10 +179,11 @@
 			};
 			buildConfigurationList = C613C3361DBF2A1E00E397B8 /* Build configuration list for PBXProject "DBNetworkStack+Sourcing" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = C613C3321DBF2A1E00E397B8;
 			productRefGroup = C613C33D1DBF2A1E00E397B8 /* Products */;
@@ -338,13 +331,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos watchsimulator watchos appletvsimulator appletvos";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				TVOS_DEPLOYMENT_TARGET = 11.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -404,11 +398,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos watchsimulator watchos appletvsimulator appletvos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				TVOS_DEPLOYMENT_TARGET = 11.0;
 				VALIDATE_PRODUCT = YES;
@@ -423,19 +418,28 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "DBNetworkStack+Sourcing/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dbsystel.DBNetworkStack-Sourcing";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -444,18 +448,27 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "DBNetworkStack+Sourcing/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dbsystel.DBNetworkStack-Sourcing";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -463,13 +476,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "DBNetworkStack+SourcingTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=appletvsimulator*]" = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/tvOS";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=iphonesimulator*]" = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(PROJECT_DIR)/Carthage/Build/iOS";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dbsystel.DBNetworkStack-SourcingTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -477,11 +491,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "DBNetworkStack+SourcingTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dbsystel.DBNetworkStack-SourcingTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
