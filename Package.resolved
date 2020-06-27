@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "DBNetworkStack",
+        "repositoryURL": "https://github.com/dbsystel/DBNetworkStack",
+        "state": {
+          "branch": null,
+          "revision": "245034c0171e42d5858f33f061d52fff656af594",
+          "version": "2.0.1"
+        }
+      },
+      {
+        "package": "Sourcing",
+        "repositoryURL": "https://github.com/lightsprint09/Sourcing",
+        "state": {
+          "branch": null,
+          "revision": "be872e9a4bfe942c672e51ed94797806c7f9b497",
+          "version": "4.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
