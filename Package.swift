@@ -16,7 +16,7 @@ let package = Package(
             targets: ["DBNetworkStackSourcing"])
     ],
     dependencies: [
-        .package(url: "https://github.com/dbsystel/DBNetworkStack", from: "2.0.0"),
+        .package(url: "https://github.com/dbsystel/DBNetworkStack", from: "3.0.0"),
         .package(url: "https://github.com/lightsprint09/Sourcing", from: "4.0.0")
     ],
     targets: [
